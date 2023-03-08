@@ -1,34 +1,88 @@
-import { StyleSheet, Text, View } from "react-native";
 
-export default function Page() {
-  return (
-    <View style={styles.container}>
-      <View style={styles.main}>
-        <Text style={styles.title}>Hello World</Text>
-        <Text style={styles.subtitle}>This is the first page of your app.</Text>
-      </View>
-    </View>
-  );
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Profile from './src/pages/Profile'; 
+// import Analyzes from '../app/src/pages/Analyzes';
+import Tests from '../app/src/pages/Tests/Tests';
+// import Error from '../app/src/components/Error/Error';
+import Login from '../app/src/pages/Login';
+// import SignUp from '../app/src/pages/Signup/SignUp'
+// import AddTest from '../app/src/pages/Admin/AddTest/AddTest'
+// import TestEditList from '../app/src/pages/Admin/TestEditList/TestEditList'
+// import TestInformation from '../app/src/pages/Tests/TestInformation/TestInformation';
+// import CheckBox from '../app/src/components/CheckBox/CheckBox';
+
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+// const ProfileStack = () => {
+//     return(
+//         <Stack.Navigator>
+//             <Stack.Screen name='ProfileScreen' component={Profile}/>
+//         </Stack.Navigator>
+//     )
+// }
+
+// const TestsStack = () => {
+//     return(
+//         <Stack.Navigator>
+//             <Stack.Screen name='TestsScreen' component={Tests}/>
+//         </Stack.Navigator>
+//     )
+// }
+
+// const AnalyzesStack = () => {
+//     return(
+//         <Stack.Navigator>
+//             <Stack.Screen name='AnalyzesScreen' component={Analyzes}/>
+//         </Stack.Navigator>
+//     )
+// }
+
+function Router(){
+   // return <Error/>;
+  /* return(
+    <NavigationContainer>                
+        <Tab.Navigator initialRouteName='Profile'>
+            <Tab.Screen name="Profile" component={ProfileStack}/>
+            <Tab.Screen name="Tests" component={TestsStack}/>
+            <Tab.Screen name="Analyzes" component={AnalyzesStack}/>
+        </Tab.Navigator>
+    </NavigationContainer>
+)*/
+const isRegistered = false;
+return (
+    <Stack.Navigator screenOptions={{headerShown:false}}>
+    
+      
+       <Stack.Screen name='Login' component={Login}/>
+    </Stack.Navigator>
+//     ! isRegistered ? (
+    
+//     <NavigationContainer>
+//         <Stack.Navigator screenOptions={{headerShown:false}}>
+    
+      
+//        <Stack.Screen name='Login' component={Login}/>
+//         <Stack.Screen name='Sign Up' component={SignUp}/>
+//         {/* <Stack.Screen name='Profile' component={Profile}/> */}
+        
+            
+//         <Stack.Screen name='Info Test' component={TestInformation}/> 
+//         <Stack.Screen name='Add Test' component={AddTest}/>
+//         </Stack.Navigator>
+//     </NavigationContainer>  ):( 
+//     <NavigationContainer>           
+//     <Tab.Navigator initialRouteName='Profile'>
+//         <Tab.Screen name="Profile" component={ProfileStack}/>
+//         <Tab.Screen name="Tests" component={TestsStack}/>
+//         <Tab.Screen name="Analyzes" component={AnalyzesStack}/>
+//     </Tab.Navigator>
+// </NavigationContainer>)
+);
+
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    padding: 24,
-  },
-  main: {
-    flex: 1,
-    justifyContent: "center",
-    maxWidth: 960,
-    marginHorizontal: "auto",
-  },
-  title: {
-    fontSize: 64,
-    fontWeight: "bold",
-  },
-  subtitle: {
-    fontSize: 36,
-    color: "#38434D",
-  },
-});
+export default Router;
