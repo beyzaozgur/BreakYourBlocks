@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Profile from './src/pages/Profile'; 
 // import Analyzes from '../app/src/pages/Analyzes';
 import Tests from '../app/src/pages/Tests/Tests';
+import TestEditList from '../app/src/pages/Admin/TestEditList';
 // import Error from '../app/src/components/Error/Error';
 import Login from '../app/src/pages/Login';
 // import SignUp from '../app/src/pages/Signup/SignUp'
@@ -13,7 +14,8 @@ import Login from '../app/src/pages/Login';
 // import TestEditList from '../app/src/pages/Admin/TestEditList/TestEditList'
 // import TestInformation from '../app/src/pages/Tests/TestInformation/TestInformation';
 // import CheckBox from '../app/src/components/CheckBox/CheckBox';
-
+import TestsList from '../app/src/pages/Tests/TestsList/TestsList'
+import AnalysisList from '../app/src/pages/Analyzes/AnalysisList/AnalysisList'
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {View, FlatList} from "react-native"
 import test_data from '../../../test-data.json'
-import TestCard from '../../../components/TestCard';
+import TestEditCard from '../../../components/TestEditCard';
 import SearchBar from '../../../components/SearchBar'
 import styles from './TestEditList.style'
 
@@ -9,7 +9,7 @@ function TestEditList() {
 
     const [list, setList] = useState(test_data);
 
-    const renderTest = ({item}) => <TestCard test={item} />;
+    const renderTest = ({item}) => <TestEditCard test={item} />;
 
     const renderSeparator = () => <View style={styles.seperator}></View>
 

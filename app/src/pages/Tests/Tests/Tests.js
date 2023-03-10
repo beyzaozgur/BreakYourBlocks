@@ -5,6 +5,7 @@ import { Audio } from 'expo-av';
 import * as Sharing from 'expo-sharing';
 import Svg, { Path, LinearGradient, Stop, Defs } from 'react-native-svg';
 import { useCountdown } from 'react-native-countdown-circle-timer'
+import styles from './Tests.style';
 
 export default function App() {
   const [recording, setRecording] = useState();
@@ -188,68 +189,3 @@ export default function App() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#A7D7C5',
-  },
-  timerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginRight: 20,
-    marginTop:75
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  fill: {
-    flex: 1,
-    margin: 16
-  },
-  button: {
-    margin: 16
-  },
-  testTitle: {
-    textAlign: 'center',
-    fontSize: 40,
-    marginTop: 20,
-    marginBottom: 20
-  },
-  testBox: {
-    backgroundColor: '#F4F9F4',
-    borderColor: '#5C8D89',
-    borderWidth: 2,
-    margin: 20,
-    padding: 10,
-    marginBottom:20
-  },
-  startStopButton: {
-    backgroundColor: '#5C8D89',
-    height:60,
-    width: 160,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    fontSize: 20
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  time: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    width: '100%',
-    height: '100%'
- }
-});
