@@ -23,11 +23,7 @@ function AddTest() {
     return(
         <View style={styles.container}>
             <Text style={styles.title}>Create Test</Text>
-            <Dropdown data = {      [
-                                    { label: '30 seconds', value: '7' },
-                                    { label: '1 minute', value: '1' }
-                                    ]
-                            }/>
+            <Dropdown data = {['30 seconds', '1 minute']} placeholder='Time'/>
             <TestInputBox onChange={handleChange} value={testContent}/>
             <View style={styles.buttonContainer}>
                 <Button text = 'Clear' onPress={deleteTestContent} theme='danger'/>

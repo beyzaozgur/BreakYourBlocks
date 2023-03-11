@@ -5,12 +5,12 @@ import Input from "../../components/Input";
 import { Formik } from "formik";
 import * as Yup from 'yup';
 import styles from './Login.style';
+//import { signInWithEmailAndPassword } from "firebase/auth";
+import { firebase } from "../../../firebase";
 
 const LoginSchema = Yup.object({
-    username: Yup.string()
-    .min(2, 'Invalid username!')
-    .max(50, 'Invalid username!')
-    .required('Required!'),
+    mail: Yup.string().email('Invalid email!').required('Required!'),
+ 
     password:  Yup
     .string()
     .matches(/\w*[a-z]\w*/,  "Invalid password!")
@@ -23,8 +23,15 @@ const LoginSchema = Yup.object({
 });
 
 const Login = ({navigation}) => {
-    function handleLogin(values){
+  async function handleLogin(values){        
+            try {
+               await firebase.auth().signInWithEmailAndPassword(values.mail, values.password);
+            } catch (error) {
+                console.log(error);
+            }
+
         console.log(values);
+
     }
     function handleSignUp(){
         navigation.navigate('Sign Up')
@@ -34,11 +41,11 @@ const Login = ({navigation}) => {
             <View style={styles.logo_container}>
             <Image style={styles.logo} source={require('../../assets/logo.png')}/>
             </View>
-            <Formik initialValues={{username:'', password:''}} validationSchema={LoginSchema} onSubmit={handleLogin}>
+            <Formik initialValues={{mail:'', password:''}} validationSchema={LoginSchema} onSubmit={handleLogin}>
             {({handleSubmit, handleChange, values, errors}) => (
             <View style={styles.body_container}>
-                <Input placeholder={"Username"} value={values.username} onChangeText={handleChange('username')} icon='account'/>
-                {errors.username && <Text style={styles.error}>{errors.username}</Text>}
+                <Input placeholder={"Mail"} value={values.mail} onChangeText={handleChange('mail')} icon='account'/>
+                {errors.mail && <Text style={styles.error}>{errors.mail}</Text>}
                 <Input placeholder={"Password"} value={values.password} onChangeText={handleChange('password')}  icon='key' isPasswordHidden/>
                 {errors.password && <Text style={styles.error}>{errors.password}</Text>}
                 <Button text={"Login"} onPress={handleSubmit}/>
