@@ -5,11 +5,6 @@ export default StyleSheet.create({
         padding:10,
         flexDirection: 'row',
     },
-    image : {
-        width:100,
-        height:100,
-        borderRadius:50
-    },
     inner_container: {
         flex:1,
         padding:10,
@@ -19,19 +14,19 @@ export default StyleSheet.create({
         fontWeight:'bold',
         fontSize:27,
     },
-    info_container: {
-        flex:1,
-        flexDirection:'row',
-        alignItems: 'center'
-    },
-    content_container: {
-        flexDirection: 'row'
-    },
-    buttonsContainer: {
-        flexDirection: 'row'
+    buttonsLocation: {
+        flexDirection: 'row',
+        width: 100,
+        justifyContent: 'space-between'
     },
     headerContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between'
-    }
+    },
+    buttonContainer: {
+        paddingRight:0
+    },
+    subtitle:{
+        fontWeight:'bold',
+    },
 })
