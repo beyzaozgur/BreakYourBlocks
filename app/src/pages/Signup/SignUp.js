@@ -9,6 +9,8 @@ import styles from './SignUp.style';
 import Dropdown from "../../components/Dropdown";
 import CheckBox from "../../components/CheckBox";
 import DatePicker from '../../components/DatePicker';
+//import { createUserWithEmailAndPassword } from "firebase/auth";
+import { firebase } from "../../../firebase";
 
 const educationOptions = ['No Formal Education', 'Primary Education', 'Secondary Education', 'High School', 
 "Bachelor's degree", "Master's degree", 'Doctorate or higher'];
@@ -46,10 +48,40 @@ const SignUpSchema = Yup.object({
   isApproved:Yup.string().required('Required!'),
 });
 
+
+
 const SignUp = ({navigation}) => {
-    function handleSignUp(values){
-        console.log(values);
-        navigation.navigate('Profile')
+   async function handleSignUp(values){
+    try {
+       await firebase.auth().createUserWithEmailAndPassword(values.mail, values.password)
+       .then(() => {
+        firebase.auth().currentUser.sendEmailVerification({
+            handleCodeInApp:true,
+            url:'https://breakyourblocks-1.firebaseapp.com',
+        })
+        .then(() =>{alert('Verification email sent!')}).catch(error =>{
+            alert(error.message)
+        }) .then(()=>{
+            firebase.firestore().collection('users')
+            .doc(firebase.auth().currentUser.uid)
+            .set({
+                name: values.name,
+                surname: values.surname,
+                education: values.education,
+                gender:values.gender,
+                mail: values.mail,
+                username: values.username,
+                password:values.password
+            })
+        }).then(()=>{
+            console.log(values);
+            navigation.navigate('Profile');
+        }).catch((error)=>{alert(error.message)})
+       })
+    } catch (error) {
+        console.log(error);
+    }
+      
     }
    return(
         <SafeAreaView style={styles.container}>

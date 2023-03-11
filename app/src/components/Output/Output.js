@@ -5,7 +5,7 @@ import styles from './Output.style'
 const Output = ({label='', value, align='center'}) => {
     return(
         <View style={styles[align].container}><Text style={styles[align].text}>{label}</Text>
-        <Text style={styles[align].text}>{value}</Text></View> 
+        <Text style={styles[align].text}>{'\n'+ value}</Text></View> 
     )
 }
 
