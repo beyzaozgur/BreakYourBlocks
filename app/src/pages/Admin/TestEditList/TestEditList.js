@@ -12,18 +12,23 @@ const TestEditList = ({navigation}) => {
 
     const [testList, setTestList] = useState([]);
 
+    
+
     useEffect(() => {
         const testData = firebase.firestore()
             .collection('tests')
             .onSnapshot(querySnapshot => {
             const testList = [];
-        
+            var testNo = 1;
+
             querySnapshot.forEach(documentSnapshot => {
                 testList.push({
                 ...documentSnapshot.data(),
                 key: documentSnapshot.id,
-                navigation: navigation
+                navigation: navigation,
+                testNo: testNo
                 });
+                testNo = testNo + 1;
             });
             setTestList(testList);
             });
@@ -37,9 +42,9 @@ const TestEditList = ({navigation}) => {
     const handleSearch = text => {
         const filteredList = testList.filter( test => {
             const searchedText = text.toLowerCase();
-            const currentTitle = test.content.toLowerCase();
+            const currentTestContent = test.testContent.toLowerCase();
 
-            return currentTitle.indexOf(searchedText) > -1;
+            return currentTestContent.indexOf(searchedText) > -1;
         });
 
         setTestList(filteredList);
@@ -54,7 +59,7 @@ const TestEditList = ({navigation}) => {
             <View style={styles.buttonContainer}>
                 <FontAwesome.Button style={styles.testAddButton} name='plus' backgroundColor={colors.darkestgreen} onPress={navigateToAddTestScreen}>Add Test</FontAwesome.Button>
             </View>
-            <SearchBar onSearch={handleSearch} />
+            <SearchBar placeholder='Search by content...' onSearch={handleSearch} />
             <FlatList
                 ItemSeparatorComponent={renderSeparator}
                 keyExtractor={item => item.id}

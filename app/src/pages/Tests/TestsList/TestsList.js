@@ -13,13 +13,16 @@ const TestsList = ({navigation}) => {
             .collection('tests')
             .onSnapshot(querySnapshot => {
             const testList = [];
-        
+            var testNo = 1;
+
             querySnapshot.forEach(documentSnapshot => {
                 testList.push({
                 ...documentSnapshot.data(),
                 key: documentSnapshot.id,
-                navigation: navigation
+                navigation: navigation,
+                testNo: testNo
                 });
+                testNo = testNo + 1;
             });
             setTestList(testList);
             });

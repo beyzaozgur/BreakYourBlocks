@@ -55,7 +55,7 @@ const TestEditCard = props => {
         <View style={styles.container} >
             <View style={styles.inner_container}>
                 <View style={styles.headerContainer}>
-                    <Text style={styles.title} >Test</Text>
+                    <Text style={styles.title} >Test {props.test.testNo}</Text>
                     <View style={styles.buttonsLocation}>
                         <FontAwesome.Button style={styles.buttonContainer} name='edit' size={25} backgroundColor={colors.warning} onPress={navigateToUpdateTestScreen}/>
                         <FontAwesome.Button style={styles.buttonContainer} name='trash' size={25} backgroundColor={colors.danger} onPress={deleteTest}/>
