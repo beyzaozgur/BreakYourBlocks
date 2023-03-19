@@ -10,4 +10,10 @@ export default StyleSheet.create({
       borderWidth: 1,
       borderColor: colors.darkestgreen,
     },
+    buttonContainer: {
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      marginTop: 40,
+      margin: 10,
+  }
   });

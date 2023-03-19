@@ -12,7 +12,8 @@ export default StyleSheet.create({
     },
     row: {
       flex: 1,
-      justifyContent: 'space-around',
-      marginTop: '5%'
+      justifyContent: 'space-between',
+      marginTop: '10%',
+      marginHorizontal: '10%',
     },
   });

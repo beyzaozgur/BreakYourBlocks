@@ -1,10 +1,15 @@
-import React, {useState} from "react";
+import React from "react";
 import {View, Text, ScrollView} from "react-native"
 import Button from "../../../components/Button";
 
 import styles from './TestInformation.style';
 
-function TextInformation() {
+const TestInformation = ({ route, navigation }) => {
+
+    function navigateToTestsScreen() {
+        navigation.navigate('TestsScreen', {testContent: route.params.testContent, duration: route.params.duration});
+    }
+
     return(
         <View style={styles.container}>
             <View style={styles.headerContainer}>
@@ -18,15 +23,15 @@ function TextInformation() {
                     - You can exit the test by pressing "Do Not Save" button, but no data will be saved.{"\n"}{"\n"}
                     - The test will be automatically saved after the given time is finished.{"\n"}{"\n"}
                     - You need to wear headphones to get the best results.{"\n"}{"\n"}
-                    - You have .......... seconds to finish this test.{"\n"}{"\n"}</Text>
+                    - You have {route.params.duration} seconds to finish this test.{"\n"}{"\n"}</Text>
                 </ScrollView>
             </View>
             <View style={styles.buttonContainer}>
-                <Button text = 'Start' />
+                <Button text = 'Start' onPress={navigateToTestsScreen}/>
             </View>
         </View>
     )
 }
 
-export default TextInformation;
+export default TestInformation;
 

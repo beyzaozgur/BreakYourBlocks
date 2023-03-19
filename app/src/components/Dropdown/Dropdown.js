@@ -6,12 +6,12 @@ import colors from '../../styles/colors';
 import styles from './Dropdown.style';
 
 
-const DropdownComponent = ({placeholder, data, onChange}) => {
+const DropdownComponent = ({placeholder, data, onChange, dbValue}) => {
    // const [value, setValue] = useState(null);
 
     return (
       <SelectDropdown
-        defaultButtonText={placeholder}
+        defaultButtonText={dbValue ? dbValue : placeholder}
         buttonStyle={styles.button}
         buttonTextStyle= {styles.text}
         dropdownStyle={styles.container}

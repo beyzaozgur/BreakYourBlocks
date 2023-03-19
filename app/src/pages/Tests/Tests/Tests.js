@@ -7,14 +7,14 @@ import Svg, { Path, LinearGradient, Stop, Defs } from 'react-native-svg';
 import { useCountdown } from 'react-native-countdown-circle-timer'
 import styles from './Tests.style';
 
-export default function App() {
+const Tests = ({ route, navigation }) =>  {
   const [recording, setRecording] = useState();
   // const [recordings, setRecordings] = useState([]);
   const [recordContinues, setRecordingContinues] = useState();
   const [recordingContent, setRecordingContent] = useState([]);
   const [message, setMessage] = useState("");
 
-  const duration = 5;
+  const duration = route.params.duration;
 
   const executeOnLoad = () => {
     startRecording();
@@ -167,15 +167,7 @@ export default function App() {
       </View>
       <Text style={styles.testTitle}>Test 10</Text>
       <View style={styles.testBox}>
-        <Text style={styles.testContent}>Summer was dead, but autumn had not yet been born when the ibis
-            came to the bleeding tree. It's strange that all this is so clear to me, now
-            that time has had its way. But sometimes (like right now) I sit in the
-            cool green parlor, and I remember Doodle.
-            Doodle was about the craziest brother a boy ever had. Doodle was born when I was seven and
-            was, from the start, a disappointment. He seemed all head, with a tiny body that was red and
-            shriveled like an old man's. Everybody thought he was going to die.
-            Daddy had the carpenter build a little coffin, and when he was three months old, Mama and
-            Daddy named him William Armstrong. Such a name sounds good only on a tombstone.
+        <Text style={styles.testContent}>{route.params.testContent}
         </Text>
       </View>
       <Text>{message}</Text>
@@ -189,3 +181,5 @@ export default function App() {
     </View>
   );
 }
+
+export default Tests;
