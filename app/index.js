@@ -7,14 +7,14 @@ import { ToastProvider } from 'react-native-toast-notifications';
 
 import Profile from '../app/src/pages/Profile';
 //import Analyzes from '../app/src/pages/Analyzes';
-//import Tests from '../app/src/pages/Tests/Tests';
-//import TestEditList from '../app/src/pages/Admin/TestEditList';
+import Tests from '../app/src/pages/Tests/Tests';
+import TestEditList from '../app/src/pages/Admin/TestEditList';
 // import Error from '../app/src/components/Error/Error';
 import Login from '../app/src/pages/Login';
-import SignUp from '../app/src/pages/Signup';
-// import AddTest from '../app/src/pages/Admin/AddTest';
-// import TestEditList from '../app/src/pages/Admin/TestEditList/TestEditList';
-// import TestInformation from '../app/src/pages/Tests/TestInformation';
+import SignUp from '../app/src/pages/Signup'
+import AddUpdateTest from '../app/src/pages/Admin/AddUpdateTest'
+// import TestEditList from '../app/src/pages/Admin/TestEditList/TestEditList'
+import TestInformation from '../app/src/pages/Tests/TestInformation';
 // import CheckBox from '../app/src/components/CheckBox/CheckBox';
 import TestsList from '../app/src/pages/Tests/TestsList';
 import AnalysisList from '../app/src/pages/Analyzes/AnalysisList';
@@ -33,18 +33,29 @@ const ProfileStack = () => {
         </Stack.Navigator>
     )
 }
-const TestsStack = () => {
-    return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name='TestsScreen' component={TestsList} />
-        </Stack.Navigator>
-    )
-}
+ const TestsStack = () => {
+     return(
+         <Stack.Navigator screenOptions={{headerShown:false}}>
+              <Stack.Screen name='TestsListScreen' component={TestsList}/>
+              <Stack.Screen name='TestInformationScreen' component={TestInformation}/>
+              <Stack.Screen name='TestsScreen' component={Tests}/>
+         </Stack.Navigator>
+     )
+ }
 
 const AnalyzesStack = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='AnalyzesScreen' component={AnalysisList} />
+        </Stack.Navigator>
+    )
+}
+
+ const AdminTestOperationsStack = () => {
+    return(
+        <Stack.Navigator screenOptions={{headerShown:false}}>
+             <Stack.Screen name='TestEditListScreen' component={TestEditList}/>
+             <Stack.Screen name='AddUpdateTestScreen' component={AddUpdateTest}/>
         </Stack.Navigator>
     )
 }
@@ -155,6 +166,7 @@ function Router() {
                 <Tab.Screen name="Profile" component={ProfileStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="account-circle" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                 <Tab.Screen name="Tests" component={TestsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="alpha-t-circle" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                 <Tab.Screen name="Analyzes" component={AnalyzesStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
+                <Tab.Screen name="AdminTestOperations" component={AdminTestOperationsStack} options={{tabBarIcon: ({focused}) =>(<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />)}}/>
             </Tab.Navigator>
         </ToastProvider>
 

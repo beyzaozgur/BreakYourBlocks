@@ -1,38 +1,69 @@
-import React, { useState } from "react";
-import { View, FlatList } from "react-native";
-
-import test_data from '../../../test-data.json';
+import React, {useState, useEffect} from "react";
+import {View, FlatList} from "react-native"
 import TestEditCard from '../../../components/TestEditCard';
-import SearchBar from '../../../components/SearchBar';
-import styles from './TestEditList.style';
+import SearchBar from '../../../components/SearchBar'
+import styles from './TestEditList.style'
+import { firebase } from "../../../../firebase";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import colors from '../../../styles/colors';
 
 
-function TestEditList() {
+const TestEditList = ({navigation}) => {
 
-    const [list, setList] = useState(test_data);
+    const [testList, setTestList] = useState([]);
 
-    const renderTest = ({ item }) => <TestEditCard test={item} />;
+    
+
+    useEffect(() => {
+        const testData = firebase.firestore()
+            .collection('tests')
+            .onSnapshot(querySnapshot => {
+            const testList = [];
+            var testNo = 1;
+
+            querySnapshot.forEach(documentSnapshot => {
+                testList.push({
+                ...documentSnapshot.data(),
+                key: documentSnapshot.id,
+                navigation: navigation,
+                testNo: testNo
+                });
+                testNo = testNo + 1;
+            });
+            setTestList(testList);
+            });
+        return () => testData();
+    }, []);
+
+    const renderTest = ({item}) => <TestEditCard test={item}/>;
 
     const renderSeparator = () => <View style={styles.seperator}></View>
 
     const handleSearch = text => {
-        const filteredList = test_data.filter(test => {
+        const filteredList = testList.filter( test => {
             const searchedText = text.toLowerCase();
-            const currentTitle = test.content.toLowerCase();
+            const currentTestContent = test.testContent.toLowerCase();
 
-            return currentTitle.indexOf(searchedText) > -1;
+            return currentTestContent.indexOf(searchedText) > -1;
         });
 
-        setList(filteredList);
+        setTestList(filteredList);
+    } 
+
+    function navigateToAddTestScreen() {
+        navigation.navigate('AddUpdateTestScreen', {key: null});
     }
 
     return (
         <View style={styles.container}>
-            <SearchBar onSearch={handleSearch} />
+            <View style={styles.buttonContainer}>
+                <FontAwesome.Button style={styles.testAddButton} name='plus' backgroundColor={colors.darkestgreen} onPress={navigateToAddTestScreen}>Add Test</FontAwesome.Button>
+            </View>
+            <SearchBar placeholder='Search by content...' onSearch={handleSearch} />
             <FlatList
                 ItemSeparatorComponent={renderSeparator}
                 keyExtractor={item => item.id}
-                data={list}
+                data={testList}
                 renderItem={renderTest}>
             </FlatList>
         </View>

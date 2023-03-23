@@ -9,8 +9,9 @@ export default StyleSheet.create({
         backgroundColor: colors.green,
     },
     headerContainer: {
-        flexDirection: 'row',
+        flexDirection: 'row', 
         justifyContent: 'center',
+        marginTop: 50,
     },
     title: {
         marginTop: 25,

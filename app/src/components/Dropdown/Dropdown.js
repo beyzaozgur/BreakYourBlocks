@@ -4,23 +4,23 @@ import SelectDropdown from 'react-native-select-dropdown';
 import styles from './Dropdown.style';
 
 
-const DropdownComponent = ({ placeholder, data, onChange }) => {
-  // const [value, setValue] = useState(null);
+const DropdownComponent = ({placeholder, data, onChange, dbValue}) => {
+   // const [value, setValue] = useState(null);
 
-  return (
-    <SelectDropdown
-      defaultButtonText={placeholder}
-      buttonStyle={styles.button}
-      buttonTextStyle={styles.text}
-      dropdownStyle={styles.container}
-      // selectedRowStyle={styles.container}
-      data={data}
-      // rowStyle={styles.container}
-      // placeholderStyle={styles.text}
-      rowTextStyle={styles.text}
-      // selectedRowTextStyle={styles.text}
-      // itemTextStyle={styles.text}
-      //maxHeight={300}
+    return (
+      <SelectDropdown
+        defaultButtonText={dbValue ? dbValue : placeholder}
+        buttonStyle={styles.button}
+        buttonTextStyle= {styles.text}
+        dropdownStyle={styles.container}
+       // selectedRowStyle={styles.container}
+        data={data}
+       // rowStyle={styles.container}
+       // placeholderStyle={styles.text}
+        rowTextStyle={styles.text}
+       // selectedRowTextStyle={styles.text}
+       // itemTextStyle={styles.text}
+        //maxHeight={300}
       // labelField="label"
       // valueField="value"
       //  placeholder={placeholder}
