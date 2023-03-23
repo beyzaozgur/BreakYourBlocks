@@ -1,18 +1,20 @@
 import React from "react";
-import {View, Text} from 'react-native';
-import styles from './TestEditCard.styles';
+import { View, Text } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+
+import styles from './TestEditCard.styles';
 import colors from '../../styles/colors';
 
+
 const TestEditCard = props => {
-    return(
+    return (
         <View style={styles.container} >
             <View style={styles.inner_container}>
                 <View style={styles.headerContainer}>
                     <Text style={styles.title} >Test {props.test.id}</Text>
                     <View style={styles.buttonsLocation}>
-                        <FontAwesome.Button style={styles.buttonContainer} name='edit' size={25} backgroundColor={colors.warning}/>
-                        <FontAwesome.Button style={styles.buttonContainer} name='trash' size={25} backgroundColor={colors.danger}/>
+                        <FontAwesome.Button style={styles.buttonContainer} name='edit' size={25} backgroundColor={colors.warning} />
+                        <FontAwesome.Button style={styles.buttonContainer} name='trash' size={25} backgroundColor={colors.danger} />
                     </View>
                 </View>
                 <Text><Text style={styles.subtitle}>Level:</Text> {props.test.level}</Text>

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { Button, Text, View, Pressable } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, View, Pressable } from 'react-native';
 import { Audio } from 'expo-av';
 import * as Sharing from 'expo-sharing';
 import Svg, { Path, LinearGradient, Stop, Defs } from 'react-native-svg';
-import { useCountdown } from 'react-native-countdown-circle-timer'
+import { useCountdown } from 'react-native-countdown-circle-timer';
+
 import styles from './Tests.style';
+
 
 export default function App() {
   const [recording, setRecording] = useState();
@@ -37,7 +39,7 @@ export default function App() {
       stopRecording();
     }
   }, [elapsedTime]);
-  
+
 
   async function startRecording() {
     try {
@@ -51,7 +53,7 @@ export default function App() {
           allowsRecordingIOS: true,
           playsInSilentModeIOS: true
         });
-        
+
         const { recording } = await Audio.Recording.createAsync(
           Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
         );
@@ -93,10 +95,10 @@ export default function App() {
     const { sound, status } = await recording.createNewLoadedSoundAsync();
 
     setRecordingContent({
-        sound: sound,
-        duration: getDurationFormatted(status.durationMillis),
-        file: recording.getURI()
-      });
+      sound: sound,
+      duration: getDurationFormatted(status.durationMillis),
+      file: recording.getURI()
+    });
 
   }
 
@@ -121,25 +123,25 @@ export default function App() {
   // }
 
   function getRecordingLines() {
-    
-      return (
-        <View style={styles.row}>
-          <Text style={styles.fill}>Recording - {recordingContent.duration}</Text>
-          <Button style={styles.button} onPress={() => recordingContent.sound.replayAsync()} title="Play"></Button>
-          <Button style={styles.button} onPress={() => Sharing.shareAsync(recordingContent.file)} title="Share"></Button>
-        </View>
-      );
+
+    return (
+      <View style={styles.row}>
+        <Text style={styles.fill}>Recording - {recordingContent.duration}</Text>
+        <Button style={styles.button} onPress={() => recordingContent.sound.replayAsync()} title="Play"></Button>
+        <Button style={styles.button} onPress={() => Sharing.shareAsync(recordingContent.file)} title="Share"></Button>
+      </View>
+    );
   }
 
   return (
-    <View style={styles.container} onLayout={executeOnLoad}>                
+    <View style={styles.container} onLayout={executeOnLoad}>
       <View style={styles.timerContainer}>
-        <View style={{ width: 65, height: 65, position: 'relative'}}>
+        <View style={{ width: 65, height: 65, position: 'relative' }}>
           <Svg width={size} height={size} preserveAspectRatio="xMinYMin slice" viewBox="0 0 500 500">
             <Defs>
               <LinearGradient id="linearGradientId" x1="1" y1="0" x2="0" y2="0">
-                <Stop offset="5%" stopColor="gold"/>
-                <Stop offset="95%" stopColor="red"/>
+                <Stop offset="5%" stopColor="gold" />
+                <Stop offset="95%" stopColor="red" />
               </LinearGradient>
             </Defs>
             <Path
@@ -168,14 +170,14 @@ export default function App() {
       <Text style={styles.testTitle}>Test 10</Text>
       <View style={styles.testBox}>
         <Text style={styles.testContent}>Summer was dead, but autumn had not yet been born when the ibis
-            came to the bleeding tree. It's strange that all this is so clear to me, now
-            that time has had its way. But sometimes (like right now) I sit in the
-            cool green parlor, and I remember Doodle.
-            Doodle was about the craziest brother a boy ever had. Doodle was born when I was seven and
-            was, from the start, a disappointment. He seemed all head, with a tiny body that was red and
-            shriveled like an old man's. Everybody thought he was going to die.
-            Daddy had the carpenter build a little coffin, and when he was three months old, Mama and
-            Daddy named him William Armstrong. Such a name sounds good only on a tombstone.
+          came to the bleeding tree. It's strange that all this is so clear to me, now
+          that time has had its way. But sometimes (like right now) I sit in the
+          cool green parlor, and I remember Doodle.
+          Doodle was about the craziest brother a boy ever had. Doodle was born when I was seven and
+          was, from the start, a disappointment. He seemed all head, with a tiny body that was red and
+          shriveled like an old man's. Everybody thought he was going to die.
+          Daddy had the carpenter build a little coffin, and when he was three months old, Mama and
+          Daddy named him William Armstrong. Such a name sounds good only on a tombstone.
         </Text>
       </View>
       <Text>{message}</Text>

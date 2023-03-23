@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react";
 
-function useGet(dbURL){
+
+function useGet(dbURL) {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
 
-    const getData = async () =>{
-        try{
-        //    data
-        setLoading(false);
+    const getData = async () => {
+        try {
+            //    data
+            setLoading(false);
 
-        }catch(err){
+        } catch (err) {
             setError(err.message);
             setLoading(false);
         }
@@ -18,10 +19,10 @@ function useGet(dbURL){
 
     useEffect(() => {
         getData();
-    } , [])
+    }, [])
 
-    return {error, loading, data};
+    return { error, loading, data };
 
-    }
+}
 
-    export default useGet;
+export default useGet;

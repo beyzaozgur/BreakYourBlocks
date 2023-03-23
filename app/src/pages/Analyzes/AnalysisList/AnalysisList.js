@@ -1,14 +1,16 @@
 import React from "react";
-import { View, FlatList} from 'react-native';
-import test_data from '../../../test-data.json'
+import { View, FlatList } from 'react-native';
+
+import test_data from '../../../test-data.json';
 import AnalysisCard from '../../../components/AnalysisCard';
-import styles from './AnalysisList.style'
+import styles from './AnalysisList.style';
+
 
 function AnalysisList() {
 
-    const renderTest = ({item}) => <AnalysisCard test={item} />;
+    const renderTest = ({ item }) => <AnalysisCard test={item} />;
 
-    return(
+    return (
         <View style={styles.container}>
             <FlatList
                 keyExtractor={item => item.id}

@@ -1,14 +1,16 @@
-import {StyleSheet, Dimensions} from "react-native";
+import { StyleSheet } from "react-native";
+
 import colors from "../../../styles/colors";
+
 
 export default StyleSheet.create({
     container: {
-        flex:1,
+        flex: 1,
         backgroundColor: colors.green,
     },
     headerContainer: {
-        flexDirection: 'row', 
-        justifyContent: 'center', 
+        flexDirection: 'row',
+        justifyContent: 'center',
     },
     title: {
         marginTop: 25,
@@ -18,17 +20,17 @@ export default StyleSheet.create({
     testContent: {
     },
     frame: {
-        backgroundColor:colors.grayish,
+        backgroundColor: colors.grayish,
         borderColor: colors.darkestgreen,
         borderWidth: 2,
-        padding:10,
-        margin:25,
-        borderRadius:5,
+        padding: 10,
+        margin: 25,
+        borderRadius: 5,
     },
     buttonContainer: {
-        flex: 10, 
-        flexDirection: 'row', 
-        justifyContent: 'center', 
+        flex: 10,
+        flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'flex-start',
         padding: 20
     }

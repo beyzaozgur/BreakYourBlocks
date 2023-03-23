@@ -1,18 +1,20 @@
-import { StyleSheet} from "react-native";
+import { StyleSheet } from "react-native";
+
 import colors from "../../styles/colors";
+
 
 export default StyleSheet.create({
     inner_container: {
-        flex:1,
-        padding:10,
+        flex: 1,
+        padding: 10,
         justifyContent: 'center',
     },
     title: {
-        fontWeight:'bold',
-        fontSize:27,
+        fontWeight: 'bold',
+        fontSize: 27,
     },
-    subtitle:{
-        fontWeight:'bold',
+    subtitle: {
+        fontWeight: 'bold',
     },
     square: {
         flexGrow: 0,
