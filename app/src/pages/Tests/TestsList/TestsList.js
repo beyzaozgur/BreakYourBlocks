@@ -29,9 +29,9 @@ const TestsList = ({navigation}) => {
         return () => testData();
     }, []);
 
-    const renderTest = ({item}) => <TestStartCard test={item} />;
+    const renderTest = ({ item }) => <TestStartCard test={item} />;
 
-    return(
+    return (
         <View style={styles.container}>
             <FlatList
                 keyExtractor={item => item.id}

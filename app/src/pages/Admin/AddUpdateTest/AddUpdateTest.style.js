@@ -1,9 +1,11 @@
-import {StyleSheet} from "react-native"
+import { StyleSheet } from "react-native";
+
 import colors from "../../../styles/colors";
+
 
 export default StyleSheet.create({
     container: {
-        flex:1,
+        flex: 1,
         backgroundColor: colors.green,
     },
     title: {
@@ -13,9 +15,9 @@ export default StyleSheet.create({
         color: 'black',
     },
     buttonContainer: {
-        flex: 10, 
-        flexDirection: 'row', 
-        justifyContent: 'flex-end', 
+        flex: 10,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
         alignItems: 'flex-start',
     },
 });

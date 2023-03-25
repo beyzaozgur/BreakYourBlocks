@@ -54,7 +54,7 @@ const TestEditList = ({navigation}) => {
         navigation.navigate('AddUpdateTestScreen', {key: null});
     }
 
-    return(
+    return (
         <View style={styles.container}>
             <View style={styles.buttonContainer}>
                 <FontAwesome.Button style={styles.testAddButton} name='plus' backgroundColor={colors.darkestgreen} onPress={navigateToAddTestScreen}>Add Test</FontAwesome.Button>

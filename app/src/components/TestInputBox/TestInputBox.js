@@ -1,19 +1,21 @@
 import React from "react";
-import {TextInput, ScrollView} from 'react-native';
+import { TextInput, ScrollView } from 'react-native';
+
 import styles from './TestInputBox.styles';
+
 
 const TestInputBox = props => {
 
-    return(
+    return (
         <ScrollView>
             <TextInput style={styles.inputBox}
-                   placeholder='Test Content...'
-                   numberOfLines={15}
-                   maxLength={1000}
-                   editable
-                   multiline
-                   onChangeText={props.onChange}
-                   value = {props.value}/>
+                placeholder='Test Content...'
+                numberOfLines={15}
+                maxLength={1000}
+                editable
+                multiline
+                onChangeText={props.onChange}
+                value={props.value} />
         </ScrollView>
     )
 }

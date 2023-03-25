@@ -1,7 +1,8 @@
 import React from "react";
-import {View, Text} from 'react-native';
-import styles from './TestEditCard.styles';
+import { View, Text } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+
+import styles from './TestEditCard.styles';
 import colors from '../../styles/colors';
 
 import { firebase } from "../../../firebase";

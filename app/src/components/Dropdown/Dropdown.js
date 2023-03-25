@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-import { Text, View } from 'react-native';
+import React from 'react';
 import SelectDropdown from 'react-native-select-dropdown';
-import  Icon  from 'react-native-vector-icons/MaterialCommunityIcons';
-import colors from '../../styles/colors';
+
 import styles from './Dropdown.style';
 
 
@@ -24,21 +22,22 @@ const DropdownComponent = ({placeholder, data, onChange, dbValue}) => {
        // itemTextStyle={styles.text}
         //maxHeight={300}
       // labelField="label"
-       // valueField="value"
+      // valueField="value"
       //  placeholder={placeholder}
-       // value={value}
-        //onChange = {onChange}
-        //dropdownIconPosition='left'
-       // renderDropdownIcon ={()=>(<Icon name='menu-down' size={25} color={colors.darkestgreen}/>)}
-        onSelect = {onChange}
-        buttonTextAfterSelection={(selectedItem) => {	return selectedItem
-        }}
-        rowTextForSelection={(item) => {
-          return item
-        }}
-      />
-    );
-  };
+      // value={value}
+      //onChange = {onChange}
+      //dropdownIconPosition='left'
+      // renderDropdownIcon ={()=>(<Icon name='menu-down' size={25} color={colors.darkestgreen}/>)}
+      onSelect={onChange}
+      buttonTextAfterSelection={(selectedItem) => {
+        return selectedItem
+      }}
+      rowTextForSelection={(item) => {
+        return item
+      }}
+    />
+  );
+};
 
 export default DropdownComponent;
 

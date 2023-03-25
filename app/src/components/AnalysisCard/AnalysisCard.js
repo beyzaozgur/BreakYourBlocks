@@ -1,9 +1,11 @@
 import React from "react";
-import {View, Text, TouchableOpacity} from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+
 import styles from './AnalysisCard.styles';
 
+
 const AnalysisCard = props => {
-    return(
+    return (
         <View>
             { props.test.isCompleted === 1 ?
             <TouchableOpacity>

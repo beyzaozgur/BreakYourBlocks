@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { Button, Text, View, Pressable } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, View, Pressable } from 'react-native';
 import { Audio } from 'expo-av';
 import * as Sharing from 'expo-sharing';
 import Svg, { Path, LinearGradient, Stop, Defs } from 'react-native-svg';
-import { useCountdown } from 'react-native-countdown-circle-timer'
+import { useCountdown } from 'react-native-countdown-circle-timer';
+
 import styles from './Tests.style';
+
 
 const Tests = ({ route, navigation }) =>  {
   const [recording, setRecording] = useState();
@@ -37,7 +39,7 @@ const Tests = ({ route, navigation }) =>  {
       stopRecording();
     }
   }, [elapsedTime]);
-  
+
 
   async function startRecording() {
     try {
@@ -51,7 +53,7 @@ const Tests = ({ route, navigation }) =>  {
           allowsRecordingIOS: true,
           playsInSilentModeIOS: true
         });
-        
+
         const { recording } = await Audio.Recording.createAsync(
           Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
         );
@@ -93,10 +95,10 @@ const Tests = ({ route, navigation }) =>  {
     const { sound, status } = await recording.createNewLoadedSoundAsync();
 
     setRecordingContent({
-        sound: sound,
-        duration: getDurationFormatted(status.durationMillis),
-        file: recording.getURI()
-      });
+      sound: sound,
+      duration: getDurationFormatted(status.durationMillis),
+      file: recording.getURI()
+    });
 
   }
 
@@ -121,25 +123,25 @@ const Tests = ({ route, navigation }) =>  {
   // }
 
   function getRecordingLines() {
-    
-      return (
-        <View style={styles.row}>
-          <Text style={styles.fill}>Recording - {recordingContent.duration}</Text>
-          <Button style={styles.button} onPress={() => recordingContent.sound.replayAsync()} title="Play"></Button>
-          <Button style={styles.button} onPress={() => Sharing.shareAsync(recordingContent.file)} title="Share"></Button>
-        </View>
-      );
+
+    return (
+      <View style={styles.row}>
+        <Text style={styles.fill}>Recording - {recordingContent.duration}</Text>
+        <Button style={styles.button} onPress={() => recordingContent.sound.replayAsync()} title="Play"></Button>
+        <Button style={styles.button} onPress={() => Sharing.shareAsync(recordingContent.file)} title="Share"></Button>
+      </View>
+    );
   }
 
   return (
-    <View style={styles.container} onLayout={executeOnLoad}>                
+    <View style={styles.container} onLayout={executeOnLoad}>
       <View style={styles.timerContainer}>
-        <View style={{ width: 65, height: 65, position: 'relative'}}>
+        <View style={{ width: 65, height: 65, position: 'relative' }}>
           <Svg width={size} height={size} preserveAspectRatio="xMinYMin slice" viewBox="0 0 500 500">
             <Defs>
               <LinearGradient id="linearGradientId" x1="1" y1="0" x2="0" y2="0">
-                <Stop offset="5%" stopColor="gold"/>
-                <Stop offset="95%" stopColor="red"/>
+                <Stop offset="5%" stopColor="gold" />
+                <Stop offset="95%" stopColor="red" />
               </LinearGradient>
             </Defs>
             <Path

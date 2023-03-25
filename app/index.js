@@ -1,10 +1,11 @@
-
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import  Icon  from 'react-native-vector-icons/MaterialCommunityIcons';
-import Profile from '../app/src/pages/Profile'; 
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { ToastProvider } from 'react-native-toast-notifications';
+
+import Profile from '../app/src/pages/Profile';
 //import Analyzes from '../app/src/pages/Analyzes';
 import Tests from '../app/src/pages/Tests/Tests';
 import TestEditList from '../app/src/pages/Admin/TestEditList';
@@ -15,9 +16,9 @@ import AddUpdateTest from '../app/src/pages/Admin/AddUpdateTest'
 // import TestEditList from '../app/src/pages/Admin/TestEditList/TestEditList'
 import TestInformation from '../app/src/pages/Tests/TestInformation';
 // import CheckBox from '../app/src/components/CheckBox/CheckBox';
-import TestsList from '../app/src/pages/Tests/TestsList'
-import AnalysisList from '../app/src/pages/Analyzes/AnalysisList'
-import {firebase} from './firebase';
+import TestsList from '../app/src/pages/Tests/TestsList';
+import AnalysisList from '../app/src/pages/Analyzes/AnalysisList';
+import { firebase } from './firebase';
 import colors from './src/styles/colors';
 
 
@@ -25,10 +26,11 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const ProfileStack = () => {
-    return(
-        <Stack.Navigator screenOptions={{headerShown:false}}>
-            <Stack.Screen name='ProfileScreen' component={Profile}/>
-       </Stack.Navigator>
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='ProfileScreen' component={Profile} />
+
+        </Stack.Navigator>
     )
 }
  const TestsStack = () => {
@@ -41,13 +43,13 @@ const ProfileStack = () => {
      )
  }
 
- const AnalyzesStack = () => {
-     return(
-         <Stack.Navigator screenOptions={{headerShown:false}}>
-             <Stack.Screen name='AnalyzesScreen' component={AnalysisList}/>
-         </Stack.Navigator>
-     )
- }
+const AnalyzesStack = () => {
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='AnalyzesScreen' component={AnalysisList} />
+        </Stack.Navigator>
+    )
+}
 
  const AdminTestOperationsStack = () => {
     return(
@@ -59,47 +61,116 @@ const ProfileStack = () => {
 }
 
 
-function Router(){
-const [initializing, setInitializing] = useState(true);
-const [user, setUser] = useState();
+function Router() {
 
-function onAuthStateChanged(user){
-    setUser(user);
-    if(initializing) setInitializing(false);
-}
+    //const [initializing, setInitializing] = useState(true);
+    const [userSession, setUserSession] = useState();
+    const [emailVerified, setEmailVerified] = useState(false);
 
-useEffect(() =>{
-    const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber;
-}, [])
+    // function onAuthStateChanged(user){
+    //     setUser(user);
+    //    if(initializing) setInitializing(false);
+    // }
 
-if(initializing) return null;
+    useEffect(() => {
+        firebase.auth().onAuthStateChanged(user => {
+            setUserSession(!!user);
+            if (firebase.auth().currentUser !== null) setEmailVerified(firebase.auth().currentUser.emailVerified);
+            //console.log('index:');
+            //console.log(emailVerified);
+        })
 
-if(!user){
-    return(
-        <Stack.Navigator screenOptions={{headerShown:false}}>     
-        <Stack.Screen name='Login' component={Login}/>
-        <Stack.Screen name='Sign Up' component={SignUp}/>
-    </Stack.Navigator>
+
+
+    }, [])
+
+    //if(initializing) return null;
+
+    if (!userSession) {
+        return (
+            <ToastProvider
+                placement='top'
+                animationType='slide-in'
+                animationDuration={250}
+                successColor={colors.notification}
+                dangerColor={colors.notification}
+                warningColor={colors.notification}
+                normalColor={colors.notification}
+                // icon={<Icon name='information' color={colors.darkestgreen} />}
+                successIcon={<Icon name='star-shooting' color={colors.yellow} size={15} />}
+                dangerIcon={<Icon name='alert' color={colors.danger} size={15} />}
+                warningIcon={<Icon name='alert-circle-outline' color={colors.warning} size={15} />}
+                textStyle={{ fontSize: 12 }}
+                offset={60}
+            >
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name='Login' component={Login} />
+                    <Stack.Screen name='Sign Up' component={SignUp} />
+                </Stack.Navigator>
+            </ToastProvider>
+        );
+    }
+    if (!emailVerified) {
+
+        return (
+            <ToastProvider
+                placement='top'
+                animationType='slide-in'
+                animationDuration={250}
+                successColor={colors.notification}
+                dangerColor={colors.notification}
+                warningColor={colors.notification}
+                normalColor={colors.notification}
+                // icon={<Icon name='information' color={colors.darkestgreen} />}
+                successIcon={<Icon name='star-shooting' color={colors.yellow} size={15} />}
+                dangerIcon={<Icon name='alert' color={colors.danger} size={15} />}
+                warningIcon={<Icon name='alert-circle-outline' color={colors.warning} size={15} />}
+                textStyle={{ fontSize: 12 }}
+                offset={60}
+            // renderToast={(toastOptions) => JSX.Element}
+            >
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name='Login' component={Login} />
+                    <Stack.Screen name='Sign Up' component={SignUp} />
+                </Stack.Navigator>
+            </ToastProvider>
+        );
+    }
+
+    return (
+        <ToastProvider
+            placement='top'
+            animationType='slide-in'
+            animationDuration={250}
+            successColor={colors.notification}
+            dangerColor={colors.notification}
+            warningColor={colors.notification}
+            normalColor={colors.notification}
+            // icon={<Icon name='information' color={colors.darkestgreen} />}
+            successIcon={<Icon name='star-shooting' color={colors.yellow} size={15} />}
+            dangerIcon={<Icon name='alert' color={colors.danger} size={15} />}
+            warningIcon={<Icon name='alert-circle-outline' color={colors.warning} size={15} />}
+            textStyle={{ fontSize: 12 }}
+            offset={60}
+        >
+            <Tab.Navigator initialRouteName='Profile'
+
+                screenOptions={{
+                    headerShown: false,
+                    tabBarItemStyle: { borderRightColor: colors.grayish, borderRightWidth: 2, borderLeftColor: colors.grayish, borderLeftWidth: 2 },
+                    tabBarActiveTintColor: colors.grayish,
+                    tabBarInactiveTintColor: colors.darkestgreen,
+                    tabBarInactiveBackgroundColor: colors.green,
+                    tabBarActiveBackgroundColor: colors.green,
+                }}>
+                <Tab.Screen name="Profile" component={ProfileStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="account-circle" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
+                <Tab.Screen name="Tests" component={TestsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="alpha-t-circle" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
+                <Tab.Screen name="Analyzes" component={AnalyzesStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
+                <Tab.Screen name="AdminTestOperations" component={AdminTestOperationsStack} options={{tabBarIcon: ({focused}) =>(<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />)}}/>
+            </Tab.Navigator>
+        </ToastProvider>
 
     );
-}
-return (
-    <Tab.Navigator initialRouteName='Profile' 
-    
-    screenOptions={{headerShown:false,
-     tabBarActiveTintColor:colors.grayish,
-     tabBarInactiveTintColor:colors.darkestgreen, 
-     tabBarInactiveBackgroundColor:colors.green, 
-     tabBarActiveBackgroundColor:colors.green}} >
-             <Tab.Screen name="Profile" component={ProfileStack} options={{tabBarIcon: ({focused})=>(<Icon name="account-circle" color={ focused ? colors.grayish : colors.darkestgreen} size={26} />)}}/>
-             <Tab.Screen name="Tests" component={TestsStack} options={{tabBarIcon: ({focused}) =>(<Icon name="alpha-t-circle" color={focused ? colors.grayish : colors.darkestgreen} size={26} />)}}/>
-             {/* <Tab.Screen name="Analyzes" component={AnalyzesStack} options={{tabBarIcon: ({focused}) =>(<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />)}}/> */}
-             <Tab.Screen name="AdminTestOperations" component={AdminTestOperationsStack} options={{tabBarIcon: ({focused}) =>(<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />)}}/>
-    </Tab.Navigator>
-    
-
-);
 
 }
 

@@ -1,8 +1,9 @@
 import React from "react";
-import {View, Text, ScrollView} from "react-native"
-import Button from "../../../components/Button";
+import { View, Text, ScrollView } from "react-native";
 
+import Button from "../../../components/Button";
 import styles from './TestInformation.style';
+
 
 const TestInformation = ({ route, navigation }) => {
 

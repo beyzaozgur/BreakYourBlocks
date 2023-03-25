@@ -1,7 +1,9 @@
 import React from "react";
-import {View, Text, TouchableOpacity} from 'react-native';
-import styles from './TestStartCard.styles';
+import { View, Text, TouchableOpacity } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+
+import styles from './TestStartCard.styles';
+
 
 const TestStartCard = props => {
 
