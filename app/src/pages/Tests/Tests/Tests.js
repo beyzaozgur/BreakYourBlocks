@@ -6,7 +6,12 @@ import * as Sharing from 'expo-sharing';
 import Svg, { Path, LinearGradient, Stop, Defs } from 'react-native-svg';
 import { useCountdown } from 'react-native-countdown-circle-timer';
 import { firebase } from '../../../../firebase';
+import * as FileSystem from 'expo-file-system';
+
 import styles from './Tests.style';
+import playSound from '../../../hooks/playSound';
+import useAudioUploader from '../../../hooks/useAudioUploader';
+import { firebase } from '../../../../firebase';
 
 
 const Tests = ({ route, navigation }) =>  {
@@ -15,8 +20,13 @@ const Tests = ({ route, navigation }) =>  {
   const [recordContinues, setRecordingContinues] = useState();
   const [recordingContent, setRecordingContent] = useState([]);
   const [message, setMessage] = useState("");
+  const [audioURI, setAudioURI] = useState(null);
+  const [audioName, setAudioName] = useState(null);
 
   const duration = route.params.duration;
+  const audio = route.params.sound;
+  const key = route.params.key;
+  
 
   const userId = route.params.userID;
   const testId = route.params.testID;
@@ -50,6 +60,20 @@ const Tests = ({ route, navigation }) =>  {
     strokeWidth,
   } = useCountdown({ isPlaying: true, duration, colors: 'url(#linearGradientId)' });
 
+  const {
+    play, 
+    stop,
+    isPlaying,
+
+} = playSound(audio);
+
+const {
+  selectedFile,
+  uploadProgress,
+  uploadError,
+  selectFile,
+  uploadFile,
+} = useAudioUploader();
 
   useEffect(() => {
     if (elapsedTime === duration) {
@@ -60,7 +84,7 @@ const Tests = ({ route, navigation }) =>  {
 
   async function startRecording() {
     try {
-
+      play();
       setRecordingContinues(true);
 
       const permission = await Audio.requestPermissionsAsync();
@@ -106,11 +130,23 @@ const Tests = ({ route, navigation }) =>  {
   async function stopRecording() {
 
     setRecordingContinues(false);
+    stop();
 
     await recording.stopAndUnloadAsync();
 
     const { sound, status } = await recording.createNewLoadedSoundAsync();
-
+   // const info = await FileSystem.getInfoAsync(recording.getURI());
+    const name =/* `${Date.now()}aaaa`;*/ 'myyyy';
+    //  const uri =  info.uri;
+    // const convertedURI = FileSystem.documentDirectory + 'audio.mp3';
+    //  await FileSystem.moveAsync({
+    //    from: uri,
+    //    to: convertedURI,
+    //  });
+    // const uri = URI.replace('.3gp', '.mp3');
+      setAudioURI(recording.getURI());
+    //  console.log(recording.getURI().replace('.3gp', '.mp3'));
+      setAudioName(name);
     setRecordingContent({
       sound: sound,
       duration: getDurationFormatted(status.durationMillis),
@@ -141,13 +177,41 @@ const Tests = ({ route, navigation }) =>  {
   //   });
   // }
 
-  function getRecordingLines() {
+///// This code snippet plays the user recorded audio from db - start
+// For now we do not upload audios of users to db as .mp3 but we can handle it when downloading
+/*const [sound, setSound] = useState();
+async function playFromFireBase(){
+  try {
+    // Download the audio file from Firebase Storage
+    const downloadUrl = await firebase.storage().ref('userAudioRecordings/vjeCNeaUzlWKbrFBC7vW0v66r8v1/yFQg2ausnzq4jTFFjvwi/myyyy.mp3').getDownloadURL();
+    const downloadFile = await FileSystem.downloadAsync(downloadUrl, FileSystem.documentDirectory + 'audio.mp3');
+    // Create a new sound instance from the downloaded file
+    const { sound } = await Audio.Sound.createAsync({ uri: downloadFile.uri });
+    setSound(sound);
+  } catch (error) {
+    console.log('Error loading sound:', error);
+  }
 
+  try {
+    // Play the sound
+    await sound.playAsync();
+  } catch (error) {
+    console.log('Error playing sound:', error);
+  }
+}*/
+//////////// end
+
+  function getRecordingLines() {
+    const folder = `userAudioRecordings/${firebase.auth().currentUser.uid}/${key}`;
+       
+   // console.log(key);
+    
     return (
       <View style={styles.row}>
         <Text style={styles.fill}>Recording - {recordingContent.duration}</Text>
         <Button style={styles.button} onPress={() => recordingContent.sound.replayAsync()} title="Play"></Button>
         <Button style={styles.button} onPress={() => Sharing.shareAsync(recordingContent.file)} title="Share"></Button>
+        <Button style={styles.button} onPress={() => uploadFile({audioURI: audioURI , folder: folder,fileName:audioName})} title="Save"></Button>
       </View>
     );
   }
@@ -186,6 +250,7 @@ const Tests = ({ route, navigation }) =>  {
           </View>
         </View>
       </View>
+      
       <Text style={styles.testTitle}>Test 10</Text>
       <View style={styles.testBox}>
         <Text style={styles.testContent}>{route.params.testContent}
