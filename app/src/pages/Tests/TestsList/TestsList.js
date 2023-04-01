@@ -25,6 +25,7 @@ const TestsList = ({navigation}) => {
                 testNo = testNo + 1;
             });
             setTestList(testList);
+            
             });
         return () => testData();
     }, []);

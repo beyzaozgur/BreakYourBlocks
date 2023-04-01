@@ -8,14 +8,22 @@ export default StyleSheet.create({
         flex: 1,
         backgroundColor: colors.green,
     },
-    seperator: {
-      borderWidth: 1,
-      borderColor: colors.darkestgreen,
-    },
     row: {
       flex: 1,
       justifyContent: 'space-between',
       marginTop: '10%',
-      marginHorizontal: '7%',
+      marginHorizontal: '5%',
     },
+    buttonContainer: {
+      flexDirection: 'row',
+     // justifyContent: 'space-between',
+     justifyContent:'flex-end',
+      marginTop: 40,
+      margin: 10,
+  },
+ /* title: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    color:colors.darkestgreen,
+},*/
   });
