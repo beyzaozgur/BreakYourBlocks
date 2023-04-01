@@ -7,10 +7,12 @@ import Dropdown from "../../../components/Dropdown";
 import { firebase } from "../../../../firebase";
 import addTest from "../../../hooks/addTest";
 import updateTest from "../../../hooks/updateTest";
+import getAudioNameList from '../../../hooks/getAudioNameList';
 
 function AddUpdateTest({ route, navigation })  {
 
     const testKey = route.params.key;
+    const audioNameList = getAudioNameList();
 
     console.log('TEST KEY: ' +  testKey);
 
@@ -54,7 +56,7 @@ function AddUpdateTest({ route, navigation })  {
     return(
         <View style={styles.container}>
             { testKey != null ? <Text style={styles.title}>Update Test</Text> : <Text style={styles.title}>Create Test</Text> }
-            <Dropdown data = {['No sound', 'Clapping']} placeholder='Sound' onChange={setSoundValue} dbValue={soundValue}/>
+            <Dropdown data = {audioNameList} placeholder='Sound' onChange={setSoundValue} dbValue={soundValue}/>
             <Dropdown data = {['30', '60', '90', '120']} placeholder='Duration (Seconds)' onChange={setDurationValue} dbValue={durationValue}/>
             <Dropdown data = {['Easy', 'Middle', 'Hard']} placeholder='Level' onChange={setLevelValue} dbValue={levelValue}/>
             <TestInputBox onChange={setTestContent} value={testContent}/>

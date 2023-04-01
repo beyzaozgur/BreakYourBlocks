@@ -18,6 +18,8 @@ import TestInformation from '../app/src/pages/Tests/TestInformation';
 // import CheckBox from '../app/src/components/CheckBox/CheckBox';
 import TestsList from '../app/src/pages/Tests/TestsList';
 import AnalysisList from '../app/src/pages/Analyzes/AnalysisList';
+import TestAudioList from '../app/src/pages/Admin/TestAudioList';
+import AddAudio from './src/pages/Admin/AddAudio/AddAudio';
 import { firebase } from './firebase';
 import colors from './src/styles/colors';
 
@@ -43,6 +45,16 @@ const ProfileStack = () => {
      )
  }
 
+ const TestAudioStack = () => {
+    return(
+        <Stack.Navigator screenOptions={{headerShown:false}}>
+             <Stack.Screen name='TestsListScreen' component={TestAudioList}/>
+             <Stack.Screen name='AddAudioScreen' component={AddAudio}/>
+             
+        </Stack.Navigator>
+    )
+}
+
 const AnalyzesStack = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -65,6 +77,7 @@ function Router() {
 
     //const [initializing, setInitializing] = useState(true);
     const [userSession, setUserSession] = useState();
+    const [adminSession, setAdminSession] = useState();
     const [emailVerified, setEmailVerified] = useState(false);
 
     // function onAuthStateChanged(user){
@@ -74,10 +87,16 @@ function Router() {
 
     useEffect(() => {
         firebase.auth().onAuthStateChanged(user => {
-            setUserSession(!!user);
+            if(user && user.email === 'stutteringtranscriptor@gmail.com'){
+                setAdminSession(!!user);
+            }else{
+                 setUserSession(!!user);
+            }
+           
             if (firebase.auth().currentUser !== null) setEmailVerified(firebase.auth().currentUser.emailVerified);
             //console.log('index:');
             //console.log(emailVerified);
+            
         })
 
 
@@ -86,7 +105,43 @@ function Router() {
 
     //if(initializing) return null;
 
-    if (!userSession) {
+    if (adminSession) {
+
+        return (
+            <ToastProvider
+                placement='top'
+                animationType='slide-in'
+                animationDuration={250}
+                successColor={colors.notification}
+                dangerColor={colors.notification}
+                warningColor={colors.notification}
+                normalColor={colors.notification}
+                // icon={<Icon name='information' color={colors.darkestgreen} />}
+                successIcon={<Icon name='star-shooting' color={colors.yellow} size={15} />}
+                dangerIcon={<Icon name='alert' color={colors.danger} size={15} />}
+                warningIcon={<Icon name='alert-circle-outline' color={colors.warning} size={15} />}
+                textStyle={{ fontSize: 12 }}
+                offset={60}
+            // renderToast={(toastOptions) => JSX.Element}
+            >
+                <Tab.Navigator //initialRouteName='Profile'
+
+                    screenOptions={{
+                        headerShown: false,
+                        tabBarItemStyle: { borderRightColor: colors.grayish, borderRightWidth: 2, borderLeftColor: colors.grayish, borderLeftWidth: 2 },
+                        tabBarActiveTintColor: colors.grayish,
+                        tabBarInactiveTintColor: colors.darkestgreen,
+                        tabBarInactiveBackgroundColor: colors.green,
+                        tabBarActiveBackgroundColor: colors.green,
+                    }}>
+                    <Tab.Screen name="AdminTestOperations" component={AdminTestOperationsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
+                    <Tab.Screen name="Audio" component={TestAudioStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
+                </Tab.Navigator>
+            </ToastProvider>
+        );
+    }
+
+    if (!userSession || !emailVerified) {
         return (
             <ToastProvider
                 placement='top'
@@ -110,7 +165,7 @@ function Router() {
             </ToastProvider>
         );
     }
-    if (!emailVerified) {
+  /*  if (!emailVerified) {
 
         return (
             <ToastProvider
@@ -135,7 +190,7 @@ function Router() {
                 </Stack.Navigator>
             </ToastProvider>
         );
-    }
+    }*/
 
     return (
         <ToastProvider
@@ -166,7 +221,7 @@ function Router() {
                 <Tab.Screen name="Profile" component={ProfileStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="account-circle" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                 <Tab.Screen name="Tests" component={TestsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="alpha-t-circle" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                 <Tab.Screen name="Analyzes" component={AnalyzesStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
-                <Tab.Screen name="AdminTestOperations" component={AdminTestOperationsStack} options={{tabBarIcon: ({focused}) =>(<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />)}}/>
+                
             </Tab.Navigator>
         </ToastProvider>
 
