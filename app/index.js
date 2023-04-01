@@ -38,7 +38,7 @@ const ProfileStack = () => {
          <Stack.Navigator screenOptions={{headerShown:false}}>
               <Stack.Screen name='TestsListScreen' component={TestsList}/>
               <Stack.Screen name='TestInformationScreen' component={TestInformation}/>
-              <Stack.Screen name='TestsScreen' component={Tests}/>
+              <Stack.Screen name='TestsScreen' component={Tests} initialParams={{userID: firebase.auth().currentUser.uid}}/>
          </Stack.Navigator>
      )
  }
@@ -61,7 +61,7 @@ const AnalyzesStack = () => {
 }
 
 
-function Router() {
+function Router () {
 
     //const [initializing, setInitializing] = useState(true);
     const [userSession, setUserSession] = useState();
@@ -79,12 +79,9 @@ function Router() {
             //console.log('index:');
             //console.log(emailVerified);
         })
-
-
-
     }, [])
 
-    //if(initializing) return null;
+    // if(initializing) return null;
 
     if (!userSession) {
         return (
@@ -164,7 +161,7 @@ function Router() {
                     tabBarActiveBackgroundColor: colors.green,
                 }}>
                 <Tab.Screen name="Profile" component={ProfileStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="account-circle" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
-                <Tab.Screen name="Tests" component={TestsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="alpha-t-circle" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
+                <Tab.Screen name="Tests" component={TestsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="alpha-t-circle" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }}/>
                 <Tab.Screen name="Analyzes" component={AnalyzesStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                 <Tab.Screen name="AdminTestOperations" component={AdminTestOperationsStack} options={{tabBarIcon: ({focused}) =>(<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />)}}/>
             </Tab.Navigator>

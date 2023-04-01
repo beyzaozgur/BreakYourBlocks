@@ -8,7 +8,7 @@ import styles from './TestStartCard.styles';
 const TestStartCard = props => {
 
     function navigateToTestInformationScreen() {
-        props.test.navigation.navigate('TestInformationScreen', {testContent: props.test.testContent, duration: props.test.duration});
+        props.test.navigation.navigate('TestInformationScreen', {testContent: props.test.testContent, duration: props.test.duration, key: props.test.key});
     }
 
     return(

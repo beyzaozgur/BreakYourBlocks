@@ -8,7 +8,7 @@ import styles from './TestInformation.style';
 const TestInformation = ({ route, navigation }) => {
 
     function navigateToTestsScreen() {
-        navigation.navigate('TestsScreen', {testContent: route.params.testContent, duration: route.params.duration});
+        navigation.navigate('TestsScreen', {testContent: route.params.testContent, duration: route.params.duration, testID: route.params.key});
     }
 
     return(
