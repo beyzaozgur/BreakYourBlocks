@@ -6,6 +6,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ToastProvider } from 'react-native-toast-notifications';
 
 import Profile from '../app/src/pages/Profile';
+import ChangePassword from '../app/src/pages/ChangePassword';
+import EditProfile from '../app/src/pages/EditProfile/EditProfile';
+import EmailRequest from '../app/src/pages/EmailRequest/EmailRequest';
+import Settings from '../app/src/pages/Settings/Settings';
 //import Analyzes from '../app/src/pages/Analyzes';
 import Tests from '../app/src/pages/Tests/Tests';
 import TestEditList from '../app/src/pages/Admin/TestEditList';
@@ -31,7 +35,9 @@ const ProfileStack = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='ProfileScreen' component={Profile} />
-
+            <Stack.Screen name='Settings' component={Settings}/>
+            <Stack.Screen name='ChangePasswordScreen' component={ChangePassword}/>
+            <Stack.Screen name='EditProfileScreen' component={EditProfile}/>
         </Stack.Navigator>
     )
 }
@@ -158,6 +164,8 @@ function Router () {
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
                     <Stack.Screen name='Login' component={Login} />
                     <Stack.Screen name='Sign Up' component={SignUp} />
+                    <Stack.Screen name='Email Request' component={EmailRequest} />
+                    
                 </Stack.Navigator>
             </ToastProvider>
         );
