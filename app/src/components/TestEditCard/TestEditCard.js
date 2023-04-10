@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import styles from './TestEditCard.styles';
@@ -23,7 +23,35 @@ const TestEditCard = props => {
             console.log('Test deleted!');
             console.log(props.test.key);
         });
+
+        Alert.alert('Test is successfully deleted.');
     }
+
+    // const optionsArray = [
+    //     {
+    //         text: 'Cancel',
+    //         onPress: () => console.log('Cancel Pressed'),
+    //     },
+    //     {text: 'Yes', onPress: () => console.log('OK Pressed')},
+    //     ];
+    // const options = optionsArray.join(" ");
+
+    const testDeleteAlert = () =>
+        Alert.alert(
+            'WARNING',
+            'Are you sure you want to delete the test?',
+            [
+            {
+                text: 'Cancel',
+                style: 'cancel',
+            },
+            {
+                text: 'Delete',
+                onPress: () => deleteTest(),
+            },
+            ],
+        );
+
 
     // Convert firebase timestamp object to datetime string - creation date
     if(props.test.creationDate != null) {
@@ -59,7 +87,7 @@ const TestEditCard = props => {
                     <Text style={styles.title} >Test {props.test.testNo}</Text>
                     <View style={styles.buttonsLocation}>
                         <FontAwesome.Button style={styles.buttonContainer} name='edit' size={25} backgroundColor={colors.warning} onPress={navigateToUpdateTestScreen}/>
-                        <FontAwesome.Button style={styles.buttonContainer} name='trash' size={25} backgroundColor={colors.danger} onPress={deleteTest}/>
+                        <FontAwesome.Button style={styles.buttonContainer} name='trash' size={25} backgroundColor={colors.danger} onPress={testDeleteAlert}/>
                     </View>
                 </View>
                 <Text><Text style={styles.subtitle}>Level:</Text> {props.test.level}</Text>

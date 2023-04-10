@@ -5,7 +5,6 @@ import { Audio } from 'expo-av';
 import * as Sharing from 'expo-sharing';
 import Svg, { Path, LinearGradient, Stop, Defs } from 'react-native-svg';
 import { useCountdown } from 'react-native-countdown-circle-timer';
-import { firebase } from '../../../../firebase';
 import * as FileSystem from 'expo-file-system';
 
 import styles from './Tests.style';
@@ -26,10 +25,10 @@ const Tests = ({ route, navigation }) =>  {
   const duration = route.params.duration;
   const audio = route.params.sound;
   const key = route.params.key;
-  
+  const [testDuration, setTestDuration] = useState();
 
   const userId = route.params.userID;
-  const testId = route.params.testID;
+  const testId = key;
 
   function addCompletedTest(){
     firebase
@@ -39,11 +38,12 @@ const Tests = ({ route, navigation }) =>  {
             userID: userId,
             testID: testId,
             // sound: recordingContent.sound,
-            // testduration: recordingContent.duration,
+            testDuration: elapsedTime.toFixed(2),
             file: recording.getURI(),
             completitionDate: firebase.firestore.FieldValue.serverTimestamp()
         });
   }
+
 
   const executeOnLoad = () => {
     startRecording();
@@ -149,10 +149,11 @@ const {
       setAudioName(name);
     setRecordingContent({
       sound: sound,
-      duration: getDurationFormatted(status.durationMillis),
+      duration: status.durationMillis/1000, // test duration in seconds
       file: recording.getURI()
     });
 
+    setTestDuration(status.durationMillis/1000);
     addCompletedTest();
 
   }
