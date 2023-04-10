@@ -35,6 +35,11 @@ export default StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
     },
+    forgotPassword_text:{
+        color:colors.gray,
+        fontSize:15,
+        textAlign: 'center',
+    },
     error: {
         fontSize: 10,
         fontWeight: 'bold',

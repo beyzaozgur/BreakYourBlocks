@@ -10,7 +10,7 @@ import * as FileSystem from 'expo-file-system';
 import styles from './Tests.style';
 import playSound from '../../../hooks/playSound';
 import useAudioUploader from '../../../hooks/useAudioUploader';
-import { firebase } from '../../../../firebase';
+//import { firebase } from '../../../../firebase';
 
 
 const Tests = ({ route, navigation }) =>  {

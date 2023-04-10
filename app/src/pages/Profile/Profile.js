@@ -12,7 +12,7 @@ import { firebase } from "../../../firebase";
 import Loading from "../../components/Loading/Loading";
 
 
-function ProfileScreen() {
+function ProfileScreen({navigation}) {
     //     var defaultUserProfile = require('../../assets/profile.png')
     //     const [imageUri, setImageUri] = useState(defaultUserProfile);
     //   const [tintColor, setTintColor] = useState(colors.darkestgreen);
@@ -49,16 +49,13 @@ function ProfileScreen() {
     //           }).catch(error => console.log(error));
     //           };
 
-    async function handleLogOut() {
-        await firebase.auth().signOut();
-    }
 
     return (
 
         <SafeAreaView style={styles.container}>
 
             <View style={styles.profileContainer}>
-                <Icon name="cog-outline" size={35} color={colors.darkestgreen} style={styles.settings_icon} onPress={handleLogOut} />
+                <Icon name="cog-outline" size={35} color={colors.darkestgreen} style={styles.settings_icon} onPress={()=>navigation.navigate('Settings')} />
                 {/* <View style={styles.profilePictureContainer}>
             <Image style={styles.profilePicture} source={imageUri} tintColor={tintColor}/>
             <Icon name="plus-circle" size= {35} color={colors.darkestgreen} style={styles.add_photo_icon} onPress={selectImage}/>
