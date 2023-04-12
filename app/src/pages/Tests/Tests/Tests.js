@@ -5,12 +5,11 @@ import { Audio } from 'expo-av';
 import * as Sharing from 'expo-sharing';
 import Svg, { Path, LinearGradient, Stop, Defs } from 'react-native-svg';
 import { useCountdown } from 'react-native-countdown-circle-timer';
-import * as FileSystem from 'expo-file-system';
 
 import styles from './Tests.style';
 import playSound from '../../../hooks/playSound';
 import useAudioUploader from '../../../hooks/useAudioUploader';
-//import { firebase } from '../../../../firebase';
+import { firebase } from '../../../../firebase';
 
 
 const Tests = ({ route, navigation }) =>  {
@@ -75,11 +74,11 @@ const {
   uploadFile,
 } = useAudioUploader();
 
-  useEffect(() => {
-    if (elapsedTime === duration) {
-      stopRecording();
-    }
-  }, [elapsedTime]);
+useEffect(() => {
+  if (Math.trunc(elapsedTime) == duration) {
+    stopRecording();
+  }
+}, [elapsedTime]);
 
 
   async function startRecording() {
@@ -156,6 +155,8 @@ const {
     setTestDuration(status.durationMillis/1000);
     addCompletedTest();
 
+    console.log("TEST ADDED");
+
   }
 
   function getDurationFormatted(millis) {
@@ -221,6 +222,7 @@ async function playFromFireBase(){
     <View style={styles.container} onLayout={executeOnLoad}>
       <View style={styles.timerContainer}>
         <View style={{ width: 65, height: 65, position: 'relative' }}>
+        {recordContinues && Math.trunc(elapsedTime) !== duration && (
           <Svg width={size} height={size} preserveAspectRatio="xMinYMin slice" viewBox="0 0 500 500">
             <Defs>
               <LinearGradient id="linearGradientId" x1="1" y1="0" x2="0" y2="0">
@@ -234,7 +236,7 @@ async function playFromFireBase(){
               stroke="#d9d9d9"
               strokeWidth={strokeWidth}
             />
-            {recordContinues && elapsedTime !== duration && (
+            
               <Path
                 d={path}
                 fill="none"
@@ -244,8 +246,9 @@ async function playFromFireBase(){
                 strokeDasharray={pathLength}
                 strokeDashoffset={strokeDashoffset}
               />
-            )}
+            
           </Svg>
+          )}
           <View style={styles.time}>
             <Text style={{ fontSize: 25 }}>{recordContinues ? remainingTime : 0}</Text>
           </View>

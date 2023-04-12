@@ -93,7 +93,7 @@ function Router () {
 
     useEffect(() => {
         firebase.auth().onAuthStateChanged(user => {
-            if(user && user.email === 'beyzaozgur35@gmail.com'){
+            if(user && user.email === 'stutteringtranscriptor@gmail.com'){
                 setAdminSession(!!user);
             }else{
                  setUserSession(!!user);
