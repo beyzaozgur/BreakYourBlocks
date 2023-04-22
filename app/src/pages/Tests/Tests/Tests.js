@@ -91,10 +91,14 @@ const {
       stopRecording();
     });
 
-    let formattedElapsedTime = parseFloat(elapsedTime.toFixed(0));
-    if (formattedElapsedTime == duration) {
+    //let formattedElapsedTime = parseFloat(elapsedTime.toFixed(0));
+      
+    if (Math.trunc(elapsedTime) == duration) {
       stopRecording();
     }
+   /* if (formattedElapsedTime == duration) {
+      stopRecording();
+    }*/
 
     return () => {
       unsubscribeBlur();
@@ -114,10 +118,6 @@ const {
          play();
       }
      }
-     
-    /* if (Math.trunc(elapsedTime) == duration) {
-      stopRecording();
-    }*/
 
   }, [elapsedTime]);
 
@@ -150,9 +150,22 @@ const {
     }
   }
 
+  function getDateAndTime(){
+    const currentDate = new Date(); // create a new Date object with the current date and time
+const currentYear = currentDate.getFullYear(); // get the current year (4 digits)
+const currentMonth = currentDate.getMonth() + 1; // get the current month (1-12) - note that months are zero-indexed, so we add 1
+const currentDay = currentDate.getDate(); // get the current day of the month (1-31)
+const currentHour = currentDate.getHours(); // get the current hour (0-23)
+const currentMinute = currentDate.getMinutes(); // get the current minute (0-59)
+const currentSecond = currentDate.getSeconds(); // get the current second (0-59)
+
+
+    return currentDay+ "." +currentMonth + "." + currentYear + " " + currentHour + "." + currentMinute + "." + currentSecond
+  }
 
  
   async function stopRecording() {
+    setIsPlayed(true);
   if(recording){
     stop();
     setRecordingContinues(false);
@@ -167,10 +180,10 @@ const {
     
     const { sound, status } = await recording.createNewLoadedSoundAsync();
  
-    const name =/* `${Date.now()}aaaa`;*/ 'myyyy';
+    //const name =/* `${Date.now()}aaaa`;*/ 'myyyy';
    
       setAudioURI(recording.getURI());
-      setAudioName(name);
+      setAudioName(getDateAndTime());
       setRecordingContent({
       sound: sound,
       duration: status.durationMillis/1000, // test duration in seconds
@@ -217,7 +230,7 @@ async function playFromFireBase(){
 //////////// end
 
   function getRecordingLines() {
-    const folder = `userAudioRecordings/${firebase.auth().currentUser.uid}/${key}`;
+    const folder = `userAudioRecordings/${firebase.auth().currentUser.uid}/${key}`; // userAudioRecordings/user/test
        
    
     
@@ -225,7 +238,7 @@ async function playFromFireBase(){
       <View style={styles.row}>
         <Text style={styles.fill}>Recording - {recordingContent.duration}</Text>
         <Button theme='little' onPress={() => recordingContent.sound.replayAsync()} text="Play"></Button>
-        <Button theme='little' onPress={() => uploadFile({audioURI: audioURI , folder: folder,fileName:audioName})} text="Save"></Button>
+        <Button theme='little' onPress={() => uploadFile({audioURI: audioURI , folder: folder, fileName:audioName})} text="Save"></Button>
       </View>
     );
   }

@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import * as DocumentPicker from 'expo-document-picker';
 import {firebase} from '../../firebase';
+import { useToast } from "react-native-toast-notifications";
+import ErrorMessageParser from '../utils/ErrorMessageParser';
 
 const useAudioUploader = () => {
+  const toast = useToast();
+
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadError, setUploadError] = useState(null);
@@ -36,7 +40,7 @@ try{
         // console.log(recording);
         // setSelectedFile(recording);
         
-        setUri(audioURI);
+       setUri(audioURI);
      //    console.log(uri);
         }
     }
@@ -63,6 +67,7 @@ uploadTask.on('state_changed',
   (error) => {
     setUploadError(error);
     console.error(error);
+   // toast.show(ErrorMessageParser(error.code), { type: 'normal' }); 
   }, 
  async () => {
     const downloadUrl = await uploadTask.snapshot.ref.getDownloadURL();
@@ -70,11 +75,13 @@ uploadTask.on('state_changed',
       setUploadProgress(0);
       console.log('File uploaded to Firebase storage:', downloadUrl);
     console.log('File uploaded successfully');
+    toast.show("Successfully uploaded!", { type: 'success' }); 
   }
 );
 }catch (error) {
   setUploadError(error);
   console.log(error);
+//  toast.show(ErrorMessageParser(error.code), { type: 'normal' }); 
 }
 
    };

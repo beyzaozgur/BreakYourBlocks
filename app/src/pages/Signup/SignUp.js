@@ -95,7 +95,7 @@ const SignUp = ({ navigation }) => {
                 })
          } catch (error) {
              console.log(error);
-             toast.show(ErrorMessageParser(error), { type: 'normal' }); 
+             toast.show(ErrorMessageParser(error.code), { type: 'normal' }); 
         }
 
     }
