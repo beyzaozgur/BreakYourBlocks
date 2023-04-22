@@ -106,8 +106,11 @@ const playSound = (fileName) => {
 
   async function stop() {
     try {
-      await sound.stopAsync();
-      setIsPlaying(false);
+     // if (sound && sound.status === "loaded") {
+        await sound.stopAsync();
+        setIsPlaying(false);
+    //  }
+      
     } catch (error) {
       console.log('Error stopping sound:', error);
     }

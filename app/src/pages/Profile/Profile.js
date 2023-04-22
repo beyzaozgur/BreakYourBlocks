@@ -9,7 +9,7 @@ import colors from "../../styles/colors";
 import styles from "./Profile.style";
 // import Button from "../../components/Button";
 import { firebase } from "../../../firebase";
-import Loading from "../../components/Loading/Loading";
+//import Loading from "../../components/Loading/Loading";
 
 
 function ProfileScreen() {

@@ -9,6 +9,7 @@ import Input from "../../components/Input";
 import styles from './Login.style';
 //import { signInWithEmailAndPassword } from "firebase/auth";
 import { firebase } from "../../../firebase";
+import ErrorMessageParser from "../../utils/ErrorMessageParser";
 
 
 const LoginSchema = Yup.object({
@@ -37,7 +38,7 @@ const Login = ({ navigation }) => {
                     if (emailVerified === true) {
                         firebase.auth().signOut();
                         await firebase.auth().signInWithEmailAndPassword(values.mail, values.password).then(() => {
-                            toast.show('Your mail verified', { type: 'success' });
+                         //   toast.show('Your mail verified', { type: 'success' });
                         })
 
                     } else {
@@ -50,6 +51,7 @@ const Login = ({ navigation }) => {
             )
         } catch (error) {
             console.log(error);
+            toast.show(ErrorMessageParser(error.code), { type: 'normal' });           
         }
 
         console.log(values);

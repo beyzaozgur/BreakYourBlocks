@@ -103,7 +103,10 @@ function Router() {
 
     }, [])
 
+
+
     //if(initializing) return null;
+
 
     if (adminSession) {
 

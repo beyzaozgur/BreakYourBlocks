@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
-import firebase from 'firebase/compat';
+import {firebase} from '../../firebase';
 
-const useAudioUploader = () => {
+const getAudioNameList = () => {
     const storageRef = firebase.storage().ref();
     const testAudioNameList = ['No Sound'];
 
@@ -26,4 +26,4 @@ const useAudioUploader = () => {
   return testAudioNameList;
 };
 
-export default useAudioUploader;
+export default getAudioNameList;
