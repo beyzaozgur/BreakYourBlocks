@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { View, FlatList } from 'react-native';
 import TestStartCard from '../../../components/TestStartCard';
-import styles from './TestsList.style'
+import styles from './TestsList.style';
 import { firebase } from "../../../../firebase";
 
 const TestsList = ({navigation}) => {
