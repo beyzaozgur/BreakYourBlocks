@@ -12,6 +12,7 @@ import CheckBox from "../../components/CheckBox";
 import DatePicker from '../../components/DatePicker';
 import { firebase } from "../../../firebase";
 import styles from './SignUp.style';
+import ErrorMessageParser from '../../utils/ErrorMessageParser';
 
 
 const educationOptions = ['No Formal Education', 'Primary Education', 'Secondary Education', 'High School',
@@ -94,6 +95,7 @@ const SignUp = ({ navigation }) => {
                 })
          } catch (error) {
              console.log(error);
+             toast.show(ErrorMessageParser(error.code), { type: 'normal' }); 
         }
 
     }

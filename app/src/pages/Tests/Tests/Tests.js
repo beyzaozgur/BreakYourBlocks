@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Text, View, Pressable } from 'react-native';
+import {Text, View, Pressable } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Audio } from 'expo-av';
 import * as Sharing from 'expo-sharing';
@@ -10,7 +10,7 @@ import styles from './Tests.style';
 import playSound from '../../../hooks/playSound';
 import useAudioUploader from '../../../hooks/useAudioUploader';
 import { firebase } from '../../../../firebase';
-
+import Button from '../../../components/Button';
 
 const Tests = ({ route, navigation }) =>  {
   const [recording, setRecording] = useState();
@@ -20,6 +20,8 @@ const Tests = ({ route, navigation }) =>  {
   const [message, setMessage] = useState("");
   const [audioURI, setAudioURI] = useState(null);
   const [audioName, setAudioName] = useState(null);
+  const [recordingStatus, setRecordingStatus] = useState(null);
+  const [isPlayed, setIsPlayed] = useState(false);
 
   const duration = route.params.duration;
   const audio = route.params.sound;
@@ -43,8 +45,10 @@ const Tests = ({ route, navigation }) =>  {
         });
   }
 
+  const randomTime = Math.floor(Math.random() * duration); 
 
   const executeOnLoad = () => {
+    stopRecording();
     startRecording();
   };
 
@@ -74,16 +78,53 @@ const {
   uploadFile,
 } = useAudioUploader();
 
-useEffect(() => {
-  if (Math.trunc(elapsedTime) == duration) {
-    stopRecording();
-  }
-}, [elapsedTime]);
+
+  useEffect(() => {
+    // const unsubscribe = navigation.addListener('blur', () => {      
+    //   stopRecording();
+    // });
+
+    const unsubscribeBlur = navigation.addListener('blur', () => {
+      stopRecording();
+    });
+    const unsubscribeFocus = navigation.addListener('focus', () => {
+      stopRecording();
+    });
+
+    //let formattedElapsedTime = parseFloat(elapsedTime.toFixed(0));
+      
+    if (Math.trunc(elapsedTime) == duration) {
+      stopRecording();
+    }
+   /* if (formattedElapsedTime == duration) {
+      stopRecording();
+    }*/
+
+    return () => {
+      unsubscribeBlur();
+      unsubscribeFocus();
+    };
+
+   // return unsubscribe;
+  }, [elapsedTime, duration, navigation]);
+
+  
+  useEffect(() => {
+     
+     if(!isPlayed){
+      if(randomTime == parseFloat((elapsedTime).toFixed(0))){
+      
+       setIsPlayed(true);
+         play();
+      }
+     }
+
+  }, [elapsedTime]);
 
 
   async function startRecording() {
     try {
-      play();
+            
       setRecordingContinues(true);
 
       const permission = await Audio.requestPermissionsAsync();
@@ -99,6 +140,7 @@ useEffect(() => {
         );
 
         setRecording(recording);
+      
 
       } else {
         setMessage("Please grant permission to app to access microphone.");
@@ -108,55 +150,50 @@ useEffect(() => {
     }
   }
 
-
-  // async function stopRecording() {
-
-  //   setRecording(undefined);
-  //   await recording.stopAndUnloadAsync();
-
-  //   let updatedRecordings = [...recordings];
-  //   const { sound, status } = await recording.createNewLoadedSoundAsync();
-  //   updatedRecordings.push({
-  //     sound: sound,
-  //     duration: getDurationFormatted(status.durationMillis),
-  //     file: recording.getURI()
-  //   });
-
-  //   setRecordings(updatedRecordings);
-  // }
+  function getDateAndTime(){
+    const currentDate = new Date(); // create a new Date object with the current date and time
+const currentYear = currentDate.getFullYear(); // get the current year (4 digits)
+const currentMonth = currentDate.getMonth() + 1; // get the current month (1-12) - note that months are zero-indexed, so we add 1
+const currentDay = currentDate.getDate(); // get the current day of the month (1-31)
+const currentHour = currentDate.getHours(); // get the current hour (0-23)
+const currentMinute = currentDate.getMinutes(); // get the current minute (0-59)
+const currentSecond = currentDate.getSeconds(); // get the current second (0-59)
 
 
+    return currentDay+ "." +currentMonth + "." + currentYear + " " + currentHour + "." + currentMinute + "." + currentSecond
+  }
+
+ 
   async function stopRecording() {
-
-    setRecordingContinues(false);
+    setIsPlayed(true);
+  if(recording){
     stop();
+    setRecordingContinues(false);
 
-    await recording.stopAndUnloadAsync();
-
+    if(recordingStatus){
+      return;
+    }
+    
+      setRecordingStatus(await recording.stopAndUnloadAsync());
+    
+    
+    
     const { sound, status } = await recording.createNewLoadedSoundAsync();
-   // const info = await FileSystem.getInfoAsync(recording.getURI());
-    const name =/* `${Date.now()}aaaa`;*/ 'myyyy';
-    //  const uri =  info.uri;
-    // const convertedURI = FileSystem.documentDirectory + 'audio.mp3';
-    //  await FileSystem.moveAsync({
-    //    from: uri,
-    //    to: convertedURI,
-    //  });
-    // const uri = URI.replace('.3gp', '.mp3');
+ 
+    //const name =/* `${Date.now()}aaaa`;*/ 'myyyy';
+   
       setAudioURI(recording.getURI());
-    //  console.log(recording.getURI().replace('.3gp', '.mp3'));
-      setAudioName(name);
-    setRecordingContent({
+      setAudioName(getDateAndTime());
+      setRecordingContent({
       sound: sound,
       duration: status.durationMillis/1000, // test duration in seconds
       file: recording.getURI()
     });
-
     setTestDuration(status.durationMillis/1000);
     addCompletedTest();
 
     console.log("TEST ADDED");
-
+    }
   }
 
   function getDurationFormatted(millis) {
@@ -167,17 +204,6 @@ useEffect(() => {
     return `${minutesDisplay}:${secondsDisplay}`;
   }
 
-  // function getRecordingLines() {
-  //   return recordings.map((recordingLine, index) => {
-  //     return (
-  //       <View key={index} style={styles.row}>
-  //         <Text style={styles.fill}>Recording {index + 1} - {recordingLine.duration}</Text>
-  //         <Button style={styles.button} onPress={() => recordingLine.sound.replayAsync()} title="Play"></Button>
-  //         <Button style={styles.button} onPress={() => Sharing.shareAsync(recordingLine.file)} title="Share"></Button>
-  //       </View>
-  //     );
-  //   });
-  // }
 
 ///// This code snippet plays the user recorded audio from db - start
 // For now we do not upload audios of users to db as .mp3 but we can handle it when downloading
@@ -204,16 +230,15 @@ async function playFromFireBase(){
 //////////// end
 
   function getRecordingLines() {
-    const folder = `userAudioRecordings/${firebase.auth().currentUser.uid}/${key}`;
+    const folder = `userAudioRecordings/${firebase.auth().currentUser.uid}/${key}`; // userAudioRecordings/user/test
        
-   // console.log(key);
+   
     
     return (
       <View style={styles.row}>
         <Text style={styles.fill}>Recording - {recordingContent.duration}</Text>
-        <Button style={styles.button} onPress={() => recordingContent.sound.replayAsync()} title="Play"></Button>
-        <Button style={styles.button} onPress={() => Sharing.shareAsync(recordingContent.file)} title="Share"></Button>
-        <Button style={styles.button} onPress={() => uploadFile({audioURI: audioURI , folder: folder,fileName:audioName})} title="Save"></Button>
+        <Button theme='little' onPress={() => recordingContent.sound.replayAsync()} text="Play"></Button>
+        <Button theme='little' onPress={() => uploadFile({audioURI: audioURI , folder: folder, fileName:audioName})} text="Save"></Button>
       </View>
     );
   }
@@ -262,9 +287,7 @@ async function playFromFireBase(){
       </View>
       <Text>{message}</Text>
       <View style={styles.buttonContainer}>
-        <Pressable style={styles.startStopButton} onPress={stopRecording}>
-          <Text style={styles.buttonText}>Complete Test</Text>
-        </Pressable>
+      <Button onPress={stopRecording} text={'Complete Test'}></Button>
       </View>
       {!recordContinues ? getRecordingLines() : null}
       <StatusBar style="auto" />
@@ -273,3 +296,4 @@ async function playFromFireBase(){
 }
 
 export default Tests;
+

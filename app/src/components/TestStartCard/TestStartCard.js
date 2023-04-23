@@ -1,12 +1,14 @@
 import React, {useState, useEffect} from "react";
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useToast } from "react-native-toast-notifications";
 
 import styles from './TestStartCard.styles';
 import { firebase } from '../../../firebase';
 
 
 const TestStartCard = props => {
+    const toast = useToast();
 
     const [testCompletitionDate, setTestCompletitionDate] = useState('');
 
@@ -54,7 +56,7 @@ const TestStartCard = props => {
     }
 
     function warningPopup(daysDiff) {
-        Alert.alert('7 days must pass from the date you last took the test. ' + (7-daysDiff) + ' days left.');
+        toast.show('7 days must pass from the date you last took the test. ' + (7-daysDiff) + ' days left.', { type: 'warning' });
     }
 
     return(
