@@ -9,11 +9,15 @@ import useAudioUploader from '../../../hooks/useAudioUploader';
 const AddAudio = () => {
    
     const {
-        selectedFile,
-        uploadProgress,
-        uploadError,
-        selectFile,
-        uploadFile,
+      selectedFile,
+      uploadProgress,
+      uploadError,
+      isUploadSucceed,
+      setUploadError,
+      setIsUploadSucceed,
+      selectFile,
+      uploadFile,
+      uploadRecording
       } = useAudioUploader();
     const [fileName, setFileName] = useState('');
     const handleFileNameChange = (fileName) => {

@@ -14,7 +14,6 @@ const TestsList = ({navigation}) => {
             .onSnapshot(querySnapshot => {
             const testList = [];
             var testNo = 1;
-
             querySnapshot.forEach(documentSnapshot => {
                 testList.push({
                 ...documentSnapshot.data(),
@@ -23,8 +22,12 @@ const TestsList = ({navigation}) => {
                 testNo: testNo
                 });
                 testNo = testNo + 1;
-            });
+                console.log(documentSnapshot.id);
+            }
+            );
             setTestList(testList);
+            console.log('Test List');
+            console.log(testList);
             
             });
         return () => testData();

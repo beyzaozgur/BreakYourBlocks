@@ -52,7 +52,7 @@ const TestStartCard = props => {
     }
 
     function navigateToTestInformationScreen() {
-        props.test.navigation.navigate('TestInformationScreen', {testContent: props.test.testContent, duration: props.test.duration, sound:props.test.sound, key:props.test.key});
+        props.test.navigation.navigate('TestInformationScreen', {testContent: props.test.testContent, duration: props.test.duration, sound:props.test.sound, key:props.test.key, testNo:props.test.testNo});
     }
 
     function warningPopup(daysDiff) {
