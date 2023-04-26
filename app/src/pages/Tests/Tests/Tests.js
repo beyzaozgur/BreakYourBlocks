@@ -187,11 +187,11 @@ const Tests = ({ route, navigation }) => {
           playsInSilentModeIOS: true
         });
 
-        const { recording : newRecording} = await Audio.Recording.createAsync(
+        const { recording} = await Audio.Recording.createAsync(
           Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
         );
 
-        setRecording(newRecording);
+        setRecording(recording);
 
 
       } else {
