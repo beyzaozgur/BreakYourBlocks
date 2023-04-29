@@ -54,7 +54,7 @@ const ProfileStack = () => {
  const TestAudioStack = () => {
     return(
         <Stack.Navigator screenOptions={{headerShown:false}}>
-             <Stack.Screen name='TestsListScreen' component={TestAudioList}/>
+             <Stack.Screen name='TestsAudioListScreen' component={TestAudioList}/>
              <Stack.Screen name='AddAudioScreen' component={AddAudio}/>
              
         </Stack.Navigator>

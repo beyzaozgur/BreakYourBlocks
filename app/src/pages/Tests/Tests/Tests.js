@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, Pressable } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Text, View, BackHandler } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Audio } from 'expo-av';
 import * as Sharing from 'expo-sharing';
 import Svg, { Path, LinearGradient, Stop, Defs } from 'react-native-svg';
 import { useCountdown } from 'react-native-countdown-circle-timer';
 import { useToast } from "react-native-toast-notifications";
+import { useFocusEffect } from '@react-navigation/native';
 
 
 import styles from './Tests.style';
@@ -16,33 +17,29 @@ import Button from '../../../components/Button';
 
 const Tests = ({ route, navigation }) => {
 
-
-  const [recording, setRecording] = useState();
-  const [recordEndedSuccessfully, setRecordEndedSuccessfully] = useState(false);
-  const [unsuccessfulRecord, setUnsuccessfulRecord] = useState(false);
-  const [recordContinues, setRecordingContinues] = useState();
-
-  const [recordingContent, setRecordingContent] = useState([]);
-  /* const [message, setMessage] = useState("");*/
+  const [recording, setRecording] = useState(); // global recording variable to reach from everywhere
+  const [recordEndedSuccessfully, setRecordEndedSuccessfully] = useState(false); // record ends by pressing complete test or time ends
+  const [recordContinues, setRecordingContinues] = useState(); 
+  const [recordingContent, setRecordingContent] = useState([]); 
   const [audioURI, setAudioURI] = useState(null);
   const [audioName, setAudioName] = useState(null);
+  const [isPlayed, setIsPlayed] = useState(false); // check for background voice is played 
+  const [isAutoSave, setAutoSave] = useState(false); // is recording saved automatically by the end of time
 
-  const [isPlayed, setIsPlayed] = useState(false);
-  const [isAutoSave, setAutoSave] = useState(false);
+  const [testDuration, setTestDuration] = useState();
 
-  const toast = useToast();
+  const toast = useToast(); // toast notication variable creation
 
   const duration = route.params.duration;
   const audio = route.params.sound;
   const key = route.params.key;
-  const [testDuration, setTestDuration] = useState();
-
   const userId = route.params.userID;
   const testId = key;
 
 
-  const randomTime = Math.floor(Math.random() * duration);
-  const folder = `userAudioRecordings/${firebase.auth().currentUser.uid}/${key}`; // userAudioRecordings/user/test
+  const randomTime = Math.floor(Math.random() * duration); // random time to play background voice
+
+  const folder = `userAudioRecordings/${firebase.auth().currentUser.uid}/${key}`; // userAudioRecordings/user/test -- folder to save recording
 
 
   const {
@@ -63,10 +60,10 @@ const Tests = ({ route, navigation }) => {
     stop,
     isPlaying,
 
-  } = playSound(audio);
+  } = playSound(audio); // playSound hook to play background voices
 
 
-  const {
+  const { // unused ones are for admin voice file upload purpose
     selectedFile,
     uploadProgress,
     uploadError,
@@ -74,73 +71,90 @@ const Tests = ({ route, navigation }) => {
     setUploadError,
     setIsUploadSucceed,
     selectFile,
-    uploadFile,
-    uploadRecording
-  } = useAudioUploader();
+    uploadFile, // function to upload audio recording
+  } = useAudioUploader(); // useAudioUploader hook to upload user audio recording
 
-  const executeOnLoad = () => {
-    //  stopRecording();
+  const executeOnLoad = () => { // recording immidately starts when the test starts
     startRecording();
   };
 
+  const handleBackButton = () => { // back button control to prevent going back to information screen and restart test.
+    if (recordContinues) { // if record already ended, notification is not shown. Otherwise pops-up.
+      toast.show("Recording descarded!");
+      stopRecording();
+    }
+    // 
+    navigation.navigate('TestsListScreen');// Probabaly it is because navigation parameter is not the one that we want
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+      };
+    }, [])
+  );
+
   useEffect(() => {
 
+    const unsubscribeBlur = navigation.addListener('blur', () => {// tab navigation
 
-    const unsubscribeBlur = navigation.addListener('blur', () => {
-      stopRecording();
-     // setUnsuccessfulRecord(true);
-      toast.show('Unsuccessful recording!');
+      if (recordContinues) {
+        toast.show("Recording descarded!");
+        stopRecording();
+      }
+      
     });
-   /* const unsubscribeFocus = navigation.addListener('focus', () => {
-      stopRecording();
-      //  setUnsuccessfulRecord(true);
-      //  toast.show('Unsuccessful recording!');
-    });*/
 
-  /*  if(!isFocused){
-      stopRecording();
-      toast.show('Unsuccessful recording!');
-    }*/
+    const unsubscribe = navigation.addListener('beforeRemove', (e) => { // screen navigation
+      e.preventDefault();
+      if (recordContinues) {
+        toast.show("Recording descarded!");
+        stopRecording();
+      }
+      
+
+      navigation.dispatch(e.data.action);
+    });
 
 
     if (Math.trunc(elapsedTime) == duration && recordContinues) {
-      
-         completeTest();
-         console.log("auto");
-         console.log(audioURI);
-         uploadRecording({ audioURI: audioURI, folder: folder, fileName: audioName })
-         .then((downloadUrl) => {
-           toast.show("Successfully uploaded!", { type: 'success' }); 
-           console.log('Upload successful, download URL:', downloadUrl);
-         })
-         .catch((error) => {
-           console.error('Error uploading file:', error);
-           toast.show(ErrorMessageParser(error.code), { type: 'normal' }); 
-         })   
-         setAutoSave(true);   
-       
-     
+      completeTest();
+      setAutoSave(true);
     }
 
     return () => {
       unsubscribeBlur();
-    //  unsubscribeFocus();
-    };
+      unsubscribe();
+    }
 
-    // return unsubscribe;
   }, [elapsedTime, duration, navigation]);
 
- /* useEffect(() => {
-    
-  }, [uploadError]);*/
+  useEffect(() => {
+    if (recordEndedSuccessfully && !!audioURI && !!audioName && isAutoSave) {
+     
+      uploadFile({ audioURI: audioURI, folder: folder, fileName: audioName })
+        .then((downloadUrl) => {
+          toast.show("Successfully uploaded!", { type: 'success' });
+          console.log('Upload successful, download URL:', downloadUrl);
+        })
+        .catch((error) => {
+          console.error('Error uploading file:', error);
+          toast.show(ErrorMessageParser(error.code), { type: 'normal' });
+        });
+     
+
+    }
+  }, [audioURI, audioName]);
+
+
 
   useEffect(() => {
 
-    if (!isPlayed) {
-      if (randomTime == parseFloat((elapsedTime).toFixed(0))) {
-        setIsPlayed(true);
-        play();
-      }
+    if (!isPlayed && randomTime == parseFloat((elapsedTime).toFixed(0))) {
+      setIsPlayed(true);
+      play();
     }
 
   }, [elapsedTime]);
@@ -188,7 +202,7 @@ const Tests = ({ route, navigation }) => {
           playsInSilentModeIOS: true
         });
 
-        const { recording} = await Audio.Recording.createAsync(
+        const { recording } = await Audio.Recording.createAsync(
           Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
         );
 
@@ -204,56 +218,44 @@ const Tests = ({ route, navigation }) => {
     }
   }
 
+
+
   async function completeTest() {
     setRecordEndedSuccessfully(true);
-    stopRecording(); }
+    stopRecording();
+  }
 
   async function stopRecording() {
-    try{
-    setIsPlayed(true);
-    if (recording) {
-      stop();
-      setRecordingContinues(false);
+    try {
+      setIsPlayed(true);
+      if (recording) {
+        stop();
+        setRecordingContinues(false);
 
-      await recording.stopAndUnloadAsync();
+        await recording.stopAndUnloadAsync();
 
 
-      const { sound, status } = await recording.createNewLoadedSoundAsync();
+        const { sound, status } = await recording.createNewLoadedSoundAsync();
 
-      //const name =/* `${Date.now()}aaaa`;*/ 'myyyy';
+        //const name =/* `${Date.now()}aaaa`;*/ 'myyyy';
 
-      setAudioURI(recording.getURI());
-      console.log("recording");
-      console.log(recording);
-      console.log("recording URİ");
-      console.log(recording.getURI())
-      console.log("STOP");
-      console.log(audioURI);
-      setAudioName(getDateAndTime());
-      setRecordingContent({
-        sound: sound,
-        duration: status.durationMillis / 1000, // test duration in seconds
-        file: recording.getURI()
-      });
-      setRecording(null);
-      setTestDuration(status.durationMillis / 1000);
-      addCompletedTest();
+        setAudioURI(recording.getURI());
+        setAudioName(getDateAndTime());
+        setRecordingContent({
+          sound: sound,
+          duration: status.durationMillis / 1000, // test duration in seconds
+          file: recording.getURI()
+        });
+        setRecording(null);
+        setTestDuration(status.durationMillis / 1000);
+        addCompletedTest();
 
-      console.log("TEST ADDED");
+        console.log("TEST ADDED");
+      }
+    } catch (error) {
+      console.error('Failed to stop recording:', error);
     }
-  } catch (error) {
-  console.error('Failed to stop recording:', error);
-}}
-
-
-/*  function getRecordingLines() {
-
-    return (
-      
-    );
-  }*/
-
- 
+  }
 
   return (
     <View style={styles.container} onLayout={executeOnLoad}>
@@ -301,34 +303,34 @@ const Tests = ({ route, navigation }) => {
         <View style={styles.buttonContainer}>
           <Button onPress={completeTest} text={'Complete Test'}></Button>
         </View>
-        : 
+        :
         <View style={styles.row}>
-        <Text style={styles.fill}>Recording - {recordingContent.duration}</Text>
-        {recordEndedSuccessfully ?
-        <>
-        <Button theme='little' onPress={() => recordingContent.sound.replayAsync()} text="Play"></Button>
-        {!isAutoSave ?
-         <Button theme='little' onPress={() => 
-          
-          uploadRecording({ audioURI: audioURI, folder: folder, fileName: audioName })
-          .then((downloadUrl) => {
-            toast.show("Successfully uploaded!", { type: 'success' }); 
-            console.log('Upload successful, download URL:', downloadUrl);
-          })
-          .catch((error) => {
-            console.error('Error uploading file:', error);
-            toast.show(ErrorMessageParser(error.code), { type: 'normal' }); 
-          })
-          
-          } text="Save"></Button>
-        
-        :null}
-        </>
-         : null}
-      </View>
-        
-        
-        }
+          <Text style={styles.fill}>Recording - {recordingContent.duration}</Text>
+          {recordEndedSuccessfully ?
+            <>
+              <Button theme='little' onPress={() => recordingContent.sound.replayAsync()} text="Play"></Button>
+              {!isAutoSave ?
+                <Button theme='little' onPress={() =>
+
+                  uploadFile({ audioURI: audioURI, folder: folder, fileName: audioName })
+                    .then((downloadUrl) => {
+                      toast.show("Successfully uploaded!", { type: 'success' });
+                      console.log('Upload successful, download URL:', downloadUrl);
+                    })
+                    .catch((error) => {
+                      console.error('Error uploading file:', error);
+                      toast.show(ErrorMessageParser(error.code), { type: 'normal' });
+                    })
+
+                } text="Save"></Button>
+
+                : null}
+            </>
+            : null}
+        </View>
+
+
+      }
       {/**<Text>{message}</Text> */}
 
       <StatusBar style="auto" />
