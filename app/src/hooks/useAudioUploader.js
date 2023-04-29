@@ -79,9 +79,11 @@ const useAudioUploader = () => {
   const uploadRecording = async ({ audioURI, folder, fileName }) => {
 
     try {
+      console.log("audioURI")
+      console.log(audioURI)
       const storageRef = firebase.storage().ref();
 
-          setUri(audioURI);
+       //   setUri(audioURI);
 
 
       const fileRef = storageRef.child(`${folder}/${fileName}.mp3`);
@@ -91,7 +93,7 @@ const useAudioUploader = () => {
         contentType: 'audio/mpeg' // Set the content type to MPEG audio
       };
 
-      const response = await fetch(uri);
+      const response = await fetch(audioURI);
       const blob = await response.blob();
 
       return new Promise((resolve, reject) => {

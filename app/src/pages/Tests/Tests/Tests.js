@@ -6,7 +6,6 @@ import * as Sharing from 'expo-sharing';
 import Svg, { Path, LinearGradient, Stop, Defs } from 'react-native-svg';
 import { useCountdown } from 'react-native-countdown-circle-timer';
 import { useToast } from "react-native-toast-notifications";
-import { useIsFocused } from '@react-navigation/native';
 
 
 import styles from './Tests.style';
@@ -17,7 +16,6 @@ import Button from '../../../components/Button';
 
 const Tests = ({ route, navigation }) => {
 
-  const isFocused = useIsFocused();
 
   const [recording, setRecording] = useState();
   const [recordEndedSuccessfully, setRecordEndedSuccessfully] = useState(false);
@@ -108,6 +106,8 @@ const Tests = ({ route, navigation }) => {
     if (Math.trunc(elapsedTime) == duration && recordContinues) {
       
          completeTest();
+         console.log("auto");
+         console.log(audioURI);
          uploadRecording({ audioURI: audioURI, folder: folder, fileName: audioName })
          .then((downloadUrl) => {
            toast.show("Successfully uploaded!", { type: 'success' }); 
@@ -118,6 +118,7 @@ const Tests = ({ route, navigation }) => {
            toast.show(ErrorMessageParser(error.code), { type: 'normal' }); 
          })   
          setAutoSave(true);   
+       
      
     }
 
@@ -205,8 +206,7 @@ const Tests = ({ route, navigation }) => {
 
   async function completeTest() {
     setRecordEndedSuccessfully(true);
-    stopRecording(); 
-  }
+    stopRecording(); }
 
   async function stopRecording() {
     try{
@@ -223,6 +223,12 @@ const Tests = ({ route, navigation }) => {
       //const name =/* `${Date.now()}aaaa`;*/ 'myyyy';
 
       setAudioURI(recording.getURI());
+      console.log("recording");
+      console.log(recording);
+      console.log("recording URİ");
+      console.log(recording.getURI())
+      console.log("STOP");
+      console.log(audioURI);
       setAudioName(getDateAndTime());
       setRecordingContent({
         sound: sound,
@@ -302,19 +308,21 @@ const Tests = ({ route, navigation }) => {
         <>
         <Button theme='little' onPress={() => recordingContent.sound.replayAsync()} text="Play"></Button>
         {!isAutoSave ?
-        <Button theme='little' onPress={() => 
+         <Button theme='little' onPress={() => 
+          
+          uploadRecording({ audioURI: audioURI, folder: folder, fileName: audioName })
+          .then((downloadUrl) => {
+            toast.show("Successfully uploaded!", { type: 'success' }); 
+            console.log('Upload successful, download URL:', downloadUrl);
+          })
+          .catch((error) => {
+            console.error('Error uploading file:', error);
+            toast.show(ErrorMessageParser(error.code), { type: 'normal' }); 
+          })
+          
+          } text="Save"></Button>
         
-        uploadRecording({ audioURI: audioURI, folder: folder, fileName: audioName })
-        .then((downloadUrl) => {
-          toast.show("Successfully uploaded!", { type: 'success' }); 
-          console.log('Upload successful, download URL:', downloadUrl);
-        })
-        .catch((error) => {
-          console.error('Error uploading file:', error);
-          toast.show(ErrorMessageParser(error.code), { type: 'normal' }); 
-        })
-        
-        } text="Save"></Button>:null}
+        :null}
         </>
          : null}
       </View>
