@@ -1,91 +1,100 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as DocumentPicker from 'expo-document-picker';
-import {firebase} from '../../firebase';
+import { firebase } from '../../firebase';
 import { useToast } from "react-native-toast-notifications";
 import ErrorMessageParser from '../utils/ErrorMessageParser';
 
-const useAudioUploader = () => {
-  const toast = useToast();
+const useAudioUploader = () => { // a hook to upload recordings and (admin) voice files
+  const toast = useToast(); // toast object to show notifications
 
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [uploadError, setUploadError] = useState(null);
-  const [uri, setUri] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null); // if admin uploads voice file, it is the selected file (from device)
+  const [uploadProgress, setUploadProgress] = useState(0); // upload progress of 
+  const [uploadError, setUploadError] = useState(null); // if there is an error while uploading, to show user
+  const [uri, setUri] = useState(null); // uri of recording or file
+  const [fileRef, setFileRef] = useState(null); // to upload db
+  const [metadata, setMetadata] = useState(null); // metadata of file or recording
+
+  useEffect(() => {
+    if (uri) { // if uri is truthy, call fetchFile function
+      fetchFile();
+    }
+
+  }, [uri, fileRef, metadata]); // dependencies of the effect, determines when to  rerun
 
   // Function to select an audio file from the device
   const selectFile = async () => {
     try {
-      const type = DocumentPicker.types?.audio || 'audio/*';
-      const file = await DocumentPicker.getDocumentAsync({ type });
-
+      const type = DocumentPicker.types?.audio || 'audio/*'; // If DocumentPicker.types.audio is undefined, it sets type to 'audio/*'
+      const file = await DocumentPicker.getDocumentAsync({ type }); // file that is selected
+      // setting global variables
       setSelectedFile(file);
       setUri(file.uri);
     } catch (error) {
       setUploadError(error);
-      console.log(error);
+      console.log(error); // debugging purpose
     }
   };
 
-  // Function to upload the selected file to Firebase storage
-   const uploadFile = async ({audioURI=null, folder, fileName}) => {
+
+  const fetchFile = async () => { // to fetch file to db
     
-try{
-   // console.log(folder);
-   // console.log(fileName);
-    const storageRef = firebase.storage().ref();
-   
-    
-    if (!selectedFile) {
-      if(audioURI!==null){
-        // console.log(recording);
-        // setSelectedFile(recording);
-        
-       setUri(audioURI);
-     //    console.log(uri);
+    try {
+      const response = await fetch(uri); // that allows making network requests
+      const blob = await response.blob(); // convert to a blob that is binary data of an audio file
+      //Firebase storage location where the file should be uploaded is obtained using the fileRef object
+      // put uploads to firebase and returns uploadTask
+      const uploadTask = fileRef.put(blob, metadata); // blob and metadata is passed as parameters
+
+      uploadTask.on('state_changed', //event listener for the upload state change
+        (snapshot) => { // function takes a snapshot of the upload progress 
+          // and calculates the percentage of the file that has been uploaded
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setUploadProgress(progress); // set upload progress to global variable
+        },
+        (error) => { // function is triggered if an error occurs
+          setUploadError(error); // set error to global variable
+          console.error(error); // debugging purpose
+          // toast.show(ErrorMessageParser(error.code), { type: 'normal' }); 
+        },
+        async () => { //  function is triggered when the upload is complete
+          // gets the download URL of the uploaded file from the Firebase storage and set the global downloadURL
+          const downloadUrl = await uploadTask.snapshot.ref.getDownloadURL();
+          setSelectedFile(null);  // reset the selected file state using setSelectedFile
+          setUploadProgress(0); // since upload is complete, set to 0
+          console.log('File uploaded to Firebase storage:', downloadUrl); // debugging purpose
+          console.log('File uploaded successfully'); // debugging purpose
         }
+      );
+    } catch (error) {
+      console.log(error); // debugging purpose
     }
-   
-   // console.log(uri);
-
-const fileRef = storageRef.child(`${folder}/${fileName}.mp3`);
-
-
-const metadata = {
-  contentType: 'audio/mpeg' // Set the content type to MPEG audio
-};
-
-const response = await fetch(uri);
-const blob = await response.blob();
-
-const uploadTask = fileRef.put(blob, metadata);
-
-uploadTask.on('state_changed', 
-  (snapshot) => {
-    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    setUploadProgress(progress);
-  }, 
-  (error) => {
-    setUploadError(error);
-    console.error(error);
-   // toast.show(ErrorMessageParser(error.code), { type: 'normal' }); 
-  }, 
- async () => {
-    const downloadUrl = await uploadTask.snapshot.ref.getDownloadURL();
-      setSelectedFile(null);
-      setUploadProgress(0);
-      console.log('File uploaded to Firebase storage:', downloadUrl);
-    console.log('File uploaded successfully');
-    toast.show("Successfully uploaded!", { type: 'success' }); 
   }
-);
-}catch (error) {
-  setUploadError(error);
-  console.log(error);
-//  toast.show(ErrorMessageParser(error.code), { type: 'normal' }); 
-}
 
-   };
-  return {
+  // Function to upload the selected file to Firebase storage
+  const uploadFile = async ({ audioURI = null, folder, fileName }) => {
+   
+    try {
+      const storageRef = firebase.storage().ref(); // firebase storage ref
+       //Firebase storage location where the file should be uploaded 
+      const fileRef_ = storageRef.child(`${folder}/${fileName}.mp3`); 
+      setFileRef(fileRef_) // setting global variable
+      if (!selectedFile && !!audioURI) { // if there is no selected file that means it is a recording and audioURI is truthy
+        setUri(audioURI); // set global uri variable
+      }
+
+      const metadata_ = { // metadata that is information about file
+        contentType: 'audio/mpeg' // Set the content type to MPEG audio
+      };
+      setMetadata(metadata_);
+
+    } catch (error) {
+      setUploadError(error);
+      console.log(error);
+      //  toast.show(ErrorMessageParser(error.code), { type: 'normal' }); 
+    }
+
+  };
+  return { // return functions and attributes to use anywhere
     selectedFile,
     uploadProgress,
     uploadError,
