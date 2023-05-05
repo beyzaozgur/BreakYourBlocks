@@ -1,60 +1,112 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import PropTypes from 'prop-types';
 import _ from 'underscore';
 
 import styles from './CheckBox.style';
+import { onChange } from "react-native-reanimated";
 
-
+// To create a custom implementation of a checkbox, Component class is extended
 class CheckBox extends Component {
+    // This code defines a constructor function for the component,
+    // which sets the initial state of the component's properties to specific default values.
     constructor(props) {
-        super(props);
-        this.state = {
+        super(props); // call to Component's constructor
+        this.state = { 
             checked: false,
             onChange: null,
             placeholder: '',
             options: [],
             values: [],
             isVisible: true,
-
+           // isSingleSelection:true,
         }
-    };
+    };   
 
-
-
-    // const [values, setValues] = useState([]);
+  
 
     pick(selectedValue) {
-
-        // const index = values.findIndex(value => value===selectedValue)
-        // if(this.state.values.length=1){ // prevent multiple selcetion 
-        //  this.setState({ values:this.state.values.filter(value => value === selectedValue)});
-        //  var checked = !this.state.checked;
-        //  this.setState({ checked: checked });
-        //  this.props.onChange && this.props.onChange(selectedValue,checked);
-        //  setValues(values => values.concat(selectedValue) );
-        //setTimeout(30);
-
-        //  }
-
-
+      
+    // if(this.state.isSingleSelection){
         if (this.state.values.includes(selectedValue)) {
-            this.setState({ values: this.state.values.filter(value => value !== selectedValue) });
-
-            var checked = !this.state.checked;
-            this.setState({ checked: checked });
-            this.props.onChange && this.props.onChange(selectedValue, checked);
-            return;
+         // if(this.state.options.length==1){
+           // this.setState({ values: []}); 
+          
+          //}else{
+          // it returns a new array that contains all the elements of values except for the one that matches selectedValue
+          // removing
+          //this.setState({ values: this.state.values.filter(value => value !== selectedValue) }); 
+          return;
+         // }
+         // this.setState({ checked: false});
+         
+          } else { 
+            this.setState({ values: selectedValue, checked:true });
+            
+          //  if(this.state.isSingleSelection){
+              // If multiple options are allowed, and there is already a selected value,
+              // clear the selection and add the new value
+           //   this.setState({
+           //     values: selectedValue,
+            //    checked: true // Set checked to true
+           //   });
+        //  }else{
+        //    this.setState({ values: this.state.values.concat(selectedValue), checked:true });
+        //  }}
+   /*   }else{
+        if (this.state.values.includes(selectedValue)) {
+            // If the selected value is already in the array, remove it
+            this.setState({values: this.state.values.filter(value => value !== selectedValue), checked: false});
+          } else {
+            // Otherwise, add the selected value to the array
+            this.setState({ values: this.state.values.concat(selectedValue), checked:true });
+          }*/
         }
-        if (this.state.values.length = 1) { // prevent multiple selcetion 
-            this.setState({ values: this.state.values.filter(value => value === selectedValue) });
-        }
+          console.log(this.state.values)
+          console.log(this.state.checked)
+          
+          // Call the onChange handler with the selected value and checked state
+          this.props.onChange && this.props.onChange(selectedValue, this.state.checked);
+         
 
-
-        this.setState({ values: this.state.values.concat(selectedValue) });
-        var checked = !this.state.checked;
-        this.setState({ checked: checked });
-        this.props.onChange && this.props.onChange(selectedValue, checked);
+          // if (this.state.isSingleSelection) {
+          //   if (this.state.values.includes(selectedValue)) {
+          //     // Do nothing if the selected value is already in the array
+          //     return;
+          //   } else if (this.state.options.length > 1 && this.state.values.length > 0) {
+          //     // If multiple options are allowed, and there is already a selected value,
+          //     // clear the selection and add the new value
+          //     this.setState({
+          //       values: [selectedValue],
+          //       checked: true // Set checked to true
+          //     });
+          //   } else {
+          //     // Otherwise, set the array to contain only the selected value
+          //     this.setState({
+          //       values: [selectedValue],
+          //       checked: true // Set checked to true
+          //     });
+          //   }
+          // } else {
+          //   if (this.state.values.includes(selectedValue)) {
+          //     // If the selected value is already in the array, remove it
+          //     this.setState({
+          //       values: this.state.values.filter(value => value !== selectedValue),
+          //       checked: false
+          //     });
+          //   } else {
+          //     // Otherwise, add the selected value to the array
+          //     this.setState({
+          //       values: this.state.values.concat(selectedValue),
+          //       checked: true
+          //     });
+          //   }
+          // }
+          
+          // // Call the onChange handler with the selected value and checked state
+          // this.props.onChange && this.props.onChange(selectedValue, this.state.checked);
+          
+          
 
     }
     componentDidMount() {
@@ -64,8 +116,11 @@ class CheckBox extends Component {
     componentWillReceiveProps(nextProps) {
         this.props = nextProps;
         this.setState({ checked: nextProps.checked });
+       // console.log(this.state.checked)
     }
-    //const CheckBox = ({placeholder, options, onChange}) =>{
+
+   
+
     render() {
         return (
             <View style={styles.container}>
@@ -84,14 +139,10 @@ class CheckBox extends Component {
             </View>
         );
     };
-    /*_toggleCheck() {
-        var checked = !this.state.checked;
-        this.setState({ checked: checked });
-        this.props.onChange && this.props.onChange(this.props.option,checked);
-    }*/
+
 }
 
-
+// This code defines the propTypes for the component, which specify the types and requirements for its props.
 CheckBox.propTypes = {
     checked: PropTypes.bool,
     placeholder: PropTypes.string,
@@ -99,7 +150,7 @@ CheckBox.propTypes = {
     values: PropTypes.any,
     options: PropTypes.any,
     isVisible: PropTypes.bool,
-    //option:PropTypes.string
+  //  isSingleSelection: PropTypes.bool
 }
 export default CheckBox;
 
