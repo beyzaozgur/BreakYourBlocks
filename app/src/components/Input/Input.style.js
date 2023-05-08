@@ -4,7 +4,7 @@ import colors from "../../styles/colors";
 
 
 export default StyleSheet.create({
-    container: {
+    container: { // main container's look
         marginTop: 10,
         marginLeft: 10,
         marginRight: 10,
@@ -18,13 +18,12 @@ export default StyleSheet.create({
         justifyContent: 'center',
 
     },
-    input: {
+    input: { // text's look
         paddingLeft: 4,
         flex: 0.99,
         fontSize: 14,
         color: colors.darkestgreen,
         fontWeight: 'bold',
-        // fontFamily:'ui-serif',
     }
 
 })

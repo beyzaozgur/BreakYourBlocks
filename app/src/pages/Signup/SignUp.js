@@ -39,7 +39,7 @@ const SignUpSchema = Yup.object({
         .max(50, 'Too Long!')
         .required('Required!'),
     education: Yup.string().required('Required!').oneOf(educationOptions),
-    gender: Yup.string().required('gender Required!'),
+    gender: Yup.string().required('Required!'),
     mail: Yup.string().email('Invalid email!').required('Required!'),
     username: Yup.string()
         .min(2, 'Too Short!')
