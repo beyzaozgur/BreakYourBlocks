@@ -4,11 +4,8 @@ import colors from "../../styles/colors";
 
 
 export default StyleSheet.create({
-    container: {
-        // flex:1,
-        // alignItems:'center',
-        // justifyContent:'center',
-        flexDirection: 'row',
+    container: { // main container that contains boxes
+        flexDirection: 'row', // The child components are arranged horizontally
         marginTop: 10,
         marginLeft: 10,
         marginRight: 10,
@@ -16,42 +13,32 @@ export default StyleSheet.create({
         borderWidth: 2,
         borderColor: colors.grayish,
         borderRadius: 5,
-        //  backgroundColor:'red',
     },
-    title: {
+    title: { // style of placeholder
         fontSize: 14,
         padding: 5,
         fontWeight: 'bold',
-        // borderWidth:2,
-        // borderColor:colors.grayish,
         alignSelf: 'center',
         color: colors.grayish,
 
     },
-    values: {
-        // alignSelf:'flex-start',
+    values: { // style of options, if there are more than one how they are arrenged according to each other
         justifyContent: 'space-evenly',
-        // marginLeft:50,
         flex: 1,
-        // backgroundColor:'yellow',
         flexDirection: 'row',
-        // padding: 20,
 
     },
-    option: {
-        flexDirection: 'row',
+    option: { // style of an option: how label and checkbox is arrenged
+        flexDirection: 'row', // 
     },
-    checkBox: {
+    checkBox: { // how box looks
         width: 25,
         height: 25,
         borderWidth: 2,
         borderColor: colors.grayish,
-        flexDirection: 'row',
-        // alignItems:'center',
-        // justifyContent:'center',
-        // justifyContent:'flex-start',
+        flexDirection: 'row', // The child component (✓) is arranged horizontally
     },
-    valueName: {
+    valueName: { // how label of an option looks
         textTransform: 'capitalize',
         alignSelf: 'center',
         paddingLeft: 5,
@@ -59,14 +46,9 @@ export default StyleSheet.create({
         fontWeight: 'bold',
         color: colors.grayish,
     },
-    check: {
-        flex: 1,
-        alignSelf: 'center',
-        // justifyContent:'space-around',
-        // marginBottom:5,
-        //marginEnd:10,
-
-
+    check: { // how ✓  looks
+        flex: 1, // it will expand to fill all available space in its parent container.
+        alignSelf: 'center', // it is centered
         fontSize: 18,
         fontWeight: 'bold',
         backgroundColor: colors.grayish,

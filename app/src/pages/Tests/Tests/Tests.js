@@ -15,7 +15,7 @@ import useAudioUploader from '../../../hooks/useAudioUploader';
 import { firebase } from '../../../../firebase';
 import Button from '../../../components/Button';
 
-const Tests = ({ route, navigation }) => {
+const Tests = ({ route, navigation }) => { // Test Screen
 
   const [recording, setRecording] = useState(); // global recording variable to reach from everywhere
   const [recordEndedSuccessfully, setRecordEndedSuccessfully] = useState(false); // record ends by pressing complete test or time ends
@@ -78,18 +78,21 @@ const Tests = ({ route, navigation }) => {
     startRecording();
   };
 
-  const handleBackButton = () => { // back button control to prevent going back to information screen and restart test.
-    if (recordContinues) { // if record already ended, notification is not shown. Otherwise pops-up.
+  const handleBackButton = () => { // back button control to avoid going back to information screen and restart test.
+    if (recordContinues) { // if action is taken when recording, notification pops-up and recording is ended.
       toast.show("Recording descarded!");
       stopRecording();
     }
-    // 
-    navigation.navigate('TestsListScreen');// Probabaly it is because navigation parameter is not the one that we want
+    // It navigates to Profile
+    // Probabaly it is because navigation parameter is not the one that we want, since it is passed to multiple screens.
+    navigation.navigate('TestsListScreen');
   }
 
-  useFocusEffect(
-    useCallback(() => {
-      BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+  useFocusEffect( //  code adds an event listener for the back button during the screen's focus
+                  // and removes the event listener when the screen is unmounted.
+    useCallback(() => { // useCallback hook is used to memoize the function and prevent it from being recreated. Performance concern
+      //The handleBackButton function is called when the back button is pressed
+      BackHandler.addEventListener('hardwareBackPress', handleBackButton); 
       return () => {
         BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
       };
@@ -98,66 +101,69 @@ const Tests = ({ route, navigation }) => {
 
   useEffect(() => {
 
-    const unsubscribeBlur = navigation.addListener('blur', () => {// tab navigation
+    const unsubscribeBlur = navigation.addListener('blur', () => {// tab navigation - prevent record
 
-      if (recordContinues) {
+      if (recordContinues) { // if record continuous stop and show notification
         toast.show("Recording descarded!");
         stopRecording();
       }
       
     });
 
-    const unsubscribe = navigation.addListener('beforeRemove', (e) => { // screen navigation
-      e.preventDefault();
-      if (recordContinues) {
+    const unsubscribe = navigation.addListener('beforeRemove', (e) => { // screen navigation - prevent record
+      e.preventDefault(); //  prevent the default action which is navigation to stop recording if applicable
+      if (recordContinues) { // if record continuous stop and show notification
         toast.show("Recording descarded!");
         stopRecording();
-      }
-      
+      }     
 
-      navigation.dispatch(e.data.action);
+      navigation.dispatch(e.data.action); // navigate as expected
     });
 
 
-    if (Math.trunc(elapsedTime) == duration && recordContinues) {
-      completeTest();
-      setAutoSave(true);
+    if (Math.trunc(elapsedTime) == duration && recordContinues) { 
+      // if elapsed time equals to duration and recording continues(important for UI)
+      completeTest(); // successfully end recording
+      setAutoSave(true); // set autoSave true;
     }
 
-    return () => {
+    return () => { // to clean up listeners
       unsubscribeBlur();
       unsubscribe();
     }
 
-  }, [elapsedTime, duration, navigation]);
+  }, [elapsedTime, duration, navigation]); // dependencies of the effect, determines when to  rerun
 
   useEffect(() => {
     if (recordEndedSuccessfully && !!audioURI && !!audioName && isAutoSave) {
+      // if record ended succesfully and audioURI and audioName is truthy and it is an auto-save, upload file is called
      
-      uploadFile({ audioURI: audioURI, folder: folder, fileName: audioName })
-        .then((downloadUrl) => {
+      uploadFile({ audioURI: audioURI, folder: folder, fileName: audioName }) // to upload recording to db
+        .then((downloadUrl) => { // if upload successful show notification
           toast.show("Successfully uploaded!", { type: 'success' });
-          console.log('Upload successful, download URL:', downloadUrl);
+          console.log('Upload successful, download URL:', downloadUrl); // debugging purpose
         })
         .catch((error) => {
-          console.error('Error uploading file:', error);
-          toast.show(ErrorMessageParser(error.code), { type: 'normal' });
+          console.error('Error uploading file:', error); // debugging purpose
+          // ErrorMesage parser is used to customize error messages
+          toast.show(ErrorMessageParser(error.code), { type: 'normal' }); // if upload unsuccessful show notification
         });
      
 
     }
-  }, [audioURI, audioName]);
+  }, [audioURI, audioName]); // dependencies of the effect, determines when to  rerun
 
 
 
   useEffect(() => {
 
     if (!isPlayed && randomTime == parseFloat((elapsedTime).toFixed(0))) {
-      setIsPlayed(true);
-      play();
+      // İf background voice is not played yet and it is the specified random time, play
+      setIsPlayed(true); // to avoid replay
+      play(); // play background voice
     }
 
-  }, [elapsedTime]);
+  }, [elapsedTime]); // dependency of the effect, determines when to  rerun
 
 
   function addCompletedTest() {
@@ -176,7 +182,7 @@ const Tests = ({ route, navigation }) => {
 
 
 
-  function getDateAndTime() {
+  function getDateAndTime() { // custom formatted date and time
     const currentDate = new Date(); // create a new Date object with the current date and time
     const currentYear = currentDate.getFullYear(); // get the current year (4 digits)
     const currentMonth = currentDate.getMonth() + 1; // get the current month (1-12) - note that months are zero-indexed, so we add 1
@@ -189,10 +195,10 @@ const Tests = ({ route, navigation }) => {
   }
 
 
-  async function startRecording() {
+  async function startRecording() { // starting record
     try {
 
-      setRecordingContinues(true);
+      setRecordingContinues(true); // setting recording continuous state to true
 
       const permission = await Audio.requestPermissionsAsync();
 
@@ -206,7 +212,7 @@ const Tests = ({ route, navigation }) => {
           Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
         );
 
-        setRecording(recording);
+        setRecording(recording); // setting local recording object to global one
 
 
       } else {
@@ -220,17 +226,17 @@ const Tests = ({ route, navigation }) => {
 
 
 
-  async function completeTest() {
-    setRecordEndedSuccessfully(true);
-    stopRecording();
+  async function completeTest() { // if test is completed(success), this function is called
+    setRecordEndedSuccessfully(true); // setting true the indicator of successful recording
+    stopRecording(); // stopping recoording
   }
 
-  async function stopRecording() {
+  async function stopRecording() { // to stop recording
     try {
-      setIsPlayed(true);
-      if (recording) {
-        stop();
-        setRecordingContinues(false);
+      setIsPlayed(true); // to avoid playing background voice after recording is done
+      if (recording) { // if recording 
+        stop(); // to stop background voice if it is playing when stopRecording is called
+        setRecordingContinues(false); // to indicate record is ended
 
         await recording.stopAndUnloadAsync();
 
@@ -239,14 +245,14 @@ const Tests = ({ route, navigation }) => {
 
         //const name =/* `${Date.now()}aaaa`;*/ 'myyyy';
 
-        setAudioURI(recording.getURI());
-        setAudioName(getDateAndTime());
-        setRecordingContent({
+        setAudioURI(recording.getURI()); // setting audioURI
+        setAudioName(getDateAndTime()); // setting audioName to current date and time to distinguish multiple test recordings 
+        setRecordingContent({ // UI
           sound: sound,
           duration: status.durationMillis / 1000, // test duration in seconds
           file: recording.getURI()
         });
-        setRecording(null);
+        setRecording(null); // setting recording null
         setTestDuration(status.durationMillis / 1000);
         addCompletedTest();
 
@@ -299,17 +305,17 @@ const Tests = ({ route, navigation }) => {
         <Text style={styles.testContent}>{route.params.testContent}
         </Text>
       </View>
-      {recordContinues ?
+      {recordContinues ? // İf record continuous show Complete Test button (user can finish test earlier)
         <View style={styles.buttonContainer}>
           <Button onPress={completeTest} text={'Complete Test'}></Button>
         </View>
-        :
+        : // else show recording duration
         <View style={styles.row}>
           <Text style={styles.fill}>Recording - {recordingContent.duration}</Text>
-          {recordEndedSuccessfully ?
+          {recordEndedSuccessfully ? // if record ended succesfully allow user to play recording
             <>
               <Button theme='little' onPress={() => recordingContent.sound.replayAsync()} text="Play"></Button>
-              {!isAutoSave ?
+              {!isAutoSave ? // if it is not auto save, show save button
                 <Button theme='little' onPress={() =>
 
                   uploadFile({ audioURI: audioURI, folder: folder, fileName: audioName })
@@ -323,9 +329,10 @@ const Tests = ({ route, navigation }) => {
                     })
 
                 } text="Save"></Button>
-
-                : null}
+                  // if auto save, record is automatically saved no need to show save button
+                : null } 
             </>
+            // if it is not a successful recording, buttons are not shown
             : null}
         </View>
 

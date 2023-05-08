@@ -17,7 +17,6 @@ const AddAudio = () => {
       setIsUploadSucceed,
       selectFile,
       uploadFile,
-      uploadRecording
       } = useAudioUploader();
     const [fileName, setFileName] = useState('');
     const handleFileNameChange = (fileName) => {
