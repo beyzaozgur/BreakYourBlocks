@@ -191,7 +191,7 @@ const Tests = ({ route, navigation }) => { // Test Screen
     const currentMinute = currentDate.getMinutes(); // get the current minute (0-59)
     const currentSecond = currentDate.getSeconds(); // get the current second (0-59)
 
-    return currentDay + "." + currentMonth + "." + currentYear + " " + currentHour + "." + currentMinute + "." + currentSecond
+    return currentDay + "." + currentMonth + "." + currentYear + "-" + currentHour + "." + currentMinute + "." + currentSecond
   }
 
 
@@ -209,7 +209,7 @@ const Tests = ({ route, navigation }) => { // Test Screen
         });
 
         const { recording } = await Audio.Recording.createAsync(
-          Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
+          Audio.RecordingOptionsPresets.HIGH_QUALITY
         );
 
         setRecording(recording); // setting local recording object to global one
