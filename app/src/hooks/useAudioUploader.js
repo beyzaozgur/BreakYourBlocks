@@ -14,6 +14,8 @@ const useAudioUploader = () => { // a hook to upload recordings and (admin) voic
   const [fileRef, setFileRef] = useState(null); // to upload db
   const [metadata, setMetadata] = useState(null); // metadata of file or recording
 
+  const FLASK_API_BACKEND = "http://192.168.1.24:3000/audio"; // ipv4 address for api connection
+
   useEffect(() => {
     if (uri) { // if uri is truthy, call fetchFile function
       fetchFile();
@@ -63,6 +65,25 @@ const useAudioUploader = () => { // a hook to upload recordings and (admin) voic
           setUploadProgress(0); // since upload is complete, set to 0
           console.log('File uploaded to Firebase storage:', downloadUrl); // debugging purpose
           console.log('File uploaded successfully'); // debugging purpose
+          try {
+            console.log("downloadUrl: " + downloadUrl);
+            const response =  await fetch(FLASK_API_BACKEND, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ parameter: downloadUrl.toString() }), // firebase storage url of audio file is being sent to api as a parameter
+            });
+
+            if (response.ok) {
+              console.log('Request successful');
+            } else {
+              console.error('Request failed:', response.status);
+            }
+            console.log("RESPONSE : " + JSON.stringify(response))
+          } catch (err) {
+            console.error(err);
+          }
         }
       );
     } catch (error) {
@@ -83,7 +104,7 @@ const useAudioUploader = () => { // a hook to upload recordings and (admin) voic
       }
 
       const metadata_ = { // metadata that is information about file
-        contentType: 'audio/mpeg' // Set the content type to MPEG audio
+        contentType: 'audio/mp3' // Set the content type to MP3 audio
       };
       setMetadata(metadata_);
 
