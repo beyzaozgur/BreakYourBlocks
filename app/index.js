@@ -140,7 +140,7 @@ function Router () {
                         tabBarInactiveBackgroundColor: colors.green,
                         tabBarActiveBackgroundColor: colors.green,
                     }}>
-                    <Tab.Screen name="AdminTestOperations" component={AdminTestOperationsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
+                    <Tab.Screen name="Test" component={AdminTestOperationsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                     <Tab.Screen name="Audio" component={TestAudioStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                 </Tab.Navigator>
             </ToastProvider>

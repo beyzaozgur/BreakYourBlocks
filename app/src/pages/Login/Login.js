@@ -73,7 +73,7 @@ const Login = ({ navigation }) => {
                         <Input placeholder={"Password"} value={values.password} onChangeText={handleChange('password')} icon='key' isPasswordHidden />
                         {errors.password && <Text style={styles.error}>{errors.password}</Text>}
                         <Button text={"Login"} onPress={handleSubmit} />
-                        <Text style={styles.forgotPassword_text}  onPress={()=>navigation.navigate('Email Request') } >forgot password?</Text>
+                        <Text style={styles.forgotPassword_text}  onPress={()=>navigation.navigate('Email Request') } >Forgot password?</Text>
                     </View>)}
             </Formik>
             <View style={styles.signup_container}>
