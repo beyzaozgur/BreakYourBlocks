@@ -24,6 +24,7 @@ import TestsList from '../app/src/pages/Tests/TestsList';
 import AnalysisList from '../app/src/pages/Analyzes/AnalysisList';
 import TestAudioList from '../app/src/pages/Admin/TestAudioList';
 import AddAudio from './src/pages/Admin/AddAudio/AddAudio';
+import PDPP from './src/pages/PDPP';
 import { firebase } from './firebase';
 import colors from './src/styles/colors';
 
@@ -168,7 +169,7 @@ function Router () {
                     <Stack.Screen name='Login' component={Login} />
                     <Stack.Screen name='Sign Up' component={SignUp} />
                     <Stack.Screen name='Email Request' component={EmailRequest} />
-                    
+                    <Stack.Screen name='PDPP' component={PDPP}/>                    
                 </Stack.Navigator>
             </ToastProvider>
         );

@@ -54,7 +54,7 @@ const Login = ({ navigation }) => {
             toast.show(ErrorMessageParser(error.code), { type: 'normal' });           
         }
 
-        console.log(values);
+      //  console.log(values);
 
     }
     function handleSignUp() {
