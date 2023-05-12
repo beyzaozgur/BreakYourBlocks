@@ -19,6 +19,7 @@ class CheckBox extends Component {
             options: [],
             values: [],
             isVisible: true,
+            isLink:false,
            // isSingleSelection:true,
         }
     };   
@@ -56,7 +57,7 @@ class CheckBox extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>{this.state.placeholder}</Text> 
+                {this.state.isLink ? <Text style={{...styles.title, textDecorationLine: 'underline'}} onPress={() => this.props.navigation.navigate('PDPP')}>{this.state.placeholder}</Text> : <Text style={styles.title}>{this.state.placeholder}</Text> }
                 <View style={styles.values}>
                     {this.state.options.map(option => (// for each option creates a box and labels it with option if isVisible set to true
                         <View key={option} style={styles.option}>
@@ -83,6 +84,7 @@ CheckBox.propTypes = {
     values: PropTypes.any,
     options: PropTypes.any,
     isVisible: PropTypes.bool,
+    isLink:PropTypes.bool,
   //  isSingleSelection: PropTypes.bool
 }
 export default CheckBox;
