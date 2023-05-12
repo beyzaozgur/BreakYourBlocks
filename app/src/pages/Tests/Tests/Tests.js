@@ -318,7 +318,7 @@ const Tests = ({ route, navigation }) => { // Test Screen
               {!isAutoSave ? // if it is not auto save, show save button
                 <Button theme='little' onPress={() =>
 
-                  uploadFile({ audioURI: audioURI, folder: folder, fileName: audioName })
+                  uploadFile({ audioURI: audioURI, folder: folder, fileName: audioName, testId: testId, userId: userId })
                     .then((downloadUrl) => {
                       toast.show("Successfully uploaded!", { type: 'success' });
                       console.log('Upload successful, download URL:', downloadUrl);

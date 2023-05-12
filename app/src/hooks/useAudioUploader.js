@@ -14,6 +14,10 @@ const useAudioUploader = () => { // a hook to upload recordings and (admin) voic
   const [fileRef, setFileRef] = useState(null); // to upload db
   const [metadata, setMetadata] = useState(null); // metadata of file or recording
 
+  const [testId, setTestId] = useState();
+  const [userId, setUserId] = useState();
+  const [fileName, setFileName] = useState(null);
+
   const FLASK_API_BACKEND = "http://192.168.1.24:3000/audio"; // ipv4 address for api connection
 
   useEffect(() => {
@@ -21,7 +25,7 @@ const useAudioUploader = () => { // a hook to upload recordings and (admin) voic
       fetchFile();
     }
 
-  }, [uri, fileRef, metadata]); // dependencies of the effect, determines when to  rerun
+  }, [uri, fileRef, metadata, testId, userId]); // dependencies of the effect, determines when to  rerun
 
   // Function to select an audio file from the device
   const selectFile = async () => {
@@ -67,12 +71,18 @@ const useAudioUploader = () => { // a hook to upload recordings and (admin) voic
           console.log('File uploaded successfully'); // debugging purpose
           try {
             console.log("downloadUrl: " + downloadUrl);
+            var obj = {
+              parameter: downloadUrl.toString(),
+              testID: testId,
+              userID: userId,
+              testCompletitionTime: fileName
+            };
             const response =  await fetch(FLASK_API_BACKEND, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify({ parameter: downloadUrl.toString() }), // firebase storage url of audio file is being sent to api as a parameter
+              body: JSON.stringify(obj), // firebase storage url of audio file is being sent to api as a parameter
             });
 
             if (response.ok) {
@@ -92,12 +102,15 @@ const useAudioUploader = () => { // a hook to upload recordings and (admin) voic
   }
 
   // Function to upload the selected file to Firebase storage
-  const uploadFile = async ({ audioURI = null, folder, fileName }) => {
+  const uploadFile = async ({ audioURI = null, folder, fileName, testId, userId }) => {
    
     try {
       const storageRef = firebase.storage().ref(); // firebase storage ref
        //Firebase storage location where the file should be uploaded 
       const fileRef_ = storageRef.child(`${folder}/${fileName}.mp3`); 
+      setTestId(testId);
+      setUserId(userId);
+      setFileName(fileName);
       setFileRef(fileRef_) // setting global variable
       if (!selectedFile && !!audioURI) { // if there is no selected file that means it is a recording and audioURI is truthy
         setUri(audioURI); // set global uri variable
