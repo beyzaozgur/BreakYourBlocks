@@ -33,7 +33,7 @@ def get_audio_from_storage(formattedAudioFileName):
     bucket = storage.bucket()
     blob = bucket.blob(fileName)
 
-    download_file_path = "D:/MLIntegrationData/user-test-audio/" + formattedAudioFileName
+    download_file_path = "C:/MLIntegrationData/user-test-audio/" + formattedAudioFileName
     parent_directory = os.path.dirname(download_file_path)
     os.makedirs(parent_directory, exist_ok=True)
     download_file = download_file_path + ".mp3"

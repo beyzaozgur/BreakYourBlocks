@@ -16,10 +16,20 @@ CORS(app)
 
 @app.route('/audio', methods = ['POST'])
 def process_user_audio():
-    data = request.get_json()
-    string_parameter = data['parameter']
+    obj = request.get_json()
+    print(obj)
 
-    print("STRING PARAMETER (FIREBASE STORAGE URL OF USER AUDIO): " + string_parameter)
+    # dumps the json object into an element
+    json_str = json.dumps(obj)
+
+    # load the json to a string
+    data = json.loads(json_str)
+
+    # get firebase storage url of audio, testID, userID, test date
+    string_parameter = data['parameter']
+    testId = data['testID']
+    userId = data['userID']
+    testCompletitionTime = data['testCompletitionTime']
 
     string_parameter_formatted  = string_parameter.replace("%2F", "/")
 
@@ -45,7 +55,7 @@ def process_user_audio():
 
     print("PREPROCESSING IS COMPLETED!")
 
-    load_model_and_predict(spectrogram_dir)
+    load_model_and_predict(spectrogram_dir, testId, userId, testCompletitionTime)
 
     print("PREDICTION IS COMPLETED!")
 
@@ -54,4 +64,4 @@ def process_user_audio():
     return json.dumps({ "text": "Audio successfully processed!" }), 200
 
 if __name__ == "__main__":
-    app.run(host="192.168.1.24", port=3000, debug=True) # ipv4 address of the mach
+    app.run(host="192.168.1.6", port=3000, debug=True) # ipv4 address of the machine

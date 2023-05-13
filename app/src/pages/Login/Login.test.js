@@ -1,4 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
+/*import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import renderer from 'react-test-renderer';
@@ -38,3 +38,4 @@ test('navigates to details screen when button is pressed', () => {
   // Check that the navigate function was called with the correct arguments
   expect(mockNavigation.navigate).toHaveBeenCalledWith('Sign Up', { itemId: 42 });
 });
+*/

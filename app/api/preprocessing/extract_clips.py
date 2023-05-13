@@ -3,7 +3,7 @@ import wave
 import math
 
 def split_wav_file(input_file, formattedFileName):
-    output_file_prefix = "D:/MLIntegrationData/extracted-clips/" + formattedFileName
+    output_file_prefix = "C:/MLIntegrationData/extracted-clips/" + formattedFileName
     parent_directory = os.path.dirname(output_file_prefix)
     os.makedirs(parent_directory, exist_ok=True)
 

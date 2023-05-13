@@ -5,7 +5,7 @@ def convert_to_wav(uri, formattedFileName):
     print("URI : " + uri)
     audio = pydub.AudioSegment.from_file(uri)
 
-    output_path = 'D:/MLIntegrationData/wav-audio/' + formattedFileName
+    output_path = 'C:/MLIntegrationData/wav-audio/' + formattedFileName
     parent_directory = os.path.dirname(output_path)
     os.makedirs(parent_directory, exist_ok=True)
 

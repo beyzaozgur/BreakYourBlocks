@@ -9,7 +9,7 @@ from pydub import AudioSegment
 
 def remove_noice_from_clips(clipped_wav_path, formattedFileName):
 
-    noise_reduced_wav_path = 'D:/MLIntegrationData/noise-removed-clips/' + formattedFileName
+    noise_reduced_wav_path = 'C:/MLIntegrationData/noise-removed-clips/' + formattedFileName
     os.makedirs(noise_reduced_wav_path, exist_ok=True)
 
     print('Clipped Wav Folder path found: ', os.path.isdir(clipped_wav_path))
