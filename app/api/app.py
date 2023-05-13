@@ -54,4 +54,4 @@ def process_user_audio():
     return json.dumps({ "text": "Audio successfully processed!" }), 200
 
 if __name__ == "__main__":
-    app.run(host="192.168.1.6", port=3000, debug=True) # ipv4 address of the mach
+    app.run(host="192.168.1.24", port=3000, debug=True) # ipv4 address of the mach
