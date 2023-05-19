@@ -6,7 +6,7 @@ import librosa.display
 
 def extract_spectrograms(noise_removed_clips, formattedFileName):
 
-    spectrogram_dir = 'D:/MLIntegrationData/spectrograms/' + formattedFileName + '/'
+    spectrogram_dir = 'D:/MLIntegrationData/spectrograms/' + formattedFileName 
     os.makedirs(spectrogram_dir, exist_ok=True)
 
     # Loop through the folder and subfolders containing the files to remove noise
@@ -36,4 +36,4 @@ def extract_spectrograms(noise_removed_clips, formattedFileName):
                 plt.savefig(output_spec_path)
                 plt.close()
 
-    return spectrogram_dir
+    return spectrogram_dir + '/'

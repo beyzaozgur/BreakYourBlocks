@@ -138,7 +138,7 @@ const Tests = ({ route, navigation }) => { // Test Screen
     if (recordEndedSuccessfully && !!audioURI && !!audioName && isAutoSave) {
       // if record ended succesfully and audioURI and audioName is truthy and it is an auto-save, upload file is called
      
-      uploadFile({ audioURI: audioURI, folder: folder, fileName: audioName }) // to upload recording to db
+      uploadFile({ audioURI: audioURI, folder: folder, fileName: audioName, testId: testId, userId: userId }) // to upload recording to db
         .then((downloadUrl) => { // if upload successful show notification
           toast.show("Successfully uploaded!", { type: 'success' });
           console.log('Upload successful, download URL:', downloadUrl); // debugging purpose
