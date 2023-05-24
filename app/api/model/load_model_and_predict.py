@@ -1,4 +1,4 @@
-import os
+"""import os
 import tensorflow as tf
 import numpy as np
 import pandas as pd
@@ -18,12 +18,14 @@ def load_model_and_predict(prediction_data_dir, testId, userId, testCompletition
         
     images = np.array(images_array)
 
-    df = pd.read_csv('C:/reactNativeProjects/BreakYourBlocks-1/app/api/model/multilabel.csv')
+    df = pd.read_csv('C:/project/BreakYourBlocks/app/api/model/multilabel.csv')
 
-    model = tf.keras.models.load_model("C:/reactNativeProjects/BreakYourBlocks-1/app/api/model/multilabel_classification.h5", compile=False)
+    model = tf.keras.models.load_model("C:/project/BreakYourBlocks/app/api/model/multilabel_classification.h5", compile=False)
 
     classes = np.array(df.columns[6:]) #Get array of all classes
     proba = model.predict(np.vstack(images))  #Get probabilities for each class
+    print("probaaa")
+    print(proba)
     sorted_categories = np.argsort(proba[0])[:-11:-1]  #Get class names for top 10 categories
 
     #Print classes and corresponding probabilities
@@ -55,4 +57,61 @@ def load_model_and_predict(prediction_data_dir, testId, userId, testCompletition
     # Add a new doc in collection 'cities' with ID 'LA'
     db.collection(u'userTestResults').add(data)
 
+    print("COLLECTION ADDED...")"""
+
+import os
+import tensorflow as tf
+import numpy as np
+import pandas as pd
+from firebase_admin import firestore
+from PIL import Image
+
+# prediction_data_dir = 'C:/Users/w/StutteringDetectionModel/MultiLabelClassification/multi-label-test-data/'
+
+def load_model_and_predict(prediction_data_dir, testId, userId, testCompletitionTime):
+    images_array = []  
+    for i in os.listdir(prediction_data_dir):
+        img = Image.open(prediction_data_dir+i)
+        img = img.resize((240, 180))
+        img =np.array(img)
+        images_array.append(img)
+        
+    images = np.array(images_array)
+
+    model = tf.keras.models.load_model("C:/reactNativeProjects/BreakYourBlocks-1/app/api/model/nfold_classification.h5")
+    # classes and probabilities dictionary(map)
+    classes_probabilities={"Unsure" : 0, "PoorAudioQuality":0, "Prolongation":0, "Block":0, "SoundRepetition":0, 
+                           "WordRepetition":0, "DifficultToUnderstand":0, "Interjection":0, 
+                           "NoStutteredWords":0, "NaturalPause":0, "Music":0, "NoSpeech":0}
+
+    proba = model.predict(images)
+    print(proba)
+
+    
+    #arithmetic mean of all 
+    for i, row in enumerate(proba):
+        for j, key in enumerate(classes_probabilities):
+            classes_probabilities[key] = (classes_probabilities[key]*i + row[j])/(i+1)
+            #print(classes_probabilities[key])
+
+    # sort dictionary(map) in descending order
+    # sorting has no effect on db, can be used for other purposes
+    # limit with 3 digit 
+    sorted_classes_probabilities = {k: '{:.3f}'.format(v) for k, v in sorted(classes_probabilities.items(), key=lambda item: item[1], reverse=True)}
+    #list_sorted_classes_probabilities = list(sorted_classes_probabilities)
+    ###################################################
+
+    data = {
+        'userID': userId,
+        'testID': testId,
+        'testDate': testCompletitionTime,
+    }
+    # concatenate with class - probability map
+    data.update(sorted_classes_probabilities) 
+
+    db = firestore.client()
+    # Add a new doc in collection 'cities' with ID 'LA'
+    db.collection(u'userTestResults').add(data)
+
     print("COLLECTION ADDED...")
+
