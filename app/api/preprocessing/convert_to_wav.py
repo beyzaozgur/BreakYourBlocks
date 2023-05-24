@@ -1,11 +1,11 @@
 import os
 import pydub
 
-def convert_to_wav(uri, formattedFileName):
+def convert_to_wav(uri, formattedFileName, testCompletitionTime):
     print("URI : " + uri)
     audio = pydub.AudioSegment.from_file(uri)
 
-    output_path = 'C:/MLIntegrationData/wav-audio/' + formattedFileName
+    output_path = 'D:/MLIntegrationData/wav-audio/' + formattedFileName + '/' + testCompletitionTime
     parent_directory = os.path.dirname(output_path)
     os.makedirs(parent_directory, exist_ok=True)
 

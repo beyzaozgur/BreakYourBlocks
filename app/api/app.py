@@ -35,17 +35,17 @@ def process_user_audio():
 
     formattedFileName = convert_file_name(string_parameter_formatted)
 
-    user_test_audio_path = get_audio_from_storage(formattedFileName)
+    user_test_audio_path = get_audio_from_storage(formattedFileName, testCompletitionTime)
 
     print("USER TEST AUDIO PATH : " + user_test_audio_path)
 
     ###
 
     # CONVERT AUDIO TO WAV
-    input_wav_file = convert_to_wav(user_test_audio_path, formattedFileName)
+    input_wav_file = convert_to_wav(user_test_audio_path, formattedFileName, testCompletitionTime)
 
     # EXTRACT CLIPS
-    clipped_wav_path = split_wav_file(input_wav_file, formattedFileName)
+    clipped_wav_path = split_wav_file(input_wav_file, formattedFileName, testCompletitionTime)
 
     # REMOVE NOICE
     noise_removed_clips = remove_noice_from_clips(clipped_wav_path, formattedFileName)
@@ -64,4 +64,4 @@ def process_user_audio():
     return json.dumps({ "text": "Audio successfully processed!" }), 200
 
 if __name__ == "__main__":
-    app.run(host="192.168.1.6", port=3000, debug=True) # ipv4 address of the machine
+    app.run(host="192.168.1.106", port=3000, debug=True) # ipv4 address of the machine
