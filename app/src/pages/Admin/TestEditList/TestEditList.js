@@ -11,8 +11,8 @@ import colors from '../../../styles/colors';
 const TestEditList = ({navigation}) => {
 
     const [testList, setTestList] = useState([]);
-
-    
+    const [filteredList, setFilteredList] = useState([]);
+    const [search, setSearch] = useState('');
 
     useEffect(() => {
         const testData = firebase.firestore()
@@ -31,6 +31,7 @@ const TestEditList = ({navigation}) => {
                 testNo = testNo + 1;
             });
             setTestList(testList);
+            setFilteredList(testList);
             });
         return () => testData();
     }, []);
@@ -39,16 +40,21 @@ const TestEditList = ({navigation}) => {
 
     const renderSeparator = () => <View style={styles.seperator}></View>
 
-    const handleSearch = text => {
-        const filteredList = testList.filter( test => {
-            const searchedText = text.toLowerCase();
-            const currentTestContent = test.testContent.toLowerCase();
+    const handleSearch = (text) => {
+        if(text) {
+            const newData = testList.filter( test => {
+                const searchedText = text.toLowerCase();
+                const currentTestContent = test.testContent.toLowerCase();
 
-            return currentTestContent.indexOf(searchedText) > -1;
-        });
-
-        setTestList(filteredList);
-    } 
+                return currentTestContent.indexOf(searchedText) > -1;
+            });
+            setFilteredList(newData);
+            setSearch(text);
+        } else {
+            setFilteredList(testList);
+            setSearch(text);
+        }
+    }
 
     function navigateToAddTestScreen() {
         navigation.navigate('AddUpdateTestScreen', {key: null});
@@ -59,11 +65,11 @@ const TestEditList = ({navigation}) => {
             <View style={styles.buttonContainer}>
                 <FontAwesome.Button style={styles.testAddButton} name='plus' backgroundColor={colors.darkestgreen} onPress={navigateToAddTestScreen}>Add Test</FontAwesome.Button>
             </View>
-            <SearchBar placeholder='Search by content...' onSearch={handleSearch} />
+            <SearchBar placeholder='Search by content...' onSearch={(text) => handleSearch(text)} value={search}/>
             <FlatList
                 ItemSeparatorComponent={renderSeparator}
                 keyExtractor={item => item.id}
-                data={testList}
+                data={filteredList}
                 renderItem={renderTest}>
             </FlatList>
         </View>
