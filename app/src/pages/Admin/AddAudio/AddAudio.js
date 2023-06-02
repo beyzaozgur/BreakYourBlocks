@@ -5,6 +5,7 @@ import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 //import {firebase} from '../../../../firebase';
 import useAudioUploader from '../../../hooks/useAudioUploader';
+import colors from '../../../styles/colors';
 
 const AddAudio = () => {
    
@@ -24,7 +25,8 @@ const AddAudio = () => {
     };
     
       return (
-        <View style={{ padding: 50 }}>
+        <View style={{ padding: 50, backgroundColor:colors.darkgreen, flex:1 }}>
+          <View style={{ padding: 50, backgroundColor:colors.green, flex:1, borderWidth:2, borderColor:colors.grayish, borderRadius:5 }}>
           <Button text="Select Audio File" onPress={selectFile} />
           {selectedFile && (
             <View style={{ marginTop: 20 }}>
@@ -36,6 +38,7 @@ const AddAudio = () => {
             </View>
           )}
           
+        </View>
         </View>
       );
     };

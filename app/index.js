@@ -84,7 +84,7 @@ function Router () {
 
     //const [initializing, setInitializing] = useState(true);
     const [session, setSession] = useState();
-    const [userSession, setUserSession] = useState();
+   // const [userSession, setUserSession] = useState();
     const [adminSession, setAdminSession] = useState();
     const [emailVerified, setEmailVerified] = useState(false);
 
@@ -96,12 +96,13 @@ function Router () {
     useEffect(() => {
         firebase.auth().onAuthStateChanged(user => {
             if(user){
-                setSession(true);
                 if(user.email === 'stutteringtranscriptor@gmail.com'){
                     setAdminSession(true);
                 }else{
-                     setUserSession(true);
+                    setAdminSession(false);
                 }
+                setSession(true);
+                
             }else{
                 setSession(false);
             }
@@ -179,6 +180,18 @@ function Router () {
                 </Tab.Navigator>
             </ToastProvider>
         );}else{
+            // if this app was not an Expo app
+          /*  const { exec } = require('child_process');
+            exec('C:/reactNativeProjects/BreakYourBlocks-1/app/api/app.py', (error, stdout, stderr) => {
+                if (error) {
+                  console.error(`Error executing Python script: ${error}`);
+                  return;
+                }
+              
+                // Handle the output if needed
+                console.log(`Python script output: ${stdout}`);
+              });*/
+              
             return (
                 <ToastProvider
                     placement='top'
