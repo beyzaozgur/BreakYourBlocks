@@ -3,17 +3,20 @@ import { Text, View } from 'react-native';
 
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';
-import firebase from '../../../../firebase';
+//import {firebase} from '../../../../firebase';
 import useAudioUploader from '../../../hooks/useAudioUploader';
 
 const AddAudio = () => {
    
     const {
-        selectedFile,
-        uploadProgress,
-        uploadError,
-        selectFile,
-        uploadFile,
+      selectedFile,
+      uploadProgress,
+      uploadError,
+      isUploadSucceed,
+      setUploadError,
+      setIsUploadSucceed,
+      selectFile,
+      uploadFile,
       } = useAudioUploader();
     const [fileName, setFileName] = useState('');
     const handleFileNameChange = (fileName) => {

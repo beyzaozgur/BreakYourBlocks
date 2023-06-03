@@ -1,79 +1,68 @@
-import React, { Component } from "react";
+import React, { Component} from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import PropTypes from 'prop-types';
 import _ from 'underscore';
 
 import styles from './CheckBox.style';
 
-
+// To create a custom implementation of a checkbox, Component class is extended
 class CheckBox extends Component {
+    // This code defines a constructor function for the component,
+    // which sets the initial state of the component's properties to specific default values.
     constructor(props) {
-        super(props);
-        this.state = {
+        super(props); // call to Component's constructor
+        this.state = { 
+            // properties
             checked: false,
             onChange: null,
             placeholder: '',
             options: [],
             values: [],
             isVisible: true,
-
+            isLink:false,
+           // isSingleSelection:true,
         }
-    };
+    };   
+  
 
-
-
-    // const [values, setValues] = useState([]);
-
-    pick(selectedValue) {
-
-        // const index = values.findIndex(value => value===selectedValue)
-        // if(this.state.values.length=1){ // prevent multiple selcetion 
-        //  this.setState({ values:this.state.values.filter(value => value === selectedValue)});
-        //  var checked = !this.state.checked;
-        //  this.setState({ checked: checked });
-        //  this.props.onChange && this.props.onChange(selectedValue,checked);
-        //  setValues(values => values.concat(selectedValue) );
-        //setTimeout(30);
-
-        //  }
-
-
-        if (this.state.values.includes(selectedValue)) {
-            this.setState({ values: this.state.values.filter(value => value !== selectedValue) });
-
-            var checked = !this.state.checked;
-            this.setState({ checked: checked });
-            this.props.onChange && this.props.onChange(selectedValue, checked);
-            return;
+    pick(selectedValue) { // function that controls selection
+        if (this.state.values.includes(selectedValue)) {  // if selected value already selected , do nothing
+            // prevent unselect  
+          return;      
+         
+        } else { // if not selected, select
+            this.setState({ values: selectedValue, checked:true });            
+         
         }
-        if (this.state.values.length = 1) { // prevent multiple selcetion 
-            this.setState({ values: this.state.values.filter(value => value === selectedValue) });
-        }
-
-
-        this.setState({ values: this.state.values.concat(selectedValue) });
-        var checked = !this.state.checked;
-        this.setState({ checked: checked });
-        this.props.onChange && this.props.onChange(selectedValue, checked);
-
+          
+          // Call the onChange handler with the selected value and checked state
+          this.props.onChange && this.props.onChange(selectedValue, this.state.checked);        
+          
     }
+
+    //set the component's state based on the style property and other props passed to it. 
     componentDidMount() {
         this.setState(_.extend({}, this.props.style, _.omit(this.props, 'style')))
     }
+    //  update the component's state based on the new props that it is about to receive
+   // componentWillReceiveProps(nextProps) {
+      //  this.props = nextProps;
+   //     this.setState({ checked: nextProps.checked });
+       // console.log(this.state.checked)
+   // }
+   
 
-    componentWillReceiveProps(nextProps) {
-        this.props = nextProps;
-        this.setState({ checked: nextProps.checked });
-    }
-    //const CheckBox = ({placeholder, options, onChange}) =>{
+   // A required method that defines what should be displayed on the screen when the component is rendered   
+   // The render method is called whenever the component's state or props change
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>{this.state.placeholder}</Text>
+                {this.state.isLink ? <Text style={{...styles.title, textDecorationLine: 'underline'}} onPress={() => this.props.navigation.navigate('PDPP')}>{this.state.placeholder}</Text> : <Text style={styles.title}>{this.state.placeholder}</Text> }
                 <View style={styles.values}>
-                    {this.state.options.map(option => (
+                    {this.state.options.map(option => (// for each option creates a box and labels it with option if isVisible set to true
                         <View key={option} style={styles.option}>
-                            <TouchableOpacity style={styles.checkBox} onPress={() =>
+                            <TouchableOpacity style={styles.checkBox} onPress={() => // when box is clicked, pick method is called
+                                                                                                // if option is selected, puts ✓ in it
                                 this.pick(option)}>{this.state.values.includes(option) && <Text style={styles.check}>✓</Text>}</TouchableOpacity>
                             {this.state.isVisible && <Text style={styles.valueName}>{option}</Text>}
 
@@ -84,14 +73,10 @@ class CheckBox extends Component {
             </View>
         );
     };
-    /*_toggleCheck() {
-        var checked = !this.state.checked;
-        this.setState({ checked: checked });
-        this.props.onChange && this.props.onChange(this.props.option,checked);
-    }*/
+
 }
 
-
+// This code defines the propTypes for the component, which specify the types and requirements for its props.
 CheckBox.propTypes = {
     checked: PropTypes.bool,
     placeholder: PropTypes.string,
@@ -99,7 +84,8 @@ CheckBox.propTypes = {
     values: PropTypes.any,
     options: PropTypes.any,
     isVisible: PropTypes.bool,
-    //option:PropTypes.string
+    isLink:PropTypes.bool,
+  //  isSingleSelection: PropTypes.bool
 }
 export default CheckBox;
 

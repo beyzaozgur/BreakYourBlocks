@@ -21,11 +21,14 @@ export default StyleSheet.create({
   },
   fill: {
     flex: 1,
-    margin: 16
+    margin: 16,
+    color:colors.darkestgreen,
+    fontWeight:'bold',
+    fontSize:17,
   },
-  button: {
-    margin: 16
-  },
+ /* button: {
+    //margin: 16
+  },*/
   testTitle: {
     textAlign: 'center',
     fontSize: 40,

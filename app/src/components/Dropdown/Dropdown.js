@@ -3,38 +3,24 @@ import SelectDropdown from 'react-native-select-dropdown';
 
 import styles from './Dropdown.style';
 
-
-const DropdownComponent = ({placeholder, data, onChange, dbValue}) => {
-   // const [value, setValue] = useState(null);
-
-    return (
+// Custom Dropdown Component that takes placeholder data(list of options), onChange function, and dbValue
+const DropdownComponent = ({placeholder, data, onChange, dbValue}) => { 
+    return ( 
       <SelectDropdown
-        defaultButtonText={dbValue ? dbValue : placeholder}
+        defaultButtonText={dbValue ? dbValue : placeholder} // if there is dbValue, assign it. Otherwise assign placeholder
+        // style, data, and onChange function is assigned
         buttonStyle={styles.button}
         buttonTextStyle= {styles.text}
         dropdownStyle={styles.container}
-       // selectedRowStyle={styles.container}
         data={data}
-       // rowStyle={styles.container}
-       // placeholderStyle={styles.text}
         rowTextStyle={styles.text}
-       // selectedRowTextStyle={styles.text}
-       // itemTextStyle={styles.text}
-        //maxHeight={300}
-      // labelField="label"
-      // valueField="value"
-      //  placeholder={placeholder}
-      // value={value}
-      //onChange = {onChange}
-      //dropdownIconPosition='left'
-      // renderDropdownIcon ={()=>(<Icon name='menu-down' size={25} color={colors.darkestgreen}/>)}
-      onSelect={onChange}
-      buttonTextAfterSelection={(selectedItem) => {
+        onSelect={onChange}
+        buttonTextAfterSelection={(selectedItem) => { // button text will be assigned to selected option
         return selectedItem
       }}
-      rowTextForSelection={(item) => {
-        return item
-      }}
+      //  rowTextForSelection={(item) => { // it is used to customize options
+      //  return item
+      //}}
     />
   );
 };

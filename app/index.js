@@ -24,6 +24,7 @@ import TestsList from '../app/src/pages/Tests/TestsList';
 import AnalysisList from '../app/src/pages/Analyzes/AnalysisList';
 import TestAudioList from '../app/src/pages/Admin/TestAudioList';
 import AddAudio from './src/pages/Admin/AddAudio/AddAudio';
+import PDPP from './src/pages/PDPP';
 import { firebase } from './firebase';
 import colors from './src/styles/colors';
 import AdminSettings from './src/pages/Admin/AdminSettings/AdminSettings';
@@ -57,7 +58,7 @@ const ProfileStack = () => {
  const TestAudioStack = () => {
     return(
         <Stack.Navigator screenOptions={{headerShown:false}}>
-             <Stack.Screen name='TestsListScreen' component={TestAudioList}/>
+             <Stack.Screen name='TestsAudioListScreen' component={TestAudioList}/>
              <Stack.Screen name='AddAudioScreen' component={AddAudio}/>
              
         </Stack.Navigator>
@@ -121,7 +122,10 @@ function Router () {
         })
     }, [])
 
-    // if(initializing) return null;
+
+
+    //if(initializing) return null;
+
 
     if (adminSession) {
 
@@ -152,7 +156,7 @@ function Router () {
                         tabBarInactiveBackgroundColor: colors.green,
                         tabBarActiveBackgroundColor: colors.green,
                     }}>
-                    <Tab.Screen name="AdminTestOperations" component={AdminTestOperationsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
+                    <Tab.Screen name="Test" component={AdminTestOperationsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                     <Tab.Screen name="Audio" component={TestAudioStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                     <Tab.Screen name="Settings" component={AdminSettingsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="cog-outline" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                 </Tab.Navigator>
@@ -181,7 +185,7 @@ function Router () {
                     <Stack.Screen name='Login' component={Login} />
                     <Stack.Screen name='Sign Up' component={SignUp} />
                     <Stack.Screen name='Email Request' component={EmailRequest} />
-                    
+                    <Stack.Screen name='PDPP' component={PDPP}/>                    
                 </Stack.Navigator>
             </ToastProvider>
         );

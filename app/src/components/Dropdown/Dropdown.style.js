@@ -4,25 +4,19 @@ import colors from "../../styles/colors";
 
 
 export default StyleSheet.create({
-  container: {
-    //flex:1,
-    // margin:10,
+  container: { // main container that contains buttons
     marginTop: 10,
-    // marginLeft:10,
-    // marginRight:10,
     backgroundColor: colors.grayish,
     borderRadius: 5,
     borderWidth: 1,
     borderColor: colors.darkestgreen,
-    flexDirection: 'row',
-    alignItems: 'center',
-    // justifyContent:'center',
-    width: Dimensions.get('window').width * 0.95,
-    alignSelf: 'center',
-    //height:40,
+    flexDirection: 'row', // The child components are arranged horizontally(options)
+    alignItems: 'center', // items in it centered
+    justifyContent:'center', // align items horizontally since flex direction is row
+    width: Dimensions.get('window').width * 0.95, // width is 95% of the screen width
+    alignSelf: 'center', // container is centered
   },
-  button: {
-    //flex:1,
+  button: { // buttons (that contains options) looks
     marginTop: 10,
     marginLeft: 10,
     marginRight: 10,
@@ -30,20 +24,17 @@ export default StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     borderColor: colors.darkestgreen,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: 'row', // main axis
+    alignItems: 'center', // aligning cross axis
+    justifyContent: 'center', // aligning main axis
     height: 40,
-    width: Dimensions.get('window').width * 0.95,
+    width: Dimensions.get('window').width * 0.95, // width is 95% of the screen width
   },
   text: {
-    //paddingLeft:4,
-    // textAlign:'left',
-    flex: 0.99,
+    flex: 0.99, //  take up almost all the available space, leaving just a tiny amount of space
     fontSize: 14,
     color: colors.darkestgreen,
     fontWeight: 'bold',
-    // fontFamily:'ui-serif',
   },
 
 });

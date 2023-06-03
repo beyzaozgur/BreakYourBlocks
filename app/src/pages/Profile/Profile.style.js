@@ -12,6 +12,7 @@ export default StyleSheet.create({
     profileContainer: {
         flex: 1,
         flexDirection: 'row-reverse',
+        marginTop:20,
         //  backgroundColor:'red'
     },
     profilePictureContainer: {

@@ -84,7 +84,13 @@ import {firebase} from '../../firebase';
 
 
 const playSound = (fileName) => {
- if(fileName === 'No Sound') return;
+  if(fileName === 'No Sound') return {
+    play: () => {},
+    stop: () => {},
+    isPlaying: false
+  };
+
+
   const storageRef = firebase.storage().ref();
   const fileRef = storageRef.child(`testAudios/${fileName}`);
 
@@ -106,8 +112,11 @@ const playSound = (fileName) => {
 
   async function stop() {
     try {
-      await sound.stopAsync();
-      setIsPlaying(false);
+     // if (sound && sound.status === "loaded") {
+        await sound.stopAsync();
+        setIsPlaying(false);
+    //  }
+      
     } catch (error) {
       console.log('Error stopping sound:', error);
     }

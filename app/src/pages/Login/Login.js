@@ -9,6 +9,7 @@ import Input from "../../components/Input";
 import styles from './Login.style';
 //import { signInWithEmailAndPassword } from "firebase/auth";
 import { firebase } from "../../../firebase";
+import ErrorMessageParser from "../../utils/ErrorMessageParser";
 
 
 const LoginSchema = Yup.object({
@@ -37,7 +38,7 @@ const Login = ({ navigation }) => {
                     if (emailVerified === true) {
                         firebase.auth().signOut();
                         await firebase.auth().signInWithEmailAndPassword(values.mail, values.password).then(() => {
-                            toast.show('Your mail verified', { type: 'success' });
+                         //   toast.show('Your mail verified', { type: 'success' });
                         })
 
                     } else {
@@ -50,9 +51,10 @@ const Login = ({ navigation }) => {
             )
         } catch (error) {
             console.log(error);
+            toast.show(ErrorMessageParser(error.code), { type: 'normal' });           
         }
 
-        console.log(values);
+      //  console.log(values);
 
     }
     function handleSignUp() {
@@ -71,7 +73,7 @@ const Login = ({ navigation }) => {
                         <Input placeholder={"Password"} value={values.password} onChangeText={handleChange('password')} icon='key' isPasswordHidden />
                         {errors.password && <Text style={styles.error}>{errors.password}</Text>}
                         <Button text={"Login"} onPress={handleSubmit} />
-                        <Text style={styles.forgotPassword_text}  onPress={()=>navigation.navigate('Email Request') } >forgot password?</Text>
+                        <Text style={styles.forgotPassword_text}  onPress={()=>navigation.navigate('Email Request') } >Forgot password?</Text>
                     </View>)}
             </Formik>
             <View style={styles.signup_container}>

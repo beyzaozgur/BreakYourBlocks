@@ -12,6 +12,7 @@ import CheckBox from "../../components/CheckBox";
 import DatePicker from '../../components/DatePicker';
 import { firebase } from "../../../firebase";
 import styles from './SignUp.style';
+import ErrorMessageParser from '../../utils/ErrorMessageParser';
 
 
 const educationOptions = ['No Formal Education', 'Primary Education', 'Secondary Education', 'High School',
@@ -38,7 +39,7 @@ const SignUpSchema = Yup.object({
         .max(50, 'Too Long!')
         .required('Required!'),
     education: Yup.string().required('Required!').oneOf(educationOptions),
-    gender: Yup.string().required('gender Required!'),
+    gender: Yup.string().required('Required!'),
     mail: Yup.string().email('Invalid email!').required('Required!'),
     username: Yup.string()
         .min(2, 'Too Short!')
@@ -95,6 +96,7 @@ const SignUp = ({ navigation }) => {
                 })
          } catch (error) {
              console.log(error);
+             toast.show(ErrorMessageParser(error.code), { type: 'normal' }); 
         }
 
     }
@@ -140,7 +142,7 @@ const SignUp = ({ navigation }) => {
                                 {errors.password && <Text style={styles.error}>{errors.password}</Text>}
                                 <Input placeholder={"Confirm Password"} value={values.confirmPassword} onChangeText={handleChange('confirmPassword')} icon='key' isPasswordHidden />
                                 {errors.confirmPassword && <Text style={styles.error}>{errors.confirmPassword}</Text>}
-                                <CheckBox placeholder={'I have read the PDPP and I accept.'} isVisible={false} options={['true']} onChange={handleChange('isApproved')} />
+                                <CheckBox navigation={navigation} placeholder={'I have read the PDPP and I accept.'} isLink={true} isVisible={false} options={['true']} onChange={handleChange('isApproved')} />
                                 {errors.isApproved && <Text style={styles.error}>{errors.isApproved}</Text>}
                             </View>
                             <View style={styles.register_container}>
