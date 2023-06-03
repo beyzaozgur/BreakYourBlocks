@@ -26,6 +26,8 @@ import TestAudioList from '../app/src/pages/Admin/TestAudioList';
 import AddAudio from './src/pages/Admin/AddAudio/AddAudio';
 import { firebase } from './firebase';
 import colors from './src/styles/colors';
+import AdminSettings from './src/pages/Admin/AdminSettings/AdminSettings';
+import TestAnalyse from './src/pages/TestAnalyse/TestAnalyse';
 
 
 const Stack = createNativeStackNavigator();
@@ -36,6 +38,7 @@ const ProfileStack = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='ProfileScreen' component={Profile} />
             <Stack.Screen name='Settings' component={Settings}/>
+            <Stack.Screen name='EmailRequestScreen' component={EmailRequest}/>
             <Stack.Screen name='ChangePasswordScreen' component={ChangePassword}/>
             <Stack.Screen name='EditProfileScreen' component={EditProfile}/>
         </Stack.Navigator>
@@ -65,6 +68,17 @@ const AnalyzesStack = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='AnalyzesScreen' component={AnalysisList} />
+            <Stack.Screen name='TestAnalyseScreen' component={TestAnalyse} />
+        </Stack.Navigator>
+    )
+}
+
+const AdminSettingsStack = () => {
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='AdminSettingsScreen' component={AdminSettings}/>
+            <Stack.Screen name='EmailRequestScreen' component={EmailRequest}/>
+            <Stack.Screen name='Login' component={Login} />
         </Stack.Navigator>
     )
 }
@@ -74,6 +88,7 @@ const AnalyzesStack = () => {
         <Stack.Navigator screenOptions={{headerShown:false}}>
              <Stack.Screen name='TestEditListScreen' component={TestEditList}/>
              <Stack.Screen name='AddUpdateTestScreen' component={AddUpdateTest}/>
+             
         </Stack.Navigator>
     )
 }
@@ -139,6 +154,7 @@ function Router () {
                     }}>
                     <Tab.Screen name="AdminTestOperations" component={AdminTestOperationsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                     <Tab.Screen name="Audio" component={TestAudioStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
+                    <Tab.Screen name="Settings" component={AdminSettingsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="cog-outline" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                 </Tab.Navigator>
             </ToastProvider>
         );

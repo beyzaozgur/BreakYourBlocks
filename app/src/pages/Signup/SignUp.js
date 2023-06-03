@@ -85,6 +85,7 @@ const SignUp = ({ navigation }) => {
                                     gender: values.gender,
                                     mail: values.mail,
                                     username: values.username,
+                                    dateOfBirth: values.dateOfBirth,
                                     // password: values.password
                                 })
                         }).then(() => {
@@ -125,10 +126,11 @@ const SignUp = ({ navigation }) => {
                                 {errors.name && <Text style={styles.error}>{errors.name}</Text>}
                                 <Input placeholder={"Surname"} value={values.surname} onChangeText={handleChange('surname')} />
                                 {errors.surname && <Text style={styles.error}>{errors.surname}</Text>}
-                                <DatePicker value={values.dateOfBirth} onDateChange={handleChange('dateOfBirth')} />
+                                
                                 <Dropdown data={educationOptions} placeholder={'Education'} onChange={handleChange('education')} />
                                 {errors.education && <Text style={styles.error}>{errors.education}</Text>}
                                 <CheckBox placeholder={'Gender'} options={['Woman', 'Men']} onChange={handleChange('gender')} />
+                               <DatePicker value={values.dateOfBirth.toDateString()}/>
                                 {errors.gender && <Text style={styles.error}>{errors.gender}</Text>}
                                 <Input placeholder={"Mail"} value={values.mail} onChangeText={handleChange('mail')} />
                                 {errors.mail && <Text style={styles.error}>{errors.mail}</Text>}

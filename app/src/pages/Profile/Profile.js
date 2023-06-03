@@ -34,20 +34,9 @@ function ProfileScreen({navigation}) {
 
     }, [])
 
+    
 
 
-    //    function selectImage(){
-    //         ImagePicker.openPicker({
-    //             width: 300,
-    //             height: 400,
-    //             cropping: true,
-    //             includeBase64: true,
-    //           }).then(image => {
-    //             source={uri: `data:${image.mime};base64,${image.data}`}
-    //             setImageUri(source);
-    //             setTintColor(null);
-    //           }).catch(error => console.log(error));
-    //           };
 
 
     return (
@@ -66,7 +55,7 @@ function ProfileScreen({navigation}) {
             <View style={styles.personalDataContainer}>
                 <Output label={'Full Name'} value={info.name + ' ' + info.surname} align={'space'} />
                 <Output label={'Gender'} value={info.gender} align={'space'} />
-                <Output label={'Date Of Birth'} value={"17/6/2000"} align={'space'} />
+                <Output label={'Date Of Birth'} value={info.dateOfBirth} align={'space'} />
                 <Output label={'Education'} value={info.education} align={'space'} />
                 <Output label={'Mail'} value={info.mail} align={'space'} />
             </View>

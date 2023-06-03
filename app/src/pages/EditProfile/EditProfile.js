@@ -9,8 +9,10 @@ import styles from './EditProfile.style';
 import Dropdown from "../../components/Dropdown";
 import CheckBox from "../../components/CheckBox";
 import { firebase } from "../../../firebase";
+import {getAuth} from "firebase/auth";
 import DatePicker from '../../components/DatePicker';
 import Profile from "../Profile";
+//import {updateProfile} from "../../hooks/updateProfile";
 const educationOptions = ['No Formal Education', 'Primary Education', 'Secondary Education', 'High School', 
 "Bachelor's degree", "Master's degree", 'Doctorate or higher'];
 
@@ -52,77 +54,81 @@ const EditProfileSchema = Yup.object({
   isApproved:Yup.string().required('Required!'),
 });
 
+
+
 const EditProfile = ({navigation}) => {
-    function handleEditProfile(values){
-        console.log(values);
-        navigation.navigate('Profile')
-    }
-    function handleEditProfileSave(){
-        navigation.navigate('ProfileScreen')
-    }
-    const [info, setInfo] = useState('');
+    const auth=getAuth();
+    const user=auth.currentUser;
 
+    const [name, setName] = useState('');
+    const [surname, setSurname] = useState('');
+    const [gender, setGender] = useState('');
+    const [education, setEducation] = useState('');
+    const [mail, setMail] = useState('');
+    const [username, setUserName] = useState('');
+
+    function updateProfile (uid,_name, _surname, _education, _gender, _mail, _username,){
+    
+      firebase.firestore().collection('users')
+      .doc(uid)
+      .update({
+          name: _name,
+          surname: _surname,
+          education: _education,
+          gender: _gender,
+          mail: _mail,
+          username: _username
+      })
+  
+  }
+
+    function update () {
+        updateProfile(user.uid, name, surname, education, gender,mail,username);
+        navigation.navigate('ProfileScreen');
+    };
+    
+   
     useEffect(() => {
-        try {
-            firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).get().then((snapshot) => {
-                if (snapshot.exists) {
-                    setInfo(snapshot.data())
-                } else {
-                    console.log('User does not exist!')
-                }
-            })
+            firebase.firestore()
+            .collection('users')
+            .doc(user.uid)
+            .onSnapshot(documentSnapshot => {
+              setName(documentSnapshot.data().name);
+              setSurname(documentSnapshot.data().surname);
+              setEducation(documentSnapshot.data().education);
+              setGender(documentSnapshot.data().gender);
+              setMail(documentSnapshot.data().mail);
+              setUserName(documentSnapshot.data().username);
+            });
+          
+    }, []);
 
-        } catch (error) {
-            console.log(error);
-        }
-
-    }, [])
+    
    return(
         <SafeAreaView style={styles.container}>
             <ScrollView style={styles.scrollView}>
             <View style={styles.logo_container}>
             <Image style={styles.logo} source={require('../../assets/logo.png')}/>
             </View>
-            <Formik initialValues={{
-                name:'',
-                surname:'',
-                dateOfBirth:'', 
-                education:'', 
-                gender:'', 
-                mail:'', 
-                username:'', 
-                password:'', 
-                confirmPassword:'', 
-                isApproved:''}}                
-               // validationSchema={EditProfileSchema}
-                onSubmit={handleEditProfile}>
-            {({handleSubmit, handleChange, values,errors}) => (
-            <>
+            
             <View style={styles.body_container}>
                
-                <Input placeholder={info.name} onChangeText={handleChange('name')}/>
-                {errors.name && <Text style={styles.error}>{errors.name}</Text>}
-                <Input placeholder={info.surname} onChangeText={handleChange('surname')} />
-                {errors.surname && <Text style={styles.error}>{errors.surname}</Text>}
-                <Dropdown data={educationOptions} placeholder={info.education} onChange={handleChange('education')}/>
-                {errors.education && <Text style={styles.error}>{errors.education}</Text>}
-                <CheckBox placeholder={"Gender"} options={['Woman', 'Men']} onChange={handleChange('gender')} />
-                {errors.gender && <Text style={styles.error}>{errors.gender}</Text>}
-                <Input placeholder={info.mail} onChangeText={handleChange('mail')}/>
-                {errors.mail && <Text style={styles.error}>{errors.mail}</Text>}
-                <Input placeholder={info.username} onChangeText={handleChange('username')} icon='account'/>
-                {errors.username && <Text style={styles.error}>{errors.username}</Text>}
+                <Input placeholder={name} onChangeText={setName}/>
+                <Input placeholder={surname} onChangeText={setSurname} />
+                <Dropdown data={educationOptions} placeholder={education} onChange={setEducation}/>
+                <DatePicker />
+                <CheckBox placeholder={gender} options={['Woman', 'Men']} onChange={setGender} />
+                <Input placeholder={mail} onChangeText={setMail}/>
+                <Input placeholder={username} onChangeText={setUserName} icon='account'/>
                 
             </View>
             <View style={styles.register_container}>         
-                <Button text={"Save"} theme='secondary' onPress={handleEditProfileSave}/>
+                <Button text={"Save"} theme='secondary' onPress={update}/>
             </View>
-            </>
-            )}
-            </Formik>
             </ScrollView>
         </SafeAreaView>
     );
+    
 }
 
 export default EditProfile;
