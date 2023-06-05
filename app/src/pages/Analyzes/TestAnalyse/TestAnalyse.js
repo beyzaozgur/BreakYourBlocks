@@ -2,16 +2,11 @@ import React, { useEffect, useState } from "react";
 
 import { Dimensions } from "react-native";
 import { View, SafeAreaView, Image } from "react-native";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 // import ImagePicker from 'react-native-image-crop-picker';
 // import { select } from "underscore";
-import Chart from "../../components/Chart"
-import Output from "../../components/Output";
-import colors from "../../styles/colors";
 import styles from "./TestAnalyse.style";
 // import Button from "../../components/Button";
-import { firebase } from "../../../firebase";
-import Loading from "../../components/Loading/Loading";
+import { firebase } from "../../../../firebase";
 
 import { PieChart } from 'react-native-chart-kit';
 const data = [
@@ -58,13 +53,25 @@ const data = [
     
     color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
   };
+  function getData(property){
+    const auth=getAuth();
+    const user=auth.currentUser;
+    
+    useEffect(() => {
+      firebase.firestore()
+      .collection('userTestResults')
+      .doc(user.uid)
+      .onSnapshot(documentSnapshot => {
+        documentSnapshot.data().Block;
+      });
+    
+}, []);
+  }
 function TestAnalyse() {
-   
-
+  
     return (
 
         <View style={styles.container}>
-            
             <PieChart 
                 style={styles.pieChartContainer} 
                 data={data} 

@@ -12,7 +12,6 @@ import CheckBox from "../../components/CheckBox";
 import DatePicker from '../../components/DatePicker';
 import { firebase } from "../../../firebase";
 import styles from './SignUp.style';
-import ErrorMessageParser from '../../utils/ErrorMessageParser';
 
 
 const educationOptions = ['No Formal Education', 'Primary Education', 'Secondary Education', 'High School',
@@ -39,7 +38,7 @@ const SignUpSchema = Yup.object({
         .max(50, 'Too Long!')
         .required('Required!'),
     education: Yup.string().required('Required!').oneOf(educationOptions),
-    gender: Yup.string().required('Required!'),
+    gender: Yup.string().required('gender Required!'),
     mail: Yup.string().email('Invalid email!').required('Required!'),
     username: Yup.string()
         .min(2, 'Too Short!')
@@ -86,7 +85,7 @@ const SignUp = ({ navigation }) => {
                                     gender: values.gender,
                                     mail: values.mail,
                                     username: values.username,
-                                    dateOfBirth: values.dateOfBirth,
+                                    dateOfBirth: values.dateOfBirth.toDateString(),
                                     // password: values.password
                                 })
                         }).then(() => {
@@ -96,7 +95,6 @@ const SignUp = ({ navigation }) => {
                 })
          } catch (error) {
              console.log(error);
-             toast.show(ErrorMessageParser(error.code), { type: 'normal' }); 
         }
 
     }
@@ -132,7 +130,7 @@ const SignUp = ({ navigation }) => {
                                 <Dropdown data={educationOptions} placeholder={'Education'} onChange={handleChange('education')} />
                                 {errors.education && <Text style={styles.error}>{errors.education}</Text>}
                                 <CheckBox placeholder={'Gender'} options={['Woman', 'Men']} onChange={handleChange('gender')} />
-                               <DatePicker value={values.dateOfBirth.toDateString()}/>
+                               <DatePicker value={values.dateOfBirth}/>
                                 {errors.gender && <Text style={styles.error}>{errors.gender}</Text>}
                                 <Input placeholder={"Mail"} value={values.mail} onChangeText={handleChange('mail')} />
                                 {errors.mail && <Text style={styles.error}>{errors.mail}</Text>}
@@ -142,7 +140,7 @@ const SignUp = ({ navigation }) => {
                                 {errors.password && <Text style={styles.error}>{errors.password}</Text>}
                                 <Input placeholder={"Confirm Password"} value={values.confirmPassword} onChangeText={handleChange('confirmPassword')} icon='key' isPasswordHidden />
                                 {errors.confirmPassword && <Text style={styles.error}>{errors.confirmPassword}</Text>}
-                                <CheckBox navigation={navigation} placeholder={'I have read the PDPP and I accept.'} isLink={true} isVisible={false} options={['true']} onChange={handleChange('isApproved')} />
+                                <CheckBox placeholder={'I have read the PDPP and I accept.'} isVisible={false} options={['true']} onChange={handleChange('isApproved')} />
                                 {errors.isApproved && <Text style={styles.error}>{errors.isApproved}</Text>}
                             </View>
                             <View style={styles.register_container}>

@@ -2,16 +2,16 @@ import React from "react";
 import { View, FlatList } from 'react-native';
 
 import test_data from '../../../test-data.json';
-import AnalysisCard from '../../../components/AnalysisCard';
-import styles from './AnalysisList.style';
+import AnalysesListCard from "../../../components/AnalysesListCard";
+import styles from './TestAnalysesList.style';
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 
-function AnalysisList({navigation}) {
+function TestAnalysesList({navigation}) {
 
     const renderTest = ({ item }) => 
-    <TouchableOpacity onPress={ ()=>navigation.navigate('TestAnalysesListScreen')}>
-            <AnalysisCard test={item} />
+    <TouchableOpacity onPress={ ()=>navigation.navigate('TestAnalyseScreen')}>
+            <AnalysesListCard test={item} />
     </TouchableOpacity> ;
 
     return (
@@ -30,4 +30,4 @@ function AnalysisList({navigation}) {
     )
 }
 
-export default AnalysisList;
+export default TestAnalysesList;
