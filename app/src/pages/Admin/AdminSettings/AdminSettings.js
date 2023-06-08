@@ -5,13 +5,13 @@ import Input from "../../../components/Input";
 import { Formik } from "formik";
 import * as Yup from 'yup';
 import styles from './AdminSettings.style';
-import  firebase  from "../../../../firebase";
-import  {getAuth}  from "firebase/auth";
+import  {firebase}  from "../../../../firebase";
 
-logOut=async()=> {
+
+async function handleLogOut() {
     await firebase.auth().signOut();
-    
- }
+    console.log("Logging out");
+}
 const AdminSettings = ({navigation}) => {
    
 
@@ -22,7 +22,7 @@ const AdminSettings = ({navigation}) => {
             </View>
             <View style={styles.body_container}>
                 <Button text={"Change Password"} onPress={()=>navigation.navigate('EmailRequestScreen') }/>
-                <Button text={"Log Out"} onPress={()=>this.logOut()}/>
+                <Button text={"Log Out"} onPress={handleLogOut}/>
             </View>
         </SafeAreaView>
     );

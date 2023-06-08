@@ -192,6 +192,7 @@ function Router () {
                     }}>
                     <Tab.Screen name="Test" component={AdminTestOperationsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                     <Tab.Screen name="Audio" component={TestAudioStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
+                    <Tab.Screen name="Settings" component={AdminSettingsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="cog-outline" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                 </Tab.Navigator>
             </ToastProvider>
         );}else{

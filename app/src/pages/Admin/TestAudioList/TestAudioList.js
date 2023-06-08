@@ -47,16 +47,10 @@ const TestAudioList = ({navigation}) => {
 
     const renderAudio = ({ item }) => <TestAudioCard audio={item} />;
 
-    async function handleLogOut() {
-        await firebase.auth().signOut();
-        console.log("Logging out");
-    }
-
     return (
         <View style={styles.container}>
             <View style={styles.buttonContainer}>
                 {/* <Text style={styles.title}>Sounds</Text> */}
-                <Icon name="cog-outline" size={35} color={colors.darkestgreen} style={styles.settings_icon} onPress={handleLogOut} />
                 <FontAwesome.Button style={styles.audioAddButton} name='plus' backgroundColor={colors.darkestgreen} onPress={navigateToAddAudioScreen}>Add Audio</FontAwesome.Button>
             </View>
             <FlatList

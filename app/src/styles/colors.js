@@ -7,7 +7,9 @@ const colors = {
     yellow: '#FFB100',
     warning: '#FD841F',
     danger: '#FF1700',
-    notification: '#678983'
+    notification: '#678983',
+    chartColors: ["#e60049", "#0bb4ff", "#50e991", "#e6d800", "#9b19f5", "#ffa300", "#dc0ab4", "#b3d4ff", "#00bfa0","#f46a9b","#de25da","#00ffff"],
+
 };
 
 export default colors;

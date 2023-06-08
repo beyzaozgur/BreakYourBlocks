@@ -59,17 +59,20 @@ const TestStartCard = props => {
         toast.show('7 days must pass from the date you last took the test. ' + (7-daysDiff) + ' days left.', { type: 'warning' });
     }
 
+    function unreachableWarningPopup() {
+        toast.show('This test is temporarily unavailable.');
+    }
+
     return(
         <TouchableOpacity onPress={() => {
-            if (testCompletitionDays() > 7) {
-                navigateToTestInformationScreen();
-            } else {
-              warningPopup(testCompletitionDays());
-            }
-          }}>
-            <View style={[styles.square, props.test.isCompleted === 1 ? styles.squareWithIcon : styles.squareWithoutIcon]} >
+            props.test.reachable ?
+            testCompletitionDays() > 7 ? navigateToTestInformationScreen() : warningPopup(testCompletitionDays())
+            : unreachableWarningPopup()
+            
+          }} /*disabled={!props.test.reachable}*/>
+            <View style={[props.test.reachable? [styles.square, props.test.isCompleted === 1 ? styles.squareWithIcon : styles.squareWithoutIcon]:styles.unreachableSquare]} >
                 <View style={styles.inner_container}>
-                    { testCompletitionDays() < 7 ? <MaterialIcons name='done-outline' size={35} color={'green'}></MaterialIcons> : <View></View>}
+                    { props.test.reachable && testCompletitionDays() < 7 ? <MaterialIcons name='done-outline' size={35} color={'green'}></MaterialIcons> : <View></View>}
                     <Text style={styles.title} >Test {props.test.testNo}</Text>
                     <Text><Text style={styles.subtitle}>Level:</Text> {props.test.level}</Text>
                     <Text><Text style={styles.subtitle}>Duration:</Text> {props.test.duration} </Text>
