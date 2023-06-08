@@ -24,11 +24,11 @@ import TestsList from '../app/src/pages/Tests/TestsList';
 import AnalysisList from '../app/src/pages/Analyzes/AnalysisList';
 import TestAudioList from '../app/src/pages/Admin/TestAudioList';
 import AddAudio from './src/pages/Admin/AddAudio/AddAudio';
-import PDPP from './src/pages/PDPP';
 import { firebase } from './firebase';
 import colors from './src/styles/colors';
 import AdminSettings from './src/pages/Admin/AdminSettings/AdminSettings';
-import TestAnalyse from './src/pages/TestAnalyse/TestAnalyse';
+import TestAnalyse from '../app/src/pages/Analyzes/TestAnalyse/TestAnalyse';
+import TestAnalysesList from '../app/src/pages/Analyzes/TestAnalysesList/TestAnalysesList';
 
 
 const Stack = createNativeStackNavigator();
@@ -58,7 +58,7 @@ const ProfileStack = () => {
  const TestAudioStack = () => {
     return(
         <Stack.Navigator screenOptions={{headerShown:false}}>
-             <Stack.Screen name='TestsAudioListScreen' component={TestAudioList}/>
+             <Stack.Screen name='TestsListScreen' component={TestAudioList}/>
              <Stack.Screen name='AddAudioScreen' component={AddAudio}/>
              
         </Stack.Navigator>
@@ -70,6 +70,7 @@ const AnalyzesStack = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='AnalyzesScreen' component={AnalysisList} />
             <Stack.Screen name='TestAnalyseScreen' component={TestAnalyse} />
+            <Stack.Screen name='TestAnalysesListScreen' component={TestAnalysesList}/>
         </Stack.Navigator>
     )
 }
@@ -79,7 +80,7 @@ const AdminSettingsStack = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='AdminSettingsScreen' component={AdminSettings}/>
             <Stack.Screen name='EmailRequestScreen' component={EmailRequest}/>
-            <Stack.Screen name='Login' component={Login} />
+            
         </Stack.Navigator>
     )
 }
@@ -129,9 +130,7 @@ function Router () {
         })
     }, [])
 
-
-
-    //if(initializing) return null;
+    // if(initializing) return null;
 
     if (!session || !emailVerified) {
         return (
@@ -190,7 +189,7 @@ function Router () {
                         tabBarInactiveBackgroundColor: colors.green,
                         tabBarActiveBackgroundColor: colors.green,
                     }}>
-                    <Tab.Screen name="Test" component={AdminTestOperationsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
+                    <Tab.Screen name="AdminTestOperations" component={AdminTestOperationsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                     <Tab.Screen name="Audio" component={TestAudioStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                     <Tab.Screen name="Settings" component={AdminSettingsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="cog-outline" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                 </Tab.Navigator>

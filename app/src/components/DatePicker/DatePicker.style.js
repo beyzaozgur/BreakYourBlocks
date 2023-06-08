@@ -6,7 +6,7 @@ import colors from "../../styles/colors";
 export default StyleSheet.create({
 
   MainContainer: {
-    height: 40,
+    height: 50,
     flexDirection: 'row',
     marginTop: 10,
     marginLeft: 10,
