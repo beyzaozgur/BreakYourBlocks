@@ -1,5 +1,5 @@
 import React from "react";
-import { View, FlatList } from 'react-native';
+import { View, FlatList ,SafeAreaView, Image} from 'react-native';
 
 import test_data from '../../../test-data.json';
 import AnalysesListCard from "../../../components/AnalysesListCard";
@@ -15,18 +15,24 @@ function TestAnalysesList({navigation}) {
     </TouchableOpacity> ;
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
+            <View style={styles.logo_container}>
+            <Image style={styles.logo} source={require('../../../assets/logo.png')}/>
+            </View>
+        <View style={styles.body_container}>
+            
             <FlatList
                 keyExtractor={item => item.id}
                 data={test_data}
                 renderItem={renderTest}
-                numColumns={2}
-                columnWrapperStyle={styles.row}
+                numColumns={1}
+                //columnWrapperStyle={styles.row}
                 
                 
                 >
             </FlatList>
         </View>
+        </SafeAreaView>
     )
 }
 

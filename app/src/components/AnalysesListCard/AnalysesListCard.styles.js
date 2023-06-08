@@ -17,11 +17,14 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
   square: {
-    
+    flexGrow: 0,
+    flexShrink: 1,
+    flexBasis: '45%',
     backgroundColor: colors.darkgreen,
     borderColor: colors.darkestgreen,
     borderWidth: 5,
     borderRadius: 10,
+    margin: 10,
   },
   squareWithIcon: {
     paddingTop: '15%',
