@@ -27,6 +27,8 @@ import AddAudio from './src/pages/Admin/AddAudio/AddAudio';
 import PDPP from './src/pages/PDPP';
 import { firebase } from './firebase';
 import colors from './src/styles/colors';
+import AdminSettings from './src/pages/Admin/AdminSettings/AdminSettings';
+import TestAnalyse from './src/pages/TestAnalyse/TestAnalyse';
 
 
 const Stack = createNativeStackNavigator();
@@ -37,6 +39,7 @@ const ProfileStack = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='ProfileScreen' component={Profile} />
             <Stack.Screen name='Settings' component={Settings}/>
+            <Stack.Screen name='EmailRequestScreen' component={EmailRequest}/>
             <Stack.Screen name='ChangePasswordScreen' component={ChangePassword}/>
             <Stack.Screen name='EditProfileScreen' component={EditProfile}/>
         </Stack.Navigator>
@@ -66,6 +69,17 @@ const AnalyzesStack = () => {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='AnalyzesScreen' component={AnalysisList} />
+            <Stack.Screen name='TestAnalyseScreen' component={TestAnalyse} />
+        </Stack.Navigator>
+    )
+}
+
+const AdminSettingsStack = () => {
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='AdminSettingsScreen' component={AdminSettings}/>
+            <Stack.Screen name='EmailRequestScreen' component={EmailRequest}/>
+            <Stack.Screen name='Login' component={Login} />
         </Stack.Navigator>
     )
 }
@@ -75,6 +89,7 @@ const AnalyzesStack = () => {
         <Stack.Navigator screenOptions={{headerShown:false}}>
              <Stack.Screen name='TestEditListScreen' component={TestEditList}/>
              <Stack.Screen name='AddUpdateTestScreen' component={AddUpdateTest}/>
+             
         </Stack.Navigator>
     )
 }
