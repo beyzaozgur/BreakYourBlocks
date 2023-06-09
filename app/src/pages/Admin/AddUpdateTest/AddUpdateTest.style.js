@@ -20,4 +20,11 @@ export default StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'flex-start',
     },
+    switchContainer: {
+        flex:1,
+        paddingLeft:20,
+        marginTop:10,
+        justifyContent:"center",
+        alignItems:'flex-start',
+    }
 });

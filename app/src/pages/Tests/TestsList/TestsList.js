@@ -10,24 +10,24 @@ const TestsList = ({navigation}) => {
 
     useEffect(() => {
         const testData = firebase.firestore()
-            .collection('tests')
+            .collection('tests').orderBy('testNo', 'asc')
             .onSnapshot(querySnapshot => {
             const testList = [];
-            var testNo = 1;
+           // var testNo = 1;
             querySnapshot.forEach(documentSnapshot => {
                 testList.push({
                 ...documentSnapshot.data(),
                 key: documentSnapshot.id,
                 navigation: navigation,
-                testNo: testNo
+               // testNo: testNo
                 });
-                testNo = testNo + 1;
+               // testNo = testNo + 1;
                 console.log(documentSnapshot.id);
             }
             );
             setTestList(testList);
-            console.log('Test List');
-            console.log(testList);
+            //console.log('Test List');
+            //console.log(testList);
             
             });
         return () => testData();

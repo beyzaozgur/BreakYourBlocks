@@ -9,43 +9,97 @@ import styles from "./TestAnalyse.style";
 import { firebase } from "../../../../firebase";
 
 import { PieChart } from 'react-native-chart-kit';
+
+label_names = ['"Unsure"', 'PoorAudioQuality', 'Prolongation',
+ 'Block', 'SoundRepetition', 'WordRepetition', 'DifficultToUnderstand',
+ 'Interjection', 'NoStutteredWords', 'NaturalPause', 'Music', 'NoSpeech'].sort();
 const data = [
     {
       name: "Block",
-      population: 21500000,
+      population: 1.000,
       color: "rgba(131, 167, 234, 1)",
       legendFontColor: "#7F7F7F",
       legendFontSize: 10
     },
     {
       name: "Interjection",
-      population: 2800000,
+      population: 2.000,
       color: "#F00",
       legendFontColor: "#7F7F7F",
       legendFontSize: 10
     },
     {
       name: "SoundRep",
-      population: 527612,
+      population: 1.000,
       color: "red",
       legendFontColor: "#7F7F7F",
       legendFontSize: 10
     },
     {
-      name: "Prolongatitons",
-      population: 8538000,
+      name: "DifficultToUnderstand",
+      population: 1.001,
       color: "#ffffff",
       legendFontColor: "#7F7F7F",
       legendFontSize: 10
     },
     {
       name: "WordRep",
-      population: 11920000,
+      population: 1.000,
       color: "rgb(0, 0, 255)",
       legendFontColor: "#7F7F7F",
       legendFontSize: 10
-    }
+    },
+    {
+      name: "Block",
+      population: 1.000,
+      color: "rgba(131, 167, 234, 1)",
+      legendFontColor: "#7F7F7F",
+      legendFontSize: 10
+    },
+    {
+      name: "Interjection",
+      population: 1.000,
+      color: "#F00",
+      legendFontColor: "#7F7F7F",
+      legendFontSize: 10
+    },
+    {
+      name: "SoundRep",
+      population: 1.000,
+      color: "red",
+      legendFontColor: "#7F7F7F",
+      legendFontSize: 10
+    },
+    {
+      name: "Prolongatitons",
+      population: 1.000,
+      color: "#ffffff",
+      legendFontColor: "#7F7F7F",
+      legendFontSize: 10
+    },
+    {
+      name: "WordRep",
+      population: 1.000,
+      color: "rgb(0, 0, 255)",
+      legendFontColor: "#7F7F7F",
+      legendFontSize: 10
+    },
+    {
+      name: "Prolongatitons",
+      population: 1.001,
+      color: "#ffffff",
+      legendFontColor: "#7F7F7F",
+      legendFontSize: 10
+    },
+    {
+      name: "WordRep",
+      population: 1.000,
+      color: "rgb(0, 0, 255)",
+      legendFontColor: "#7F7F7F",
+      legendFontSize: 10
+    },
   ];
+ 
   const screenWidth = Dimensions.get('screen').width;
   const chartConfig = {
     backgroundGradientFrom: '#1E2923',
@@ -68,23 +122,36 @@ const data = [
 }, []);
   }
 function TestAnalyse() {
-  
-    return (
 
-        <View style={styles.container}>
-            <PieChart 
-                style={styles.pieChartContainer} 
-                data={data} 
-                width={screenWidth} 
-                height={280} 
-                chartConfig={chartConfig} 
-                accessor={"population"}
-                backgroundColor={"transparent"}
-                paddingLeft={"10"}
-                absolute
-                />
-        </View>
-    )
+  for(let i=0; i<12; i++){
+    //  data[i].name=label_names[i];
+    //  data[i].population=props.analyse.label_names[i];
+      data[i].color=colors.chartColors[i];
+      data[i].legendFontColor=colors.grayish;
+      data[i].legendFontSize=10;
+    } 
+  
+  return (
+    <View style={styles.container}>
+      <View style={styles.textContainer}>
+      <Text style={styles.test}>Test 1</Text>
+      <Text style={styles.testDate}>11.04.2023</Text> 
+      </View>         
+      <View style={styles.pieChartContainer}>
+          <PieChart 
+            style={styles.pieChart} 
+            data={data} 
+            width={screenWidth} 
+            height={260} 
+            chartConfig={chartConfig} 
+            accessor={"population"}
+            backgroundColor={"transparent"}
+            paddingLeft="8"
+            absolute           
+            />
+      </View>
+    </View>
+)
 }
 
 export default TestAnalyse;
