@@ -45,5 +45,13 @@ export default StyleSheet.create({
     },
     squareWithoutIcon: {
         paddingTop: '35%',
-    }
+    },
+    unreachableSquare: {
+         flex:1,
+         backgroundColor: colors.notification,
+         borderColor: colors.darkestgreen,
+         borderWidth: 3,
+         borderRadius: 10,
+         width:Dimensions.get('window').width / 2.5,
+    },
 })

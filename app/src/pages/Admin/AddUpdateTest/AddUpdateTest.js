@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {View, Text} from "react-native"
+import {View, Text, Switch} from "react-native"
 import styles from './AddUpdateTest.style';
 import TestInputBox from "../../../components/TestInputBox";
 import Button from "../../../components/Button";
@@ -8,6 +8,7 @@ import { firebase } from "../../../../firebase";
 import addTest from "../../../hooks/addTest";
 import updateTest from "../../../hooks/updateTest";
 import getAudioNameList from '../../../hooks/getAudioNameList';
+import colors from "../../../styles/colors";
 
 function AddUpdateTest({ route, navigation })  {
 
@@ -21,8 +22,12 @@ function AddUpdateTest({ route, navigation })  {
     const [levelValue, setLevelValue] = useState('');
     const [testContent, setTestContent] = useState('');
 
+    const [isEnabled, setIsEnabled] = useState(false);
+    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
     function deleteTestContent() {
         setTestContent('');
+
     };
 
     function navigateToTestEditListScreen() {
@@ -30,12 +35,12 @@ function AddUpdateTest({ route, navigation })  {
     }
 
     function add() {
-        addTest(soundValue, durationValue, levelValue, testContent);
+        addTest(soundValue, durationValue, levelValue, testContent, isEnabled);
         navigateToTestEditListScreen();
     }
 
     function update() {
-        updateTest(testKey, soundValue, durationValue, levelValue, testContent);
+        updateTest(testKey, soundValue, durationValue, levelValue, testContent, isEnabled);
         navigateToTestEditListScreen();
     }
 
@@ -49,7 +54,9 @@ function AddUpdateTest({ route, navigation })  {
               setDurationValue(documentSnapshot.data().duration);
               setLevelValue(documentSnapshot.data().level);
               setTestContent(documentSnapshot.data().testContent);
+              setIsEnabled(documentSnapshot.data().reachable);
             });
+            
           }
     }, []);
 
@@ -61,6 +68,15 @@ function AddUpdateTest({ route, navigation })  {
             <Dropdown data = {['Easy', 'Middle', 'Hard']} placeholder='Level' onChange={setLevelValue} dbValue={levelValue}/>
             <TestInputBox onChange={setTestContent} value={testContent}/>
             <View style={styles.buttonContainer}>
+            <View  style={styles.switchContainer}>
+                <Switch
+                trackColor={{false: colors.grayish, true: colors.green}}
+                thumbColor={isEnabled ? colors.green : colors.grayish}
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+            />
+            </View>
+           
                 <Button text = 'Clear' onPress={deleteTestContent} theme='danger'/>
                 { testKey != null ? <Button text = 'Update' onPress={update}/> : <Button text = 'Add' onPress={add}/> }
             </View>

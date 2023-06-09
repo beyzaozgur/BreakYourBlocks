@@ -10,13 +10,13 @@ export default StyleSheet.create({
     },
     row: {
       flex: 1,
-      justifyContent: 'space-between',
+      //justifyContent: 'space-evenly',
       marginTop: '10%',
       marginHorizontal: '5%',
     },
     buttonContainer: {
       flexDirection: 'row',
-     // justifyContent: 'space-between',
+    //  justifyContent: 'space-between',
      justifyContent:'flex-end',
       marginTop: 40,
       margin: 10,
@@ -26,4 +26,10 @@ export default StyleSheet.create({
     fontSize: 20,
     color:colors.darkestgreen,
 },*/
+
+  settings_icon:{
+    flex:1,
+    paddingHorizontal:10,
+    alignSelf:"flex-start"
+  }
   });

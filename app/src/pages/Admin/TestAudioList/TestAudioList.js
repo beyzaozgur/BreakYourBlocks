@@ -2,10 +2,12 @@ import React, {useState, useEffect} from "react";
 import { View, FlatList, Text } from 'react-native';
 import TestAudioCard from '../../../components/TestAudioCard';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import styles from './TestAudioList.style';
 import { firebase } from "../../../../firebase";
 import colors from "../../../styles/colors";
+
 
 const TestAudioList = ({navigation}) => {
     const storageRef = firebase.storage().ref();
@@ -49,7 +51,7 @@ const TestAudioList = ({navigation}) => {
         <View style={styles.container}>
             <View style={styles.buttonContainer}>
                 {/* <Text style={styles.title}>Sounds</Text> */}
-                <FontAwesome.Button style={styles.testAddButton} name='plus' backgroundColor={colors.darkestgreen} onPress={navigateToAddAudioScreen}>Add Audio</FontAwesome.Button>
+                <FontAwesome.Button style={styles.audioAddButton} name='plus' backgroundColor={colors.darkestgreen} onPress={navigateToAddAudioScreen}>Add Audio</FontAwesome.Button>
             </View>
             <FlatList
                 keyExtractor={item => item.id}

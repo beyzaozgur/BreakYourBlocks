@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,TouchableOpacity} from "react";
 import { SafeAreaView, TextInput } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from "./DatePicker.style";
@@ -73,7 +73,7 @@ function updateDB (dateOfBirth) {
 
   return (
     <View style={styles.MainContainer}>
-      <Button title="Choose Date" onPress={showDatePicker} />
+      <Button title="Date of Birth" onPress={showDatePicker} />
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="date"

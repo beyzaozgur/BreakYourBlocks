@@ -24,11 +24,11 @@ import TestsList from '../app/src/pages/Tests/TestsList';
 import AnalysisList from '../app/src/pages/Analyzes/AnalysisList';
 import TestAudioList from '../app/src/pages/Admin/TestAudioList';
 import AddAudio from './src/pages/Admin/AddAudio/AddAudio';
-import PDPP from './src/pages/PDPP';
 import { firebase } from './firebase';
 import colors from './src/styles/colors';
 import AdminSettings from './src/pages/Admin/AdminSettings/AdminSettings';
-import TestAnalyse from './src/pages/TestAnalyse/TestAnalyse';
+import TestAnalyse from '../app/src/pages/Analyzes/TestAnalyse/TestAnalyse';
+import TestAnalysesList from '../app/src/pages/Analyzes/TestAnalysesList/TestAnalysesList';
 
 
 const Stack = createNativeStackNavigator();
@@ -58,7 +58,7 @@ const ProfileStack = () => {
  const TestAudioStack = () => {
     return(
         <Stack.Navigator screenOptions={{headerShown:false}}>
-             <Stack.Screen name='TestsAudioListScreen' component={TestAudioList}/>
+             <Stack.Screen name='TestsListScreen' component={TestAudioList}/>
              <Stack.Screen name='AddAudioScreen' component={AddAudio}/>
              
         </Stack.Navigator>
@@ -70,6 +70,7 @@ const AnalyzesStack = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='AnalyzesScreen' component={AnalysisList} />
             <Stack.Screen name='TestAnalyseScreen' component={TestAnalyse} />
+            <Stack.Screen name='TestAnalysesListScreen' component={TestAnalysesList}/>
         </Stack.Navigator>
     )
 }
@@ -79,7 +80,7 @@ const AdminSettingsStack = () => {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='AdminSettingsScreen' component={AdminSettings}/>
             <Stack.Screen name='EmailRequestScreen' component={EmailRequest}/>
-            <Stack.Screen name='Login' component={Login} />
+            
         </Stack.Navigator>
     )
 }
@@ -98,7 +99,8 @@ const AdminSettingsStack = () => {
 function Router () {
 
     //const [initializing, setInitializing] = useState(true);
-    const [userSession, setUserSession] = useState();
+    const [session, setSession] = useState();
+   // const [userSession, setUserSession] = useState();
     const [adminSession, setAdminSession] = useState();
     const [emailVerified, setEmailVerified] = useState(false);
 
@@ -109,10 +111,16 @@ function Router () {
 
     useEffect(() => {
         firebase.auth().onAuthStateChanged(user => {
-            if(user && user.email === 'stutteringtranscriptor@gmail.com'){
-                setAdminSession(!!user);
+            if(user){
+                if(user.email === 'stutteringtranscriptor@gmail.com'){
+                    setAdminSession(true);
+                }else{
+                    setAdminSession(false);
+                }
+                setSession(true);
+                
             }else{
-                 setUserSession(!!user);
+                setSession(false);
             }
            
             if (firebase.auth().currentUser !== null) setEmailVerified(firebase.auth().currentUser.emailVerified);
@@ -122,13 +130,38 @@ function Router () {
         })
     }, [])
 
+    // if(initializing) return null;
 
+    if (!session || !emailVerified) {
+        return (
+            <ToastProvider
+                placement='top'
+                animationType='slide-in'
+                animationDuration={250}
+                successColor={colors.notification}
+                dangerColor={colors.notification}
+                warningColor={colors.notification}
+                normalColor={colors.notification}
+                // icon={<Icon name='information' color={colors.darkestgreen} />}
+                successIcon={<Icon name='star-shooting' color={colors.yellow} size={15} />}
+                dangerIcon={<Icon name='alert' color={colors.danger} size={15} />}
+                warningIcon={<Icon name='alert-circle-outline' color={colors.warning} size={15} />}
+                textStyle={{ fontSize: 12 }}
+                offset={60}
+            >
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name='Login' component={Login} />
+                    <Stack.Screen name='Sign Up' component={SignUp} />
+                    <Stack.Screen name='Email Request' component={EmailRequest} />
+                    <Stack.Screen name='PDPP' component={PDPP}/>                    
+                </Stack.Navigator>
+            </ToastProvider>
+        );
+    }
 
-    //if(initializing) return null;
+    else{
 
-
-    if (adminSession) {
-
+        if(adminSession){
         return (
             <ToastProvider
                 placement='top'
@@ -156,40 +189,62 @@ function Router () {
                         tabBarInactiveBackgroundColor: colors.green,
                         tabBarActiveBackgroundColor: colors.green,
                     }}>
-                    <Tab.Screen name="Test" component={AdminTestOperationsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
+                    <Tab.Screen name="AdminTestOperations" component={AdminTestOperationsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                     <Tab.Screen name="Audio" component={TestAudioStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                     <Tab.Screen name="Settings" component={AdminSettingsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="cog-outline" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
                 </Tab.Navigator>
             </ToastProvider>
-        );
+        );}else{
+            // if this app was not an Expo app
+          /*  const { exec } = require('child_process');
+            exec('C:/reactNativeProjects/BreakYourBlocks-1/app/api/app.py', (error, stdout, stderr) => {
+                if (error) {
+                  console.error(`Error executing Python script: ${error}`);
+                  return;
+                }
+              
+                // Handle the output if needed
+                console.log(`Python script output: ${stdout}`);
+              });*/
+              
+            return (
+                <ToastProvider
+                    placement='top'
+                    animationType='slide-in'
+                    animationDuration={250}
+                    successColor={colors.notification}
+                    dangerColor={colors.notification}
+                    warningColor={colors.notification}
+                    normalColor={colors.notification}
+                    // icon={<Icon name='information' color={colors.darkestgreen} />}
+                    successIcon={<Icon name='star-shooting' color={colors.yellow} size={15} />}
+                    dangerIcon={<Icon name='alert' color={colors.danger} size={15} />}
+                    warningIcon={<Icon name='alert-circle-outline' color={colors.warning} size={15} />}
+                    textStyle={{ fontSize: 12 }}
+                    offset={60}
+                >
+                    <Tab.Navigator initialRouteName='Profile'
+        
+                        screenOptions={{
+                            headerShown: false,
+                            tabBarItemStyle: { borderRightColor: colors.grayish, borderRightWidth: 2, borderLeftColor: colors.grayish, borderLeftWidth: 2 },
+                            tabBarActiveTintColor: colors.grayish,
+                            tabBarInactiveTintColor: colors.darkestgreen,
+                            tabBarInactiveBackgroundColor: colors.green,
+                            tabBarActiveBackgroundColor: colors.green,
+                        }}>
+                        <Tab.Screen name="Profile" component={ProfileStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="account-circle" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
+                        <Tab.Screen name="Tests" component={TestsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="alpha-t-circle" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }}/>
+                        <Tab.Screen name="Analyzes" component={AnalyzesStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
+                        
+                    </Tab.Navigator>
+                </ToastProvider>
+        
+            );
+        }
     }
 
-    if (!userSession || !emailVerified) {
-        return (
-            <ToastProvider
-                placement='top'
-                animationType='slide-in'
-                animationDuration={250}
-                successColor={colors.notification}
-                dangerColor={colors.notification}
-                warningColor={colors.notification}
-                normalColor={colors.notification}
-                // icon={<Icon name='information' color={colors.darkestgreen} />}
-                successIcon={<Icon name='star-shooting' color={colors.yellow} size={15} />}
-                dangerIcon={<Icon name='alert' color={colors.danger} size={15} />}
-                warningIcon={<Icon name='alert-circle-outline' color={colors.warning} size={15} />}
-                textStyle={{ fontSize: 12 }}
-                offset={60}
-            >
-                <Stack.Navigator screenOptions={{ headerShown: false }}>
-                    <Stack.Screen name='Login' component={Login} />
-                    <Stack.Screen name='Sign Up' component={SignUp} />
-                    <Stack.Screen name='Email Request' component={EmailRequest} />
-                    <Stack.Screen name='PDPP' component={PDPP}/>                    
-                </Stack.Navigator>
-            </ToastProvider>
-        );
-    }
+    
   /*  if (!emailVerified) {
 
         return (
@@ -217,40 +272,7 @@ function Router () {
         );
     }*/
 
-    return (
-        <ToastProvider
-            placement='top'
-            animationType='slide-in'
-            animationDuration={250}
-            successColor={colors.notification}
-            dangerColor={colors.notification}
-            warningColor={colors.notification}
-            normalColor={colors.notification}
-            // icon={<Icon name='information' color={colors.darkestgreen} />}
-            successIcon={<Icon name='star-shooting' color={colors.yellow} size={15} />}
-            dangerIcon={<Icon name='alert' color={colors.danger} size={15} />}
-            warningIcon={<Icon name='alert-circle-outline' color={colors.warning} size={15} />}
-            textStyle={{ fontSize: 12 }}
-            offset={60}
-        >
-            <Tab.Navigator initialRouteName='Profile'
 
-                screenOptions={{
-                    headerShown: false,
-                    tabBarItemStyle: { borderRightColor: colors.grayish, borderRightWidth: 2, borderLeftColor: colors.grayish, borderLeftWidth: 2 },
-                    tabBarActiveTintColor: colors.grayish,
-                    tabBarInactiveTintColor: colors.darkestgreen,
-                    tabBarInactiveBackgroundColor: colors.green,
-                    tabBarActiveBackgroundColor: colors.green,
-                }}>
-                <Tab.Screen name="Profile" component={ProfileStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="account-circle" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
-                <Tab.Screen name="Tests" component={TestsStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="alpha-t-circle" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }}/>
-                <Tab.Screen name="Analyzes" component={AnalyzesStack} options={{ tabBarIcon: ({ focused }) => (<Icon name="file-document" color={focused ? colors.grayish : colors.darkestgreen} size={26} />) }} />
-                
-            </Tab.Navigator>
-        </ToastProvider>
-
-    );
 
 }
 
