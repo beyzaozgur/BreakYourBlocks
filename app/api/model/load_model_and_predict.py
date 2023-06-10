@@ -78,7 +78,7 @@ def load_model_and_predict(prediction_data_dir, testId, userId, testCompletition
         
     images = np.array(images_array)
 
-    model = tf.keras.models.load_model("C:/reactNativeProjects/BreakYourBlocks-1/app/api/model/nfold_classification.h5")
+    model = tf.keras.models.load_model("C:/Users/w/BreakYourBlocks/app/api/model/nfold_classification.h5")
     # classes and probabilities dictionary(map)
     classes_probabilities={"Unsure" : 0, "PoorAudioQuality":0, "Prolongation":0, "Block":0, "SoundRepetition":0, 
                            "WordRepetition":0, "DifficultToUnderstand":0, "Interjection":0, 
