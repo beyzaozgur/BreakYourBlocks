@@ -29,7 +29,7 @@ import colors from './src/styles/colors';
 import AdminSettings from './src/pages/Admin/AdminSettings/AdminSettings';
 import TestAnalyse from '../app/src/pages/Analyzes/TestAnalyse/TestAnalyse';
 import TestAnalysesList from '../app/src/pages/Analyzes/TestAnalysesList/TestAnalysesList';
-
+import PDPP from '../app/src/pages/PDPP/PDPP'
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();

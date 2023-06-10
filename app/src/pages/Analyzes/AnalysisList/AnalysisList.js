@@ -5,7 +5,7 @@ import test_data from '../../../test-data.json';
 import AnalysisCard from '../../../components/AnalysisCard';
 import styles from './AnalysisList.style';
 import { TouchableOpacity } from "react-native-gesture-handler";
-import TestAnalyse from "../../TestAnalyse/TestAnalyse";
+import TestAnalyse from "../TestAnalyse/TestAnalyse";
 import {firebase} from "../../../../firebase";
 
 
