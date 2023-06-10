@@ -29,7 +29,6 @@ import colors from './src/styles/colors';
 import AdminSettings from './src/pages/Admin/AdminSettings/AdminSettings';
 import TestAnalyse from '../app/src/pages/Analyzes/TestAnalyse/TestAnalyse';
 import TestAnalysesList from '../app/src/pages/Analyzes/TestAnalysesList/TestAnalysesList';
-import PDPP from '../app/src/pages/PDPP/PDPP'
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -152,8 +151,7 @@ function Router () {
                 <Stack.Navigator screenOptions={{ headerShown: false }}>
                     <Stack.Screen name='Login' component={Login} />
                     <Stack.Screen name='Sign Up' component={SignUp} />
-                    <Stack.Screen name='Email Request' component={EmailRequest} />
-                    <Stack.Screen name='PDPP' component={PDPP}/>                    
+                    <Stack.Screen name='Email Request' component={EmailRequest} />         
                 </Stack.Navigator>
             </ToastProvider>
         );

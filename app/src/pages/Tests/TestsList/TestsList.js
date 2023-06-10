@@ -38,7 +38,7 @@ const TestsList = ({navigation}) => {
     return (
         <View style={styles.container}>
             <FlatList
-                keyExtractor={item => item.id}
+                keyExtractor={item => item.key}
                 data={testList}
                 renderItem={renderTest}
                 numColumns={2}

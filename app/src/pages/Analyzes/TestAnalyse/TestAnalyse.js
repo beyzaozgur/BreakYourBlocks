@@ -1,104 +1,108 @@
 import React, { useEffect, useState } from "react";
 
 import { Dimensions } from "react-native";
-import { View, SafeAreaView, Image } from "react-native";
+import { View, Text, SafeAreaView, Image } from "react-native";
 // import ImagePicker from 'react-native-image-crop-picker';
 // import { select } from "underscore";
 import styles from "./TestAnalyse.style";
 // import Button from "../../components/Button";
 import { firebase } from "../../../../firebase";
+import colors from "../../../styles/colors";
 
 import { PieChart } from 'react-native-chart-kit';
+
+
 
 label_names = ['"Unsure"', 'PoorAudioQuality', 'Prolongation',
  'Block', 'SoundRepetition', 'WordRepetition', 'DifficultToUnderstand',
  'Interjection', 'NoStutteredWords', 'NaturalPause', 'Music', 'NoSpeech'].sort();
-const data = [
-    {
-      name: "Block",
-      population: 1.000,
-      color: "rgba(131, 167, 234, 1)",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 10
-    },
-    {
-      name: "Interjection",
-      population: 2.000,
-      color: "#F00",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 10
-    },
-    {
-      name: "SoundRep",
-      population: 1.000,
-      color: "red",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 10
-    },
-    {
-      name: "DifficultToUnderstand",
-      population: 1.001,
-      color: "#ffffff",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 10
-    },
-    {
-      name: "WordRep",
-      population: 1.000,
-      color: "rgb(0, 0, 255)",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 10
-    },
-    {
-      name: "Block",
-      population: 1.000,
-      color: "rgba(131, 167, 234, 1)",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 10
-    },
-    {
-      name: "Interjection",
-      population: 1.000,
-      color: "#F00",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 10
-    },
-    {
-      name: "SoundRep",
-      population: 1.000,
-      color: "red",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 10
-    },
-    {
-      name: "Prolongatitons",
-      population: 1.000,
-      color: "#ffffff",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 10
-    },
-    {
-      name: "WordRep",
-      population: 1.000,
-      color: "rgb(0, 0, 255)",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 10
-    },
-    {
-      name: "Prolongatitons",
-      population: 1.001,
-      color: "#ffffff",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 10
-    },
-    {
-      name: "WordRep",
-      population: 1.000,
-      color: "rgb(0, 0, 255)",
-      legendFontColor: "#7F7F7F",
-      legendFontSize: 10
-    },
-  ];
+
+ var data = [
+  {
+    name: "Block",
+    population: 1.000,
+    color: "rgba(131, 167, 234, 1)",
+    legendFontColor: "#7F7F7F",
+    legendFontSize: 10
+  },
+  {
+    name: "Interjection",
+    population: 2.000,
+    color: "#F00",
+    legendFontColor: "#7F7F7F",
+    legendFontSize: 10
+  },
+  {
+    name: "SoundRep",
+    population: 1.000,
+    color: "red",
+    legendFontColor: "#7F7F7F",
+    legendFontSize: 10
+  },
+  {
+    name: "DifficultToUnderstand",
+    population: 1.001,
+    color: "#ffffff",
+    legendFontColor: "#7F7F7F",
+    legendFontSize: 10
+  },
+  {
+    name: "WordRep",
+    population: 1.000,
+    color: "rgb(0, 0, 255)",
+    legendFontColor: "#7F7F7F",
+    legendFontSize: 10
+  },
+  {
+    name: "Block",
+    population: 1.000,
+    color: "rgba(131, 167, 234, 1)",
+    legendFontColor: "#7F7F7F",
+    legendFontSize: 10
+  },
+  {
+    name: "Interjection",
+    population: 1.000,
+    color: "#F00",
+    legendFontColor: "#7F7F7F",
+    legendFontSize: 10
+  },
+  {
+    name: "SoundRep",
+    population: 1.000,
+    color: "red",
+    legendFontColor: "#7F7F7F",
+    legendFontSize: 10
+  },
+  {
+    name: "Prolongatitons",
+    population: 1.000,
+    color: "#ffffff",
+    legendFontColor: "#7F7F7F",
+    legendFontSize: 10
+  },
+  {
+    name: "WordRep",
+    population: 1.000,
+    color: "rgb(0, 0, 255)",
+    legendFontColor: "#7F7F7F",
+    legendFontSize: 10
+  },
+  {
+    name: "Prolongatitons",
+    population: 1.001,
+    color: "#ffffff",
+    legendFontColor: "#7F7F7F",
+    legendFontSize: 10
+  },
+  {
+    name: "WordRep",
+    population: 1.000,
+    color: "rgb(0, 0, 255)",
+    legendFontColor: "#7F7F7F",
+    legendFontSize: 10
+  },
+];
  
   const screenWidth = Dimensions.get('screen').width;
   const chartConfig = {
@@ -121,7 +125,51 @@ const data = [
     
 }, []);
   }
-function TestAnalyse() {
+const TestAnalyse = ({ route }) => { 
+
+  const [analysisResults, setAnalysisResults] = useState();
+
+  useEffect(() => {
+    const testData = firebase.firestore()
+        .collection('userTestResults')
+        .where('userID', '==', firebase.auth().currentUser.uid)
+        .where('testID', '==', route.params.testID)
+        .where('testDate', '==', route.params.testDate)
+        .onSnapshot(querySnapshot => {
+        const analysisList = [];
+        querySnapshot.forEach(documentSnapshot => {
+            analysisList.push({
+                key: documentSnapshot.id,
+                ...documentSnapshot.data()
+                // block: documentSnapshot.data().Block,
+                // difficultToUnderstand: documentSnapshot.data().DifficultToUnderstand,
+                // interjection: documentSnapshot.data().Interjection,
+                // music: documentSnapshot.data().Music,
+                // naturalPause: documentSnapshot.data().NaturalPause,
+                // noSpeech: documentSnapshot.data().NoSpeech,
+                // noStutteredWords: documentSnapshot.data().NoStutteredWords,
+                // poorAudioQuality: documentSnapshot.data().PoorAudioQuality,
+                // prolongation: documentSnapshot.data().Prolongation,
+                // soundRepetition: documentSnapshot.data().SoundRepetition,
+                // unsure: documentSnapshot.data().Unsure,
+                // wordRepetition: documentSnapshot.data().WordRepetition
+            });
+        }
+    );
+        setAnalysisResults(analysisList);
+    });
+    return () => testData();
+  }, []);
+
+  function formatDate(dateTimeParameter) {
+    const dateTime = dateTimeParameter;
+    const onlyDate = dateTime.split("-")[0];
+    return onlyDate;
+  }
+
+  console.log("ANALYSIS RESULT : **********************");
+  console.log(analysisResults);
+  console.log("DETAILED ANALYSIS PAGE TEST ID : " + route.params.testID);
 
   for(let i=0; i<12; i++){
     //  data[i].name=label_names[i];
@@ -130,12 +178,12 @@ function TestAnalyse() {
       data[i].legendFontColor=colors.grayish;
       data[i].legendFontSize=10;
     } 
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-      <Text style={styles.test}>Test 1</Text>
-      <Text style={styles.testDate}>11.04.2023</Text> 
+      <Text style={styles.test}>Test {route.params.testNo}</Text>
+      <Text style={styles.testDate}>{formatDate(route.params.testDate)}</Text> 
       </View>         
       <View style={styles.pieChartContainer}>
           <PieChart 

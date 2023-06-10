@@ -1,18 +1,40 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { View, FlatList ,SafeAreaView, Image} from 'react-native';
-
-import test_data from '../../../test-data.json';
 import AnalysesListCard from "../../../components/AnalysesListCard";
 import styles from './TestAnalysesList.style';
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { firebase } from "../../../../firebase";
 
 
-function TestAnalysesList({navigation}) {
+const TestAnalysesList = ({ route, navigation }) => {
 
-    const renderTest = ({ item }) => 
-    <TouchableOpacity onPress={ ()=>navigation.navigate('TestAnalyseScreen')}>
-            <AnalysesListCard test={item} />
-    </TouchableOpacity> ;
+    const testID = route.params.testID;
+    const testNo = route.params.testNo;
+    console.log("TEST ID: " + testID);
+
+    const [testAnalysisList, setTestAnalysisList] = useState([]);
+
+    useEffect(() => {
+        const testData = firebase.firestore()
+            .collection('userTestResults')
+            .where('userID', '==', firebase.auth().currentUser.uid)
+            .where('testID', '==', testID)
+            .onSnapshot(querySnapshot => {
+            const analysisList = [];
+            querySnapshot.forEach(documentSnapshot => {
+                analysisList.push({
+                    navigation: navigation,
+                    key: documentSnapshot.id,
+                    testDate : documentSnapshot.data().testDate,
+                    testID: documentSnapshot.data().testID
+                });
+            }
+        );
+            setTestAnalysisList(analysisList);
+        });
+        return () => testData();
+    }, []);
+
+    const renderTest = ({ item }) => <AnalysesListCard test={item} testNo={testNo} />;
 
     return (
         <SafeAreaView style={styles.container}>
@@ -22,13 +44,11 @@ function TestAnalysesList({navigation}) {
         <View style={styles.body_container}>
             
             <FlatList
-                keyExtractor={item => item.id}
-                data={test_data}
+                keyExtractor={item => item.key}
+                data={testAnalysisList}
                 renderItem={renderTest}
                 numColumns={1}
                 //columnWrapperStyle={styles.row}
-                
-                
                 >
             </FlatList>
         </View>

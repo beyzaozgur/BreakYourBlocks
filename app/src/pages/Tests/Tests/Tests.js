@@ -34,6 +34,7 @@ const Tests = ({ route, navigation }) => { // Test Screen
   const audio = route.params.sound;
   const key = route.params.key;
   const userId = route.params.userID;
+  const testNo = route.params.testNo;
   const testId = key;
 
 
@@ -173,6 +174,7 @@ const Tests = ({ route, navigation }) => { // Test Screen
       .add({
         userID: userId,
         testID: testId,
+        testNo: testNo,
         // sound: recordingContent.sound,
         testDuration: elapsedTime.toFixed(2),
         file: recording.getURI(),

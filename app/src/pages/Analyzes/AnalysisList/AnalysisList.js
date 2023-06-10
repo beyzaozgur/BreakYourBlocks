@@ -10,65 +10,54 @@ import {firebase} from "../../../../firebase";
 
 
 
-function AnalysisList({navigation}) {
+const AnalysisList = ({navigation}) => {
   const [analysisData, setAnalysisData] = useState([]);
     useEffect(() => {
 
       const analyse =  firebase.firestore()
-        .collection('userTestResults')
+        .collection('completedTestUserMapping')
         .where('userID', '==', firebase.auth().currentUser.uid)
         .onSnapshot(querySnapshot => {  
-            const groupedData={};
-            querySnapshot.forEach(documentSnapshot => {
-              const initialData= {
-                ...documentSnapshot.data(),                
-                key: documentSnapshot.id,
-                navigation: navigation,
-                }
-                 const category = initialData.testID; 
+            const uniqueTestIDs = new Set();
 
-                 firebase.firestore()
-                .collection('tests')
-                .doc(category)
-                .onSnapshot((snapshot) => {
-               const data= {...initialData, test:snapshot.data()}  ;  
-                  if (!groupedData[category]) {
-                groupedData[category] = [];
-                }  
-                groupedData[category].push(data);  
-              
-            });          
+            // Iterate over each document in the query snapshot
+            querySnapshot.forEach((doc) => {
+              const data = doc.data();
+              const testID = data.testID;
 
-             }            
-            
-            );
-             setAnalysisData(groupedData);
+              // Add the testID to the uniqueTestIDs Set
+              uniqueTestIDs.add(testID);
+            });
+
+            // Convert the Set to an array
+            const uniqueTestIDsArray = Array.from(uniqueTestIDs);
+
+            // Log the unique testID values
+            console.log(uniqueTestIDsArray);
+
+             setAnalysisData(uniqueTestIDsArray);
         });
-        
+
         return () => analyse();
     }, []);
 
     const renderGroup = ({ item }) =>{
       console.log(analysisData);
-      console.log(JSON.stringify(item.data));
-    return  <AnalysisCard data ={JSON.stringify(item.data)} />}
+      // console.log(JSON.stringify(item.data));
+    return  <AnalysisCard data = {item} nav = {navigation} />}
 
         
             return (
                 <View style={styles.container}>
                     <FlatList
-              data={Object.entries(analysisData).map(([groupKey, data]) => ({groupKey,data}))}
-              renderItem={renderGroup}
-              keyExtractor={(item) => item.groupKey}
-              >
-            </FlatList>
+                      data={analysisData}
+                      renderItem={renderGroup}
+                      keyExtractor={(item, index) => index.toString()}
+                      >
+                    </FlatList>
                 </View>
                 
             )
         }
-
-
-
-        
 
 export default AnalysisList;
