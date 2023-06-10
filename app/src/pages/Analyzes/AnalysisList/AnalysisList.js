@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, FlatList, Text } from 'react-native';
+import { View, FlatList, Text, SafeAreaView, Image } from 'react-native';
 
 import test_data from '../../../test-data.json';
 import AnalysisCard from '../../../components/AnalysisCard';
@@ -48,14 +48,17 @@ const AnalysisList = ({navigation}) => {
     return  <AnalysisCard data = {item} nav = {navigation} />}
 
             return (
-                <View style={styles.container}>
+              
+              <View style={styles.container}>
                     <FlatList
                       data={analysisData}
                       renderItem={renderGroup}
                       keyExtractor={(item, index) => index.toString()}
+                      numColumns={2}
                       >
                     </FlatList>
                 </View>
+                
                 
             )
         }
