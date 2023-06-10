@@ -174,15 +174,17 @@ const TestAnalyse = ({ route }) => {
   for(let i=0; i<12; i++){
     //  data[i].name=label_names[i];
     //  data[i].population=props.analyse.label_names[i];
-      data[i].color=colors.chartColors[i];
+      data[i].color=colors.chartColors1[i];
       data[i].legendFontColor=colors.grayish;
       data[i].legendFontSize=10;
     } 
 
   return (
     <View style={styles.container}>
-      <View style={styles.textContainer}>
+      <View style={styles.backgroundOfText}>
       <Text style={styles.test}>Test {route.params.testNo}</Text>
+      </View>      
+      <View style={styles.textContainer}>
       <Text style={styles.testDate}>{formatDate(route.params.testDate)}</Text> 
       </View>         
       <View style={styles.pieChartContainer}>

@@ -1,12 +1,12 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 
 import colors from "../../../styles/colors";
 
 
 export default StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: colors.green,
+  container: {
+    flex: 1,
+    backgroundColor: colors.green,
     },
     seperator: {
       borderWidth: 1,
@@ -16,6 +16,7 @@ export default StyleSheet.create({
       flex: 1,
       justifyContent: 'space-between',
       marginTop: '10%',
-      marginHorizontal: '5%',
+      marginHorizontal: '7%',
     },
+   
   });

@@ -75,7 +75,7 @@ const TestStartCard = props => {
                     { props.test.reachable && testCompletitionDays() < 7 ? <MaterialIcons name='done-outline' size={35} color={'green'}></MaterialIcons> : <View></View>}
                     <Text style={styles.title} >Test {props.test.testNo}</Text>
                     <Text><Text style={styles.subtitle}>Level:</Text> {props.test.level}</Text>
-                    <Text><Text style={styles.subtitle}>Duration:</Text> {props.test.duration} </Text>
+                    <Text><Text style={styles.subtitle}>Duration:</Text> {props.test.duration} seconds </Text>
                     <Text><Text style={styles.subtitle}>Sound:</Text> {props.test.sound} </Text>
                 </View>
             </View>
