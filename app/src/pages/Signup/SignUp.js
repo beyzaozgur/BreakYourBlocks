@@ -10,6 +10,7 @@ import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 import CheckBox from "../../components/CheckBox";
 import DatePicker from '../../components/DatePicker';
+import ErrorMessageParser from "../../utils/ErrorMessageParser";
 import { firebase } from "../../../firebase";
 import styles from './SignUp.style';
 
@@ -94,7 +95,8 @@ const SignUp = ({ navigation }) => {
                         }).catch((error) => { toast.show(error.message) })
                 })
          } catch (error) {
-             console.log(error);
+             console.log(error.code);
+             toast.show(ErrorMessageParser(error.code), { type: 'normal' });
         }
 
     }

@@ -3,6 +3,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import { firebase } from '../../firebase';
 import { useToast } from "react-native-toast-notifications";
 import ErrorMessageParser from '../utils/ErrorMessageParser';
+import config from "../../config.json";
 
 const useAudioUploader = () => { // a hook to upload recordings and (admin) voice files
   const toast = useToast(); // toast object to show notifications
@@ -18,7 +19,9 @@ const useAudioUploader = () => { // a hook to upload recordings and (admin) voic
   const [userId, setUserId] = useState();
   const [fileName, setFileName] = useState(null);
 
-  const FLASK_API_BACKEND = "http://192.168.1.24:3000/audio"; // ipv4 address for api connection
+  //const {ipAddress} = config;
+
+  const FLASK_API_BACKEND = "192.168.36.93:3000/audio"; // ipv4 address for api connection
 
   useEffect(() => {
     if (uri) { // if uri is truthy, call fetchFile function

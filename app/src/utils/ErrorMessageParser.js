@@ -5,6 +5,9 @@ export default function(errorCode){
         case 'auth/email-already-exists':
             return "Email already exists. Please try using a different email address.";
 
+        case 'auth/email-already-in-use':
+            return "Email already in use by another account. Please try using a different email address.";
+
         case 'auth/invalid-email':
             return "Invalid email address. Please ensure that the email address is entered correctly and try again.";
 
