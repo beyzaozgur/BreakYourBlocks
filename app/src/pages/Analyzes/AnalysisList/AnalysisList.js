@@ -17,6 +17,7 @@ const AnalysisList = ({navigation}) => {
       const analyse =  firebase.firestore()
         .collection('completedTestUserMapping')
         .where('userID', '==', firebase.auth().currentUser.uid)
+        .orderBy('testNo', 'asc')
         .onSnapshot(querySnapshot => {  
             const uniqueTestIDs = new Set();
 
@@ -46,7 +47,6 @@ const AnalysisList = ({navigation}) => {
       // console.log(JSON.stringify(item.data));
     return  <AnalysisCard data = {item} nav = {navigation} />}
 
-        
             return (
               
               <View style={styles.container}>

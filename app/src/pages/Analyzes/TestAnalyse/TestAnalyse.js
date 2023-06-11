@@ -16,93 +16,6 @@ import { PieChart } from 'react-native-chart-kit';
 label_names = ['"Unsure"', 'PoorAudioQuality', 'Prolongation',
  'Block', 'SoundRepetition', 'WordRepetition', 'DifficultToUnderstand',
  'Interjection', 'NoStutteredWords', 'NaturalPause', 'Music', 'NoSpeech'].sort();
-
- var data = [
-  {
-    name: "Block",
-    population: 1.000,
-    color: "rgba(131, 167, 234, 1)",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 10
-  },
-  {
-    name: "Interjection",
-    population: 2.000,
-    color: "#F00",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 10
-  },
-  {
-    name: "SoundRep",
-    population: 1.000,
-    color: "red",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 10
-  },
-  {
-    name: "DifficultToUnderstand",
-    population: 1.001,
-    color: "#ffffff",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 10
-  },
-  {
-    name: "WordRep",
-    population: 1.000,
-    color: "rgb(0, 0, 255)",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 10
-  },
-  {
-    name: "Block",
-    population: 1.000,
-    color: "rgba(131, 167, 234, 1)",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 10
-  },
-  {
-    name: "Interjection",
-    population: 1.000,
-    color: "#F00",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 10
-  },
-  {
-    name: "SoundRep",
-    population: 1.000,
-    color: "red",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 10
-  },
-  {
-    name: "Prolongatitons",
-    population: 1.000,
-    color: "#ffffff",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 10
-  },
-  {
-    name: "WordRep",
-    population: 1.000,
-    color: "rgb(0, 0, 255)",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 10
-  },
-  {
-    name: "Prolongatitons",
-    population: 1.001,
-    color: "#ffffff",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 10
-  },
-  {
-    name: "WordRep",
-    population: 1.000,
-    color: "rgb(0, 0, 255)",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 10
-  },
-];
  
   const screenWidth = Dimensions.get('screen').width;
   const chartConfig = {
@@ -127,39 +40,252 @@ label_names = ['"Unsure"', 'PoorAudioQuality', 'Prolongation',
   }
 const TestAnalyse = ({ route }) => { 
 
-  const [analysisResults, setAnalysisResults] = useState();
-
+  const [block, setBlock] = useState("");
+  const [difficultToUnderstand, setDifficultToUnderstand] = useState("");
+  const [interjection, setInterjection] = useState("");
+  const [music, setMusic] = useState("");
+  const [naturalPause, setNaturalPause] = useState("");
+  const [noSpeech, setNoSpeech] = useState("");
+  const [noStutteredWords, setNoStutteredWords] = useState("");
+  const [poorAudioQuality, setPoorAudioQuality] = useState("");
+  const [prolongation, setProlongation] = useState("");
+  const [soundRepetition, setSoundRepetition] = useState("");
+  const [unsure, setUnsure] = useState("");
+  const [wordRepetition, setWordRepetition] = useState("");
+  
   useEffect(() => {
-    const testData = firebase.firestore()
+    const analysisData = firebase.firestore()
         .collection('userTestResults')
         .where('userID', '==', firebase.auth().currentUser.uid)
         .where('testID', '==', route.params.testID)
         .where('testDate', '==', route.params.testDate)
         .onSnapshot(querySnapshot => {
-        const analysisList = [];
         querySnapshot.forEach(documentSnapshot => {
-            analysisList.push({
-                key: documentSnapshot.id,
-                ...documentSnapshot.data()
-                // block: documentSnapshot.data().Block,
-                // difficultToUnderstand: documentSnapshot.data().DifficultToUnderstand,
-                // interjection: documentSnapshot.data().Interjection,
-                // music: documentSnapshot.data().Music,
-                // naturalPause: documentSnapshot.data().NaturalPause,
-                // noSpeech: documentSnapshot.data().NoSpeech,
-                // noStutteredWords: documentSnapshot.data().NoStutteredWords,
-                // poorAudioQuality: documentSnapshot.data().PoorAudioQuality,
-                // prolongation: documentSnapshot.data().Prolongation,
-                // soundRepetition: documentSnapshot.data().SoundRepetition,
-                // unsure: documentSnapshot.data().Unsure,
-                // wordRepetition: documentSnapshot.data().WordRepetition
-            });
+            blockVal = documentSnapshot.data().Block;
+            difficultToUnderstandVal = documentSnapshot.data().DifficultToUnderstand;
+            interjectionVal = documentSnapshot.data().Interjection;
+            musicVal = documentSnapshot.data().Music;
+            naturalPauseVal = documentSnapshot.data().NaturalPause;
+            noSpeechVal = documentSnapshot.data().NoSpeech;
+            noStutteredWordsVal = documentSnapshot.data().NoStutteredWords;
+            poorAudioQualityVal = documentSnapshot.data().PoorAudioQuality;
+            prolongationVal = documentSnapshot.data().Prolongation;
+            soundRepetitionVal = documentSnapshot.data().SoundRepetition;
+            unsureVal = documentSnapshot.data().Unsure;
+            wordRepetitionVal = documentSnapshot.data().WordRepetition;
         }
     );
-        setAnalysisResults(analysisList);
+        setBlock(blockVal);
+        setDifficultToUnderstand(difficultToUnderstandVal);
+        setInterjection(interjectionVal);
+        setMusic(musicVal);
+        setNaturalPause(naturalPauseVal);
+        setNoSpeech(noSpeechVal);
+        setNoStutteredWords(noStutteredWordsVal);
+        setPoorAudioQuality(poorAudioQualityVal);
+        setProlongation(prolongationVal);
+        setSoundRepetition(soundRepetitionVal);
+        setUnsure(unsureVal);
+        setWordRepetition(wordRepetitionVal);
+
+        console.log("ANALYSIS RESULT : **********************");
+        console.log("BLOCK : " + block);
+        console.log("difficultToUnderstandVal : " + difficultToUnderstand);
+        console.log("interjectionVal : " + interjection);
+        console.log("musicVal : " + music);
+        console.log("naturalPauseVal : " + naturalPause);
+        console.log("noSpeechVal : " + noSpeech);
+        console.log("noStutteredWordsVal : " + noStutteredWords);
+        console.log("poorAudioQualityVal : " + poorAudioQuality);
+        console.log("prolongationVal : " + prolongation);
+        console.log("soundRepetitionVal : " + soundRepetition);
+        console.log("unsureVal : " + unsure);
+        console.log("wordRepetitionVal : " + wordRepetition);
+        
+
+        // setData(generateChartData(5.000));
+
     });
-    return () => testData();
+    return () => analysisData();
   }, []);
+
+
+  if(block != null && difficultToUnderstand != null && interjection != null && music!= null && naturalPause != null && noSpeech != null && noStutteredWords != null && poorAudioQuality != null && prolongation != null && soundRepetition != null && unsure != null && wordRepetition != null) {
+    data = [
+      {
+        name: "Block",
+        population: Number(block),
+        color: "rgba(131, 167, 234, 1)",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "Difficult To Understand",
+        population: Number(difficultToUnderstand),
+        color: "#F00",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "Interjection",
+        population: Number(interjection),
+        color: "red",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "Music",
+        population: Number(music),
+        color: "#ffffff",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "Natural Pause",
+        population: Number(naturalPause),
+        color: "rgb(0, 0, 255)",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "No Speech",
+        population: Number(noSpeech),
+        color: "rgba(131, 167, 234, 1)",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "No Stuttered Words",
+        population: Number(noStutteredWords),
+        color: "#F00",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "Poor Audio Quality",
+        population: Number(poorAudioQuality),
+        color: "red",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "Prolongatiton",
+        population: Number(prolongation),
+        color: "#ffffff",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "Sound Repetition",
+        population: Number(soundRepetition),
+        color: "rgb(0, 0, 255)",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "Unsure",
+        population: Number(unsure),
+        color: "#ffffff",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "Word Repetition",
+        population:Number(wordRepetition),
+        color: "rgb(0, 0, 255)",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+    ];
+  } else {
+    data = [
+      {
+        name: "Block",
+        population: 5.000,
+        color: "rgba(131, 167, 234, 1)",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "Interjection",
+        population: 2.000,
+        color: "#F00",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "SoundRep",
+        population: 1.000,
+        color: "red",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "DifficultToUnderstand",
+        population: 1.001,
+        color: "#ffffff",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "WordRep",
+        population: 1.000,
+        color: "rgb(0, 0, 255)",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "Block",
+        population: 1.000,
+        color: "rgba(131, 167, 234, 1)",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "Interjection",
+        population: 1.000,
+        color: "#F00",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "SoundRep",
+        population: 1.000,
+        color: "red",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "Prolongatitons",
+        population: 1.000,
+        color: "#ffffff",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "WordRep",
+        population: 1.000,
+        color: "rgb(0, 0, 255)",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "Prolongatitons",
+        population: 1.001,
+        color: "#ffffff",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+      {
+        name: "WordRep",
+        population: 1.000,
+        color: "rgb(0, 0, 255)",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 10
+      },
+    ];
+  }
+  
 
   function formatDate(dateTimeParameter) {
     const dateTime = dateTimeParameter;
@@ -167,9 +293,8 @@ const TestAnalyse = ({ route }) => {
     return onlyDate;
   }
 
-  console.log("ANALYSIS RESULT : **********************");
-  console.log(analysisResults);
-  console.log("DETAILED ANALYSIS PAGE TEST ID : " + route.params.testID);
+  
+      
 
   for(let i=0; i<12; i++){
     //  data[i].name=label_names[i];
