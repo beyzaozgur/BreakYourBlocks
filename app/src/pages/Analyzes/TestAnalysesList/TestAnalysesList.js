@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { View, FlatList ,SafeAreaView, Image} from 'react-native';
+import { View, FlatList ,SafeAreaView, Image,Text} from 'react-native';
 import AnalysesListCard from "../../../components/AnalysesListCard";
 import styles from './TestAnalysesList.style';
 import { firebase } from "../../../../firebase";
@@ -37,12 +37,9 @@ const TestAnalysesList = ({ route, navigation }) => {
     const renderTest = ({ item }) => <AnalysesListCard test={item} testNo={testNo} />;
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.logo_container}>
-            <Image style={styles.logo} source={require('../../../assets/logo.png')}/>
-            </View>
-        <View style={styles.body_container}>
-            
+        
+        <View style={styles.container}>
+                <Text style={styles.test}>Test {route.params.testNo}</Text>
             <FlatList
                 keyExtractor={item => item.key}
                 data={testAnalysisList}
@@ -52,7 +49,6 @@ const TestAnalysesList = ({ route, navigation }) => {
                 >
             </FlatList>
         </View>
-        </SafeAreaView>
     )
 }
 
