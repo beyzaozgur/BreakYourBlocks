@@ -66,8 +66,23 @@ const EditProfile = ({navigation}) => {
     const [education, setEducation] = useState('');
     const [mail, setMail] = useState('');
     const [username, setUserName] = useState('');
+    const [selectedDate, setSelectedDate] = useState(null);
 
-    function updateProfile (uid,_name, _surname, _education, _gender, _mail, _username,){
+    const formatDate = (date) => {
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+      
+        return day + "/" + month + "/" + year;
+    };  
+   
+   
+    const handleDateSelect = (date) => {
+        setSelectedDate(formatDate(date));
+    };
+
+
+    function updateProfile (uid,_name, _surname, _education, _gender, _mail, _username, selectedDate){
     
       firebase.firestore().collection('users')
       .doc(uid)
@@ -77,13 +92,14 @@ const EditProfile = ({navigation}) => {
           education: _education,
           gender: _gender,
           mail: _mail,
-          username: _username
+          username: _username,
+          dateOfBirth: selectedDate
       })
   
   }
 
     function update () {
-        updateProfile(user.uid, name, surname, education, gender,mail,username);
+        updateProfile(user.uid, name, surname, education, gender,mail,username, selectedDate);
         navigation.navigate('ProfileScreen');
     };
     
@@ -99,6 +115,7 @@ const EditProfile = ({navigation}) => {
               setGender(documentSnapshot.data().gender);
               setMail(documentSnapshot.data().mail);
               setUserName(documentSnapshot.data().username);
+              setSelectedDate(documentSnapshot.data().dateOfBirth);
             });
           
     }, []);
@@ -116,7 +133,7 @@ const EditProfile = ({navigation}) => {
                 <Input placeholder={name} onChangeText={setName}/>
                 <Input placeholder={surname} onChangeText={setSurname} />
                 <Dropdown data={educationOptions} placeholder={education} onChange={setEducation}/>
-                <DatePicker />
+                <DatePicker onSelect={handleDateSelect} initialDate={selectedDate}/>
                 <CheckBox placeholder={gender} options={['Woman', 'Men']} onChange={setGender} />
                 <Input placeholder={mail} onChangeText={setMail}/>
                 <Input placeholder={username} onChangeText={setUserName} icon='account'/>
