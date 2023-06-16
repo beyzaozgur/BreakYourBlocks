@@ -3,10 +3,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import librosa
 import librosa.display
+import json
 
 def extract_spectrograms(noise_removed_clips, formattedFileName):
 
-    spectrogram_dir = 'C:/MLIntegrationData/spectrograms/' + formattedFileName 
+    config_path = os.path.join('.', 'app', 'config.json')
+    with open(config_path) as file:
+        config = json.load(file)
+    spectrograms_path = config['spectrogramsPath']
+
+    spectrogram_dir = spectrograms_path + formattedFileName 
     os.makedirs(spectrogram_dir, exist_ok=True)
 
     # Loop through the folder and subfolders containing the files to remove noise

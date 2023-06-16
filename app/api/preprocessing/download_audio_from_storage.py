@@ -23,6 +23,7 @@ import os
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import storage
+import json
 
 def get_audio_from_storage(formattedAudioFileName, testCompletitionTime):
     if not firebase_admin._apps: # code to prevent the following error : ValueError: The default Firebase app already exists.
@@ -32,8 +33,12 @@ def get_audio_from_storage(formattedAudioFileName, testCompletitionTime):
     fileName = "userAudioRecordings/" + formattedAudioFileName + ".mp3"
     bucket = storage.bucket()
     blob = bucket.blob(fileName)
+    config_path = os.path.join('.', 'app', 'config.json')
+    with open(config_path) as file:
+        config = json.load(file)
+    user_test_audio_path = config['userTestAudioPath']
 
-    download_file_path = "C:/MLIntegrationData/user-test-audio/" + formattedAudioFileName + '/' + testCompletitionTime
+    download_file_path = user_test_audio_path + formattedAudioFileName + '/' + testCompletitionTime
     parent_directory = os.path.dirname(download_file_path)
     os.makedirs(parent_directory, exist_ok=True)
     download_file = download_file_path + ".mp3"

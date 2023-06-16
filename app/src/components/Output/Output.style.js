@@ -43,4 +43,20 @@ export default {
             paddingLeft: 7,
         },
     }),
+
+    space_color: StyleSheet.create({
+        ...base_style,
+        container: {
+            ...base_style.container,
+            justifyContent: 'space-between',            
+            borderColor:colors.grayish,
+            borderWidth:2,
+            marginTop: 10,
+            marginLeft: 10,
+            marginRight: 10,
+            padding: 5,
+        },
+        text: {...base_style.text,
+        fontSize: 14},
+    }),
 }

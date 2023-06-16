@@ -19,9 +19,9 @@ const useAudioUploader = () => { // a hook to upload recordings and (admin) voic
   const [userId, setUserId] = useState();
   const [fileName, setFileName] = useState(null);
 
-  //const {ipAddress} = config;
+  const {ipAddress} = config;
 
-  const FLASK_API_BACKEND = "192.168.36.93:3000/audio"; // ipv4 address for api connection
+  const FLASK_API_BACKEND = `http://${ipAddress}:3000/audio`; // ipv4 address for api connection
 
   useEffect(() => {
     if (uri) { // if uri is truthy, call fetchFile function

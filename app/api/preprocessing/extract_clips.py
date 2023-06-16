@@ -1,9 +1,14 @@
 import os
 import wave
 import math
+import json
 
 def split_wav_file(input_file, formattedFileName, testCompletitionTime):
-    output_file_prefix = "C:/MLIntegrationData/extracted-clips/" + formattedFileName + '/' + testCompletitionTime
+    config_path = os.path.join('.', 'app', 'config.json')
+    with open(config_path) as file:
+        config = json.load(file)
+    extracted_clips_path = config['extactedClipsPath']
+    output_file_prefix = extracted_clips_path + formattedFileName + '/' + testCompletitionTime
     parent_directory = os.path.dirname(output_file_prefix)
     os.makedirs(parent_directory, exist_ok=True)
 
