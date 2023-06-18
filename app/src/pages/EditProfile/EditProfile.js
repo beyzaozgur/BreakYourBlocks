@@ -12,6 +12,7 @@ import { firebase } from "../../../firebase";
 import {getAuth} from "firebase/auth";
 import DatePicker from '../../components/DatePicker';
 import Profile from "../Profile";
+import Output from "../../components/Output/Output";
 //import {updateProfile} from "../../hooks/updateProfile";
 const educationOptions = ['No Formal Education', 'Primary Education', 'Secondary Education', 'High School', 
 "Bachelor's degree", "Master's degree", 'Doctorate or higher'];
@@ -66,7 +67,7 @@ const EditProfile = ({navigation}) => {
     const [education, setEducation] = useState('');
     const [mail, setMail] = useState('');
     const [username, setUserName] = useState('');
-    const [selectedDate, setSelectedDate] = useState(null);
+    const [dateOfBirth, setDateOfBirth] = useState(null);
 
     const formatDate = (date) => {
         const day = date.getDate();
@@ -78,11 +79,11 @@ const EditProfile = ({navigation}) => {
    
    
     const handleDateSelect = (date) => {
-        setSelectedDate(formatDate(date));
+        setDateOfBirth(formatDate(date));
     };
 
 
-    function updateProfile (uid,_name, _surname, _education, _gender, _mail, _username, selectedDate){
+    function updateProfile (uid,_name, _surname, _education, _gender, _mail, _username, dateOfBirth){
     
       firebase.firestore().collection('users')
       .doc(uid)
@@ -93,17 +94,15 @@ const EditProfile = ({navigation}) => {
           gender: _gender,
           mail: _mail,
           username: _username,
-          dateOfBirth: selectedDate
+          dateOfBirth: dateOfBirth
       })
   
   }
 
     function update () {
-        updateProfile(user.uid, name, surname, education, gender,mail,username, selectedDate);
+        updateProfile(user.uid, name, surname, education, gender,mail,username, dateOfBirth);
         navigation.navigate('ProfileScreen');
     };
-    
-   
     useEffect(() => {
             firebase.firestore()
             .collection('users')
@@ -115,28 +114,26 @@ const EditProfile = ({navigation}) => {
               setGender(documentSnapshot.data().gender);
               setMail(documentSnapshot.data().mail);
               setUserName(documentSnapshot.data().username);
-              setSelectedDate(documentSnapshot.data().dateOfBirth);
+              setDateOfBirth(documentSnapshot.data().dateOfBirth);
             });
-          
     }, []);
-
-    
+   
    return(
         <SafeAreaView style={styles.container}>
             <ScrollView style={styles.scrollView}>
             <View style={styles.logo_container}>
             <Image style={styles.logo} source={require('../../assets/logo.png')}/>
             </View>
-            
             <View style={styles.body_container}>
-               
-                <Input placeholder={name} onChangeText={setName}/>
-                <Input placeholder={surname} onChangeText={setSurname} />
-                <Dropdown data={educationOptions} placeholder={education} onChange={setEducation}/>
-                <DatePicker onSelect={handleDateSelect} initialDate={selectedDate}/>
-                <CheckBox placeholder={gender} options={['Woman', 'Men']} onChange={setGender} />
-                <Input placeholder={mail} onChangeText={setMail}/>
-                <Input placeholder={username} onChangeText={setUserName} icon='account'/>
+                <Input placeholder={"Name"} value={name} onChangeText={setName} />
+                <Input placeholder={"Surname"} value={surname} onChangeText={setSurname} />
+                <Dropdown data={educationOptions} placeholder={'Education'} dbValue={education} onChange={setEducation} />
+                <Output label="Selected Date of Birth:" value={dateOfBirth} align="space_color"/>
+                <DatePicker onSelect={handleDateSelect} initialDate={dateOfBirth}/>
+                <Output label="Selected Gender:" value={gender} align="space_color"/>
+                <CheckBox placeholder={"Gender"} options={['Woman', 'Men']} onChange={setGender} />
+                <Input placeholder={"Mail"} value={mail} onChangeText={setMail}/>
+                <Input placeholder={"Username"} value={username} onChangeText={setUserName} icon='account'/>
                 
             </View>
             <View style={styles.register_container}>         
@@ -145,7 +142,7 @@ const EditProfile = ({navigation}) => {
             </ScrollView>
         </SafeAreaView>
     );
-    
 }
 
 export default EditProfile;
+

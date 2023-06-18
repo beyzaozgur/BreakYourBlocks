@@ -1,9 +1,14 @@
 import os
 import wave
 import math
+import json
 
 def split_wav_file(input_file, formattedFileName, testCompletitionTime):
-    output_file_prefix = "C:/MLIntegrationData/extracted-clips/" + formattedFileName + '/' + testCompletitionTime
+    config_path = os.path.join('.', 'app', 'config.json')
+    with open(config_path) as file:
+        config = json.load(file)
+    extracted_clips_path = config['extactedClipsPath']
+    output_file_prefix = extracted_clips_path + formattedFileName + '/' + testCompletitionTime
     parent_directory = os.path.dirname(output_file_prefix)
     os.makedirs(parent_directory, exist_ok=True)
 
@@ -14,7 +19,7 @@ def split_wav_file(input_file, formattedFileName, testCompletitionTime):
         frame_rate = wav_file.getframerate()
 
         # Calculate the duration of each clip in frames
-        clip_duration = int(frame_rate * 3)
+        clip_duration = int(frame_rate * num_frames)
 
         # Calculate the total number of clips
         num_clips = math.ceil(num_frames / clip_duration)

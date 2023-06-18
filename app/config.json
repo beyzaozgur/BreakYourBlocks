@@ -1,0 +1,11 @@
+{
+    "modelPath":"C:/reactNativeProjects/BreakYourBlocks-1/app/api/model/nfold_classification.h5",    
+    "wavPath":"C:/MLIntegrationData/wav-audio/",
+    "userTestAudioPath":"C:/MLIntegrationData/user-test-audio/",
+    "extactedClipsPath":"C:/MLIntegrationData/extracted-clips/",
+    "spectrogramsPath":"C:/MLIntegrationData/spectrograms/",
+    "noiseRemovedClips":"C:/MLIntegrationData/noise-removed-clips/",
+
+
+    "ipAddress": "192.168.145.133"
+}

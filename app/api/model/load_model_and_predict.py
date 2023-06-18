@@ -65,6 +65,7 @@ import numpy as np
 import pandas as pd
 from firebase_admin import firestore
 from PIL import Image
+import json
 
 # prediction_data_dir = 'C:/Users/w/StutteringDetectionModel/MultiLabelClassification/multi-label-test-data/'
 
@@ -78,7 +79,12 @@ def load_model_and_predict(prediction_data_dir, testId, userId, testCompletition
         
     images = np.array(images_array)
 
-    model = tf.keras.models.load_model("C:/Users/w/BreakYourBlocks/app/api/model/nfold_classification.h5")
+    config_path = os.path.join('.', 'app', 'config.json')
+    with open(config_path) as file:
+        config = json.load(file)
+    model_path = config['modelPath']
+
+    model = tf.keras.models.load_model(model_path)
     # classes and probabilities dictionary(map)
     classes_probabilities={"Unsure" : 0, "PoorAudioQuality":0, "Prolongation":0, "Block":0, "SoundRepetition":0, 
                            "WordRepetition":0, "DifficultToUnderstand":0, "Interjection":0, 

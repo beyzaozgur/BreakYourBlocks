@@ -1,11 +1,16 @@
 import os
 import pydub
+import json
 
 def convert_to_wav(uri, formattedFileName, testCompletitionTime):
     print("URI : " + uri)
     audio = pydub.AudioSegment.from_file(uri)
 
-    output_path = 'C:/MLIntegrationData/wav-audio/' + formattedFileName + '/' + testCompletitionTime
+    config_path = os.path.join('.', 'app', 'config.json')
+    with open(config_path) as file:
+        config = json.load(file)
+    wav_path = config['wavPath']
+    output_path = wav_path + formattedFileName + '/' + testCompletitionTime
     parent_directory = os.path.dirname(output_path)
     os.makedirs(parent_directory, exist_ok=True)
 

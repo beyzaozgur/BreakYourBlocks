@@ -10,6 +10,7 @@ import Input from "../../components/Input";
 import Dropdown from "../../components/Dropdown";
 import CheckBox from "../../components/CheckBox";
 import DatePicker from '../../components/DatePicker';
+import ErrorMessageParser from "../../utils/ErrorMessageParser";
 import { firebase } from "../../../firebase";
 import styles from './SignUp.style';
 
@@ -79,8 +80,7 @@ const SignUp = ({ navigation }) => {
         setSelectedDate(formatDate(date));
     };
 
-    async function handleSignUp(values) {
-        
+    async function handleSignUp(values) {      
         if(selectedDate == null || selectedDate == "") {
             toast.show('Please select your birthday!');
         } else {
@@ -113,6 +113,7 @@ const SignUp = ({ navigation }) => {
                     })
              } catch (error) {
                  console.log(error);
+                 toast.show(ErrorMessageParser(error.code), { type: 'normal' });
             }
         }
 
@@ -158,7 +159,7 @@ const SignUp = ({ navigation }) => {
                                 {errors.password && <Text style={styles.error}>{errors.password}</Text>}
                                 <Input placeholder={"Confirm Password"} value={values.confirmPassword} onChangeText={handleChange('confirmPassword')} icon='key' isPasswordHidden />
                                 {errors.confirmPassword && <Text style={styles.error}>{errors.confirmPassword}</Text>}
-                                <CheckBox placeholder={'I have read the PDPP and I accept.'} isVisible={false} options={['true']} onChange={handleChange('isApproved')} />
+                                <CheckBox placeholder={'I have read the PDPP and I accept.'} isVisible={false} isLink={true} options={['true']} onChange={handleChange('isApproved') }navigation={navigation} />
                                 {errors.isApproved && <Text style={styles.error}>{errors.isApproved}</Text>}
                             </View>
                             <View style={styles.register_container}>

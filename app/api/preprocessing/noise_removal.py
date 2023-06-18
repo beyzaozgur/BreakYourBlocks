@@ -1,6 +1,7 @@
 import noisereduce as nr
 import os
 from pydub import AudioSegment
+import json
 
 # os is used to loop through the files in the folder where the wav files are
 # pydub is used to load the files
@@ -9,7 +10,12 @@ from pydub import AudioSegment
 
 def remove_noice_from_clips(clipped_wav_path, formattedFileName):
 
-    noise_reduced_wav_path = 'C:/MLIntegrationData/noise-removed-clips/' + formattedFileName
+    config_path = os.path.join('.', 'app', 'config.json')
+    with open(config_path) as file:
+        config = json.load(file)
+    noise_removed_clips = config['noiseRemovedClips']
+
+    noise_reduced_wav_path = noise_removed_clips + formattedFileName
     os.makedirs(noise_reduced_wav_path, exist_ok=True)
 
     print('Clipped Wav Folder path found: ', os.path.isdir(clipped_wav_path))

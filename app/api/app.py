@@ -17,7 +17,6 @@ CORS(app)
 @app.route('/audio', methods = ['POST'])
 def process_user_audio():
     obj = request.get_json()
-    print(obj)
 
     # dumps the json object into an element
     json_str = json.dumps(obj)
@@ -64,4 +63,8 @@ def process_user_audio():
     return json.dumps({ "text": "Audio successfully processed!" }), 200
 
 if __name__ == "__main__":
-    app.run(host="192.168.1.24", port=3000, debug=True) # ipv4 address of the machine
+    config_path = os.path.join('.', 'app', 'config.json')
+    with open(config_path) as file:
+        config = json.load(file)
+    ipAddr = config['ipAddress']
+    app.run(host=ipAddr, port=3000, debug=True) # ipv4 address of the machine

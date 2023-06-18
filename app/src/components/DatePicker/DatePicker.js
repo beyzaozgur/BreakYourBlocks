@@ -34,7 +34,7 @@ const DatePicker = ({ onSelect, initialDate }) => {
     <View style={styles.MainContainer}>
       <TouchableOpacity onPress={showDatePicker} style={{color:'transparent'}}>
         {/* <Text>{selectedDate != "" ? (initialDate != "" ? initialDate : selectedDate) : "Select Date"}</Text> */}
-        <Text>{selectedDate != "" ? selectedDate : "Select Date"}</Text> 
+        <Text style={styles.text}>{selectedDate != "" ? selectedDate : "Select Date"}</Text> 
       </TouchableOpacity>
       <DateTimePickerModal
          minimumDate={new Date('1900-01-01')}
