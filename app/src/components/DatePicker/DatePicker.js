@@ -1,59 +1,11 @@
-import React, { useEffect, useState ,TouchableOpacity} from "react";
-import { SafeAreaView, TextInput } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import React, { useState } from 'react';
+import { TouchableOpacity, Text, View } from 'react-native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import styles from "./DatePicker.style";
-import colors from "../../styles/colors";
-import { onChange } from "react-native-reanimated";
-import { Button, View } from "react-native";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import {getAuth, updateProfile} from "firebase/auth";
-import { firebase } from "../../../firebase";
-import { date } from "yup";
 
-export default function App () {
-
+const DatePicker = ({ onSelect, initialDate }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-  const auth=getAuth();
-  const user=auth.currentUser;
-
-  function updateDate (uid,_date){
-    
-    firebase.firestore().collection('users')
-    .doc(uid)
-    .update({
-        dateOfBirth: _date.toDateString(),
-    })
-}
-function setDate (_date){
-    
-  /*firebase.firestore().collection('users')
-  .doc(firebase.auth().currentUser.uid)
-  .set({
-      dateOfBirth: _date.toString(),
-  })*/
-  return _date.toDateString()
-  
-}
-function updateDB (dateOfBirth) {
-  if(user==null){
-    setDate(dateOfBirth);
-  }else{
-  updateDate(user.uid,  dateOfBirth);
-}};
-
-
-
-/*useEffect(() => {
-  firebase.firestore()
-  .collection('users')
-  .doc(user.uid)
-  .onSnapshot(documentSnapshot => {
-    setDateOfBirth(documentSnapshot.data().dateOfBirth);
-  });
-
-}, []);*/
-
+  const [selectedDate, setSelectedDate] = useState("");
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -64,22 +16,36 @@ function updateDB (dateOfBirth) {
   };
 
   const handleConfirm = (date) => {
-    console.warn("A date has been picked: ", date);
-   
-    updateDB(date);
+    var formattedDate = formatDate(date);
+    setSelectedDate(formattedDate);
     hideDatePicker();
+    onSelect(date);
   };
+
+  const formatDate = (date) => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
   
+    return day + "/" + month + "/" + year;
+  };  
 
   return (
     <View style={styles.MainContainer}>
-      <Button title="Date of Birth" onPress={showDatePicker} />
+      <TouchableOpacity onPress={showDatePicker} style={{color:'transparent'}}>
+        {/* <Text>{selectedDate != "" ? (initialDate != "" ? initialDate : selectedDate) : "Select Date"}</Text> */}
+        <Text style={styles.text}>{selectedDate != "" ? selectedDate : "Select Date"}</Text> 
+      </TouchableOpacity>
       <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date"
-       onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
+         minimumDate={new Date('1900-01-01')}
+         maximumDate={new Date()}
+         isVisible={isDatePickerVisible}
+         mode="date"
+         onConfirm={handleConfirm}
+         onCancel={hideDatePicker}
       />
-    </View>
+     </View>
   );
-}
+};
+
+export default DatePicker;

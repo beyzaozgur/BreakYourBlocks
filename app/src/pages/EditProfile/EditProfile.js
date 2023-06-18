@@ -67,9 +67,23 @@ const EditProfile = ({navigation}) => {
     const [education, setEducation] = useState('');
     const [mail, setMail] = useState('');
     const [username, setUserName] = useState('');
-    const [dateOfBirth, setDateOfBirth] = useState('');
+    const [dateOfBirth, setDateOfBirth] = useState(null);
 
-    function updateProfile (uid,_name, _surname, _education, _gender, _mail, _username,){
+    const formatDate = (date) => {
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+      
+        return day + "/" + month + "/" + year;
+    };  
+   
+   
+    const handleDateSelect = (date) => {
+        setDateOfBirth(formatDate(date));
+    };
+
+
+    function updateProfile (uid,_name, _surname, _education, _gender, _mail, _username, dateOfBirth){
     
       firebase.firestore().collection('users')
       .doc(uid)
@@ -79,13 +93,14 @@ const EditProfile = ({navigation}) => {
           education: _education,
           gender: _gender,
           mail: _mail,
-          username: _username
+          username: _username,
+          dateOfBirth: dateOfBirth
       })
   
   }
 
     function update () {
-        updateProfile(user.uid, name, surname, education, gender,mail,username);
+        updateProfile(user.uid, name, surname, education, gender,mail,username, dateOfBirth);
         navigation.navigate('ProfileScreen');
     };
     useEffect(() => {
@@ -109,12 +124,12 @@ const EditProfile = ({navigation}) => {
             <View style={styles.logo_container}>
             <Image style={styles.logo} source={require('../../assets/logo.png')}/>
             </View>
-            <View style={styles.body_container}>               
+            <View style={styles.body_container}>
                 <Input placeholder={"Name"} value={name} onChangeText={setName} />
                 <Input placeholder={"Surname"} value={surname} onChangeText={setSurname} />
                 <Dropdown data={educationOptions} placeholder={'Education'} dbValue={education} onChange={setEducation} />
-               {/* <Output label="Selected Date of Birth:" value={dateOfBirth} align="space_color"/>*/}
-                <DatePicker />
+                <Output label="Selected Date of Birth:" value={dateOfBirth} align="space_color"/>
+                <DatePicker onSelect={handleDateSelect} initialDate={dateOfBirth}/>
                 <Output label="Selected Gender:" value={gender} align="space_color"/>
                 <CheckBox placeholder={"Gender"} options={['Woman', 'Men']} onChange={setGender} />
                 <Input placeholder={"Mail"} value={mail} onChangeText={setMail}/>
@@ -130,3 +145,4 @@ const EditProfile = ({navigation}) => {
 }
 
 export default EditProfile;
+

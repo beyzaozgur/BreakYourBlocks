@@ -27,7 +27,7 @@ export default StyleSheet.create({
     width:Dimensions.get('window').width / 2.5,
     height:Dimensions.get('window').height / 4,
     marginTop: 40,
-    marginLeft: 30,
+    marginLeft:"10%",
   },
   squareWithIcon: {
     paddingTop: '15%',

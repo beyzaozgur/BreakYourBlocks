@@ -19,7 +19,7 @@ def split_wav_file(input_file, formattedFileName, testCompletitionTime):
         frame_rate = wav_file.getframerate()
 
         # Calculate the duration of each clip in frames
-        clip_duration = int(frame_rate * 3)
+        clip_duration = int(frame_rate * num_frames)
 
         # Calculate the total number of clips
         num_clips = math.ceil(num_frames / clip_duration)

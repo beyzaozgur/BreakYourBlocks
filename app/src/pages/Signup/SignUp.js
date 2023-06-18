@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 //import { useAlert } from "react-alert";
 import { SafeAreaView, View, Image, Text, ScrollView } from "react-native";
 import { useToast } from "react-native-toast-notifications";
@@ -39,7 +39,7 @@ const SignUpSchema = Yup.object({
         .max(50, 'Too Long!')
         .required('Required!'),
     education: Yup.string().required('Required!').oneOf(educationOptions),
-    gender: Yup.string().required('gender Required!'),
+    gender: Yup.string().required('Gender Required!'),
     mail: Yup.string().email('Invalid email!').required('Required!'),
     username: Yup.string()
         .min(2, 'Too Short!')
@@ -66,37 +66,55 @@ const SignUp = ({ navigation }) => {
 
     const toast = useToast();
 
-    async function handleSignUp(values) {
-        try {
-            await firebase.auth().createUserWithEmailAndPassword(values.mail, values.password)
-                .then(() => {
-                    firebase.auth().currentUser.sendEmailVerification({
-                        handleCodeInApp: true,
-                        url: 'https://breakyourblocks-1.firebaseapp.com',
+    const [selectedDate, setSelectedDate] = useState("");
+
+    const formatDate = (date) => {
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+      
+        return day + "/" + month + "/" + year;
+    };  
+
+    const handleDateSelect = (date) => {
+        setSelectedDate(formatDate(date));
+    };
+
+    async function handleSignUp(values) {      
+        if(selectedDate == null || selectedDate == "") {
+            toast.show('Please select your birthday!');
+        } else {
+            try {
+                await firebase.auth().createUserWithEmailAndPassword(values.mail, values.password)
+                    .then(() => {
+                        firebase.auth().currentUser.sendEmailVerification({
+                            handleCodeInApp: true,
+                            url: 'https://breakyourblocks-1.firebaseapp.com',
+                        })
+                            .then(() => { toast.show('Verification email sent!') }).catch(error => {
+                                toast.show(error.message)
+                            }).then(() => {
+                                firebase.firestore().collection('users')
+                                    .doc(firebase.auth().currentUser.uid)
+                                    .set({
+                                        name: values.name,
+                                        surname: values.surname,
+                                        education: values.education,
+                                        gender: values.gender,
+                                        mail: values.mail,
+                                        username: values.username,
+                                        dateOfBirth: selectedDate
+                                        // password: values.password
+                                    })
+                            }).then(() => {
+                                console.log(values);
+                                navigation.navigate('Login');
+                            }).catch((error) => { toast.show(error.message) })
                     })
-                        .then(() => { toast.show('Verification email sent!') }).catch(error => {
-                            toast.show(error.message)
-                        }).then(() => {
-                            firebase.firestore().collection('users')
-                                .doc(firebase.auth().currentUser.uid)
-                                .set({
-                                    name: values.name,
-                                    surname: values.surname,
-                                    education: values.education,
-                                    gender: values.gender,
-                                    mail: values.mail,
-                                    username: values.username,
-                                    dateOfBirth: values.dateOfBirth.toDateString(),
-                                    // password: values.password
-                                })
-                        }).then(() => {
-                            console.log(values);
-                            navigation.navigate('Login');
-                        }).catch((error) => { toast.show(error.message) })
-                })
-         } catch (error) {
-             console.log(error.code);
-             toast.show(ErrorMessageParser(error.code), { type: 'normal' });
+             } catch (error) {
+                 console.log(error);
+                 toast.show(ErrorMessageParser(error.code), { type: 'normal' });
+            }
         }
 
     }
@@ -109,7 +127,7 @@ const SignUp = ({ navigation }) => {
                 <Formik initialValues={{
                     name: '',
                     surname: '',
-                    dateOfBirth: new Date(),
+                    dateOfBirth: '',
                     education: '',
                     gender: '',
                     mail: '',
@@ -128,12 +146,11 @@ const SignUp = ({ navigation }) => {
                                 {errors.name && <Text style={styles.error}>{errors.name}</Text>}
                                 <Input placeholder={"Surname"} value={values.surname} onChangeText={handleChange('surname')} />
                                 {errors.surname && <Text style={styles.error}>{errors.surname}</Text>}
-                                
                                 <Dropdown data={educationOptions} placeholder={'Education'} onChange={handleChange('education')} />
                                 {errors.education && <Text style={styles.error}>{errors.education}</Text>}
-                                <CheckBox placeholder={'Gender'} options={['Woman', 'Men']} onChange={handleChange('gender')} />
+                                <CheckBox placeholder={'Gender'} options={['Woman', 'Man']} onChange={handleChange('gender')} />
                                 {errors.gender && <Text style={styles.error}>{errors.gender}</Text>}
-                                <DatePicker value={values.dateOfBirth}/>
+                                <DatePicker onSelect={handleDateSelect} />
                                 <Input placeholder={"Mail"} value={values.mail} onChangeText={handleChange('mail')} />
                                 {errors.mail && <Text style={styles.error}>{errors.mail}</Text>}
                                 <Input placeholder={"Username"} value={values.username} onChangeText={handleChange('username')} icon='account' />

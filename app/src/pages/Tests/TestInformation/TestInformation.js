@@ -20,10 +20,11 @@ const TestInformation = ({ route, navigation }) => {
                 <ScrollView>
                     <Text style={styles.testContent}>- Test is going to start immediately after you press the "Start" button.{"\n"}{"\n"}
                     - You need to read the entire script in the given time.{"\n"}{"\n"}
-                    - You cannot pause recording.{"\n"}{"\n"}
-                    - You can exit the test by pressing "Do Not Save" button, but no data will be saved.{"\n"}{"\n"}
+                    - If you finish reading the text before given time, you can save your voice record without waiting for time to end by pressing "Complete Test" and "Save" buttons.{"\n"}{"\n"}
+                    - You can exit the test by switching between tabs or with the back button.{"\n"}{"\n"}
                     - The test will be automatically saved after the given time is finished.{"\n"}{"\n"}
-                    - You need to wear headphones to get the best results.{"\n"}{"\n"}
+                    - The test will be active again 7 days after the it is completed.
+                    - You need to wear headphones to get the best results, and to avoid crosstalk.{"\n"}{"\n"}
                     - You have {route.params.duration} seconds to finish this test.{"\n"}{"\n"}</Text>
                 </ScrollView>
             </View>

@@ -17,7 +17,6 @@ export default StyleSheet.create({
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor:'red'
   },
   text: {
     flex: 0.99,
@@ -25,6 +24,7 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     color: colors.grayish,
     padding: 3,
+    textAlignVertical:"center",
     // marginBottom: 10,
     // textAlign: 'center',
   },
